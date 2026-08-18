@@ -74,9 +74,9 @@ Citizens explore it interactively through spatial AR
 
 ---
 
-## 📊 Preservation Dashboard (Hackathon Winning Metric)
+## 📊 National Digital Preservation Audit Dashboard
 
-Judges and conservators require proof of digital preservation rigor. The **Preservation Dashboard** evaluates and confirms a **100% Preservation Score** across 6 standardized tiers:
+The **Preservation Dashboard** evaluates and confirms a **100% Preservation Score** across 6 standardized tiers:
 
 - [x] **Historical records archived** (Epigraphic sources & chronology verified)
 - [x] **Architectural joinery archived** (Granite tolerances & dimensions cataloged)
@@ -139,24 +139,6 @@ npm run preview
 
 ---
 
-## 🎯 3-Minute Hackathon Demo Script
-
-```text
-[0:00 - 0:45] Problem:
-"India has thousands of monuments like the Stone Chariot in Hampi facing continuous weathering, environmental damage, and loss of historical records."
-
-[0:45 - 1:30] Solution:
-"SanskritiSetu is a government digital preservation mission that records permanent sub-millimeter 3D twins, architectural specs, photo archives, and audio lore into a sovereign National Repository."
-
-[1:30 - 2:15] Preservation Audit:
-"In our Heritage Vault and Preservation Dashboard, you can see our verified 100% preservation score across all 6 archival tiers."
-
-[2:15 - 3:00] AR Experience:
-"Finally, we transform this preserved archive into an immersive spatial AR experience. When a citizen or student scans the marker, the Stone Chariot appears in full 3D augmented space with interactive audio narration."
-```
-
----
-
 ## 🔮 Future Expansion Roadmap
 
 - 🏛️ **Nationwide Ingestion:** Scale to all 42 UNESCO World Heritage Sites and 3,690+ ASI protected monuments across India.
@@ -169,5 +151,4 @@ npm run preview
 ## 📄 License & Attribution
 
 - **Project:** SanskritiSetu (संस्कृतिसेतु)
-- **Author:** Kunal Ghadge ([@KunalGhadge](https://github.com/KunalGhadge))
 - **Mission:** Preserving India's Cultural Heritage for Future Generations.

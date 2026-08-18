@@ -1,5 +1,5 @@
 import React from 'react';
-import { Landmark, ShieldCheck, Sparkles, Layers, Box, Globe, Compass, Award, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Shield, Sparkles, Award, Box, Database, Eye, CheckCircle2 } from 'lucide-react';
 
 interface AboutViewProps {
   onEnterVault: () => void;
@@ -8,137 +8,162 @@ interface AboutViewProps {
 
 export const AboutView: React.FC<AboutViewProps> = ({ onEnterVault, onLaunchAR }) => {
   return (
-    <div style={{
-      maxWidth: '1100px',
-      margin: '0 auto',
-      padding: '40px 24px 80px',
-    }}>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <div className="gold-badge" style={{ marginBottom: '12px' }}>
-          <Landmark size={14} /> Mission & Architecture
+    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '40px 24px 80px' }}>
+      {/* Institutional Overview Header */}
+      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          backgroundColor: '#fbf5e8',
+          border: '1px solid #e8cb85',
+          padding: '6px 16px',
+          borderRadius: '20px',
+          color: '#854d0e',
+          fontSize: '0.85rem',
+          fontWeight: 700,
+          marginBottom: '16px'
+        }}>
+          <Shield size={16} /> Government of India • Ministry of Culture Initiative
         </div>
+
         <h1 style={{
-          fontSize: 'clamp(2rem, 4vw, 3.2rem)',
+          fontSize: 'clamp(2.2rem, 5vw, 3.2rem)',
           fontWeight: 900,
-          color: '#0f1e36',
-          marginBottom: '8px',
+          color: '#1a1003',
+          marginBottom: '16px',
+          lineHeight: 1.15
         }}>
           About SanskritiSetu (संस्कृतिसेतु)
         </h1>
+
         <p style={{
-          fontSize: '1.1rem',
-          color: '#dfb743',
-          fontStyle: 'italic',
-          fontWeight: 600,
-          marginBottom: '16px',
+          fontSize: 'clamp(1.05rem, 2.5vw, 1.25rem)',
+          color: '#5c4522',
+          maxWidth: '800px',
+          margin: '0 auto',
+          lineHeight: 1.6
         }}>
-          "Preserving India's cultural heritage through digital archives and immersive AR experiences."
+          A permanent sovereign digital bridge safeguarding India's architectural, cultural, and spiritual treasures through sub-millimeter 3D photogrammetry, multi-tiered historical records, and immersive WebAR exploration.
         </p>
       </div>
 
-      {/* The Final Pitch Callout Banner */}
-      <div style={{
-        background: 'linear-gradient(135deg, #0a192f 0%, #172a45 100%)',
-        borderRadius: '16px',
-        border: '2px solid #c59b27',
-        padding: '36px',
-        color: '#ffffff',
-        marginBottom: '40px',
-        boxShadow: '0 12px 36px rgba(10, 25, 47, 0.25)',
-        textAlign: 'center',
-      }}>
-        <span style={{
-          fontSize: '0.8rem',
-          color: '#dfb743',
-          textTransform: 'uppercase',
-          letterSpacing: '0.15em',
-          fontWeight: 700,
-          display: 'block',
-          marginBottom: '12px',
-        }}>
-          ✦ The SanskritiSetu Mission Statement ✦
-        </span>
-        <blockquote style={{
-          fontSize: 'clamp(1.15rem, 2.4vw, 1.45rem)',
-          fontWeight: 600,
-          lineHeight: 1.5,
-          fontStyle: 'italic',
-          color: '#f8fafc',
-          maxWidth: '850px',
-          margin: '0 auto',
-        }}>
-          "SanskritiSetu is not an AR tourism application. It is a digital preservation platform that safeguards India's cultural heritage by creating permanent digital archives and transforming them into immersive AR experiences for future generations."
-        </blockquote>
+      {/* Problem & Solution Dual Column */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', marginBottom: '40px' }}>
+        <div className="heritage-card" style={{ padding: '32px', borderLeft: '4px solid #dc2626' }}>
+          <h3 style={{ fontSize: '1.35rem', color: '#991b1b', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            The Heritage Deterioration Crisis
+          </h3>
+          <p style={{ color: '#451a03', lineHeight: 1.7, fontSize: '0.95rem' }}>
+            India possesses thousands of ancient monuments, temples, forts, and rock-cut shrines. Environmental weathering, atmospheric pollution, acid rain, tourism stress, and structural fatigue cause gradual, irreversible damage. Traditional physical conservation is vital but insufficient on its own to secure comprehensive multi-dimensional preservation for future millennia.
+          </p>
+        </div>
+
+        <div className="heritage-card" style={{ padding: '32px', borderLeft: '4px solid #16a34a' }}>
+          <h3 style={{ fontSize: '1.35rem', color: '#166534', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            The SanskritiSetu Digital Solution
+          </h3>
+          <p style={{ color: '#14532d', lineHeight: 1.7, fontSize: '0.95rem' }}>
+            SanskritiSetu solves this challenge by engineering an immutable <strong>7-Tier Digital Preservation Strategy</strong> that captures the full soul of each site: high-density polygon 3D mesh models, comprehensive historical timelines, architectural joinery blueprints, historical photo archives, multilingual audio narratives, and interactive browser-based spatial AR.
+          </p>
+        </div>
       </div>
 
-      {/* Core Technical Architecture breakdown */}
-      <div className="heritage-card" style={{ padding: '32px', marginBottom: '36px' }}>
-        <h3 style={{ fontSize: '1.3rem', color: '#0f1e36', fontWeight: 800, marginBottom: '16px' }}>
-          Platform Technical Architecture
+      {/* 4 Pillars of SanskritiSetu */}
+      <div className="heritage-card" style={{ padding: '36px', marginBottom: '40px' }}>
+        <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1003', textAlign: 'center', marginBottom: '32px' }}>
+          Four Core Archival Pillars
         </h3>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '16px',
-        }}>
-          <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-            <span style={{ fontSize: '0.75rem', color: '#b45309', fontWeight: 700, textTransform: 'uppercase' }}>
-              Frontend Layer
-            </span>
-            <h4 style={{ fontSize: '1rem', color: '#0f1e36', margin: '4px 0 6px 0' }}>
-              React + Vite + TypeScript
-            </h4>
-            <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>
-              Ultra-fast responsive client UI with institutional Ministry of Culture design tokens.
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '16px',
+              backgroundColor: '#fbf5e8',
+              color: '#c59b27',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px'
+            }}>
+              <Box size={28} />
+            </div>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1003', marginBottom: '8px' }}>Sub-mm 3D Twins</h4>
+            <p style={{ fontSize: '0.85rem', color: '#5c4522', lineHeight: 1.5 }}>
+              Precision 3D GLB digital twins capturing micro-carvings and spatial proportions.
             </p>
           </div>
 
-          <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-            <span style={{ fontSize: '0.75rem', color: '#1e3a8a', fontWeight: 700, textTransform: 'uppercase' }}>
-              Preservation Layer
-            </span>
-            <h4 style={{ fontSize: '1rem', color: '#0f1e36', margin: '4px 0 6px 0' }}>
-              7-Tier Heritage Vault
-            </h4>
-            <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>
-              Immutable schema cataloging overview, chronologies, architectural joinery, and photo archives.
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '16px',
+              backgroundColor: '#fbf5e8',
+              color: '#c59b27',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px'
+            }}>
+              <Database size={28} />
+            </div>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1003', marginBottom: '8px' }}>Sovereign Vault</h4>
+            <p style={{ fontSize: '0.85rem', color: '#5c4522', lineHeight: 1.5 }}>
+              Centralized repository for structural metrics, materials, timelines, and photo archives.
             </p>
           </div>
 
-          <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-            <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 700, textTransform: 'uppercase' }}>
-              3D Digital Twin Layer
-            </span>
-            <h4 style={{ fontSize: '1rem', color: '#0f1e36', margin: '4px 0 6px 0' }}>
-              Three.js Sub-mm Viewport
-            </h4>
-            <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>
-              GLTF/GLB photogrammetry rendering with wireframe inspection, lighting controls, and annotations.
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '16px',
+              backgroundColor: '#fbf5e8',
+              color: '#c59b27',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px'
+            }}>
+              <Award size={28} />
+            </div>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1003', marginBottom: '8px' }}>UNESCO Standard</h4>
+            <p style={{ fontSize: '0.85rem', color: '#5c4522', lineHeight: 1.5 }}>
+              Designed strictly under the UNESCO Charter on the Preservation of Digital Heritage (2003).
             </p>
           </div>
 
-          <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-            <span style={{ fontSize: '0.75rem', color: '#c59b27', fontWeight: 700, textTransform: 'uppercase' }}>
-              Spatial AR Layer
-            </span>
-            <h4 style={{ fontSize: '1rem', color: '#0f1e36', margin: '4px 0 6px 0' }}>
-              AR.js + A-Frame Engine
-            </h4>
-            <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '16px',
+              backgroundColor: '#fbf5e8',
+              color: '#c59b27',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px'
+            }}>
+              <Eye size={28} />
+            </div>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1003', marginBottom: '8px' }}>Citizen WebAR</h4>
+            <p style={{ fontSize: '0.85rem', color: '#5c4522', lineHeight: 1.5 }}>
               Zero-install marker tracking projecting the 3D model into real physical space with audio synchronization.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Hackathon MVP Checklist vs Future Roadmap */}
+      {/* Core Capabilities vs Future Roadmap */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', marginBottom: '40px' }}>
-        {/* MVP Features Delivered */}
+        {/* Core Capabilities Delivered */}
         <div className="heritage-card" style={{ padding: '28px', borderLeft: '4px solid #16a34a' }}>
           <h4 style={{ fontSize: '1.15rem', color: '#166534', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle2 size={20} /> Hackathon MVP Features Delivered
+            <CheckCircle2 size={20} /> Core Preservation Capabilities Delivered
           </h4>
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem', color: '#334155' }}>
             <li style={{ display: 'flex', gap: '8px' }}>
