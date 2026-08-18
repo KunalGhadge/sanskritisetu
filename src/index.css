@@ -8,7 +8,7 @@
   --accent-gold-soft: #fffbeb;
   --emerald-green: #10b981;
   --emerald-soft: #ecfdf5;
-  --bg-page: #0f172a;
+  --bg-page: #f8fafc;
   --bg-mobile-shell: #ffffff;
   --bg-card: #ffffff;
   --bg-subtle: #f8fafc;
@@ -19,9 +19,8 @@
   --text-subtle: #64748b;
   --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Space Grotesk', var(--font-main);
-  --shadow-mobile: 0 25px 60px -15px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
   --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
-  --shadow-float: 0 12px 32px -4px rgba(11, 21, 40, 0.12);
+  --shadow-float: 0 12px 32px -4px rgba(11, 21, 40, 0.15);
 }
 
 * {
@@ -33,109 +32,65 @@
 
 html, body {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   background-color: var(--bg-page);
   font-family: var(--font-main);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
-/* App Container on Desktop vs Mobile */
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* App Outer Container */
 .mobile-app-wrapper {
-  min-height: 100vh;
+  width: 100%;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
-  background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0b1528 100%);
+  background: var(--bg-page);
 }
 
-@media (max-width: 600px) {
-  .mobile-app-wrapper {
-    padding: 0;
-    align-items: stretch;
-    background: #ffffff;
-  }
-}
-
+/* Main Mobile Shell (Strict 100% viewport fit, no outer scrolling) */
 .mobile-phone-frame {
   width: 100%;
-  max-width: 440px;
-  min-height: 100vh;
+  max-width: 480px;
+  height: 100dvh;
   background-color: var(--bg-mobile-shell);
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 0 40px rgba(15, 23, 42, 0.08);
 }
 
 @media (min-width: 601px) {
+  .mobile-app-wrapper {
+    background: #0f172a;
+    padding: 16px 0;
+  }
+
   .mobile-phone-frame {
-    min-height: 860px;
-    height: 92vh;
-    border-radius: 40px;
-    box-shadow: 30px 20px 50px rgba(83, 74, 112, 0.25), 0 0 0 12px #0f172a, 0 0 0 14px rgba(255, 255, 255, 0.1);
+    height: 94dvh;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
-/* Fullscreen expanded mode */
 .mobile-phone-frame.is-fullscreen {
   max-width: 100% !important;
-  min-height: 100vh !important;
-  height: 100vh !important;
+  height: 100dvh !important;
   border-radius: 0 !important;
-  box-shadow: none !important;
+  border: none !important;
 }
 
-/* Mobile Status Bar */
-.mobile-status-bar {
-  height: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 24px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #0f172a;
-  background-color: #ffffff;
-  z-index: 100;
-  flex-shrink: 0;
-}
-
-.mobile-notch {
-  width: 120px;
-  height: 18px;
-  background-color: #0b1528;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.camera-lens {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #1e293b;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.speaker-grill {
-  width: 36px;
-  height: 3px;
-  border-radius: 2px;
-  background: #334155;
-}
-
-/* Mobile Top App Header */
+/* App Header (Sticky top inside frame) */
 .mobile-app-header {
-  padding: 10px 18px 12px;
+  padding: 12px 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -147,45 +102,47 @@ html, body {
 
 /* Tricolor Mini Strip */
 .gov-strip-mini {
-  height: 2.5px;
+  height: 3px;
   width: 100%;
   background: linear-gradient(90deg, #ff9933 0%, #ff9933 33.33%, #ffffff 33.33%, #ffffff 66.66%, #138808 66.66%, #138808 100%);
+  flex-shrink: 0;
 }
 
-/* Mobile Scrollable Viewport */
+/* Internal Scrollable Viewport (Has dedicated padding-bottom so content never hides behind fixed nav) */
 .mobile-content-scroll {
-  flex-grow: 1;
+  flex: 1 1 0%;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 16px 16px 85px;
+  padding: 16px 16px 90px;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Hide scrollbar for clean app feel */
+/* Custom minimal scrollbar */
 .mobile-content-scroll::-webkit-scrollbar {
-  display: none;
+  width: 4px;
 }
-.mobile-content-scroll {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.mobile-content-scroll::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
 }
 
-/* Floating Bottom Navigation Bar */
+/* Fixed Bottom Navigation Dock (Always visible & accessible without page scrolling) */
 .mobile-bottom-nav {
   position: absolute;
   bottom: 12px;
-  left: 12px;
-  right: 12px;
+  left: 14px;
+  right: 14px;
   background: rgba(11, 21, 40, 0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 24px;
+  border-radius: 20px;
   padding: 6px 8px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   z-index: 1000;
 }
 
@@ -193,59 +150,53 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
   background: transparent;
   border: none;
   color: #94a3b8;
   font-size: 0.65rem;
   font-weight: 600;
   cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 16px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 6px 12px;
+  border-radius: 14px;
+  transition: all 0.15s ease;
 }
 
 .nav-tab-btn.active {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .nav-tab-btn:active {
   transform: scale(0.92);
 }
 
-/* Mobile Modern Cards */
+/* Cards */
 .app-card {
   background: #ffffff;
-  border-radius: 20px;
-  padding: 18px;
+  border-radius: 18px;
+  padding: 16px;
   border: 1px solid #f1f5f9;
   box-shadow: var(--shadow-card);
-  margin-bottom: 14px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.app-card:active {
-  transform: scale(0.99);
+  margin-bottom: 12px;
 }
 
 .app-card-dark {
   background: #0b1528;
   color: #ffffff;
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 14px;
-  box-shadow: 0 12px 24px rgba(11, 21, 40, 0.2);
+  border-radius: 18px;
+  padding: 18px 16px;
+  margin-bottom: 12px;
 }
 
-/* Mobile Button System */
+/* Buttons */
 .btn-app-primary {
-  background: linear-gradient(135deg, #0b1528 0%, #1e293b 100%);
+  background: #0b1528;
   color: #ffffff;
   border: none;
-  padding: 13px 20px;
-  border-radius: 14px;
-  font-size: 0.88rem;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 0.85rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -253,22 +204,21 @@ html, body {
   gap: 8px;
   width: 100%;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(11, 21, 40, 0.2);
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease;
 }
 
 .btn-app-primary:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(11, 21, 40, 0.15);
+  background: #162a45;
+  transform: scale(0.98);
 }
 
 .btn-app-accent {
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  background: #d97706;
   color: #ffffff;
   border: none;
-  padding: 13px 20px;
-  border-radius: 14px;
-  font-size: 0.88rem;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 0.85rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -276,34 +226,27 @@ html, body {
   gap: 8px;
   width: 100%;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.25);
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease;
 }
 
 .btn-app-accent:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.2);
+  background: #b45309;
+  transform: scale(0.98);
 }
 
 .btn-app-secondary {
   background: #f8fafc;
   color: #0f172a;
   border: 1px solid #e2e8f0;
-  padding: 11px 16px;
-  border-radius: 14px;
-  font-size: 0.84rem;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.82rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.btn-app-secondary:active {
-  background: #f1f5f9;
-  transform: scale(0.97);
 }
 
 /* Pill Tabs */
@@ -311,8 +254,8 @@ html, body {
   display: flex;
   gap: 6px;
   overflow-x: auto;
-  padding: 4px 2px 8px;
-  margin-bottom: 12px;
+  padding: 2px 2px 6px;
+  margin-bottom: 8px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -321,10 +264,10 @@ html, body {
 }
 
 .app-pill-btn {
-  padding: 8px 14px;
-  border-radius: 20px;
+  padding: 7px 12px;
+  border-radius: 16px;
   border: none;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
   background: #f1f5f9;
@@ -332,15 +275,13 @@ html, body {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 5px;
-  transition: all 0.15s ease;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .app-pill-btn.active {
   background: #0b1528;
   color: #ffffff;
-  box-shadow: 0 4px 10px rgba(11, 21, 40, 0.15);
 }
 
 /* Laser animation for AR HUD */
@@ -351,7 +292,7 @@ html, body {
   right: 0;
   height: 2px;
   background: #38bdf8;
-  box-shadow: 0 0 12px #38bdf8, 0 0 24px #38bdf8;
+  box-shadow: 0 0 12px #38bdf8;
   animation: laserScan 2s infinite alternate ease-in-out;
 }
 

@@ -18,10 +18,7 @@ import {
   Layers,
   Award,
   Maximize2,
-  Minimize2,
-  Wifi,
-  Battery,
-  Signal
+  Minimize2
 } from 'lucide-react';
 
 export type ScreenState =
@@ -72,35 +69,18 @@ export const App: React.FC = () => {
         {/* SCREENS 3 TO 10: MAIN MOBILE APPLICATION */}
         {currentScreen !== 'splash' && currentScreen !== 'loading' && (
           <>
-            {/* Native-style Mobile Status Bar */}
-            <div className="mobile-status-bar">
-              <span>9:41</span>
-
-              {/* Dynamic Island / Notch */}
-              <div className="mobile-notch">
-                <div className="camera-lens" />
-                <div className="speaker-grill" />
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Signal size={12} />
-                <Wifi size={12} />
-                <Battery size={13} />
-              </div>
-            </div>
-
             {/* Tricolor Strip */}
             <div className="gov-strip-mini" />
 
-            {/* Mobile App Top Header */}
+            {/* Clean Mobile App Header */}
             <header className="mobile-app-header">
               <div
                 onClick={() => setCurrentScreen('mission')}
                 style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
               >
                 <div style={{
-                  width: '28px',
-                  height: '28px',
+                  width: '30px',
+                  height: '30px',
                   borderRadius: '8px',
                   backgroundColor: '#0b1528',
                   color: '#ffffff',
@@ -108,10 +88,10 @@ export const App: React.FC = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <Shield size={15} />
+                  <Shield size={16} />
                 </div>
                 <div>
-                  <strong style={{ fontSize: '0.88rem', color: '#0f172a', display: 'block', lineHeight: 1.1 }}>
+                  <strong style={{ fontSize: '0.92rem', color: '#0f172a', display: 'block', lineHeight: 1.1 }}>
                     SanskritiSetu
                   </strong>
                   <span style={{ fontSize: '0.62rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -120,7 +100,7 @@ export const App: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right Action Icons */}
+              {/* Action Buttons */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <button
                   onClick={() => setIsMarkerModalOpen(true)}
@@ -131,9 +111,9 @@ export const App: React.FC = () => {
                     background: '#f1f5f9',
                     border: '1px solid #e2e8f0',
                     color: '#0f172a',
-                    padding: '5px 9px',
+                    padding: '6px 10px',
                     borderRadius: '10px',
-                    fontSize: '0.72rem',
+                    fontSize: '0.74rem',
                     fontWeight: 700,
                     cursor: 'pointer',
                   }}
@@ -142,7 +122,7 @@ export const App: React.FC = () => {
                   <span>Marker</span>
                 </button>
 
-                {/* Desktop view toggle */}
+                {/* View toggle (Phone Frame / Full Screen) */}
                 <button
                   onClick={() => setIsFullscreen(!isFullscreen)}
                   title={isFullscreen ? "Switch to Phone Frame" : "Switch to Fullscreen"}
@@ -150,21 +130,21 @@ export const App: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '28px',
-                    height: '28px',
+                    width: '30px',
+                    height: '30px',
                     background: '#f1f5f9',
                     border: '1px solid #e2e8f0',
                     color: '#64748b',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     cursor: 'pointer',
                   }}
                 >
-                  {isFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+                  {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
                 </button>
               </div>
             </header>
 
-            {/* Mobile Scrollable Viewport */}
+            {/* Scrollable Main Body with Internal Scroll */}
             <main className="mobile-content-scroll">
               {/* SCREEN 3: MISSION */}
               {currentScreen === 'mission' && (
@@ -221,7 +201,7 @@ export const App: React.FC = () => {
               )}
             </main>
 
-            {/* Floating Glass Bottom Navigation Bar */}
+            {/* Fixed Floating Bottom Navigation Dock (Always accessible without page scroll) */}
             {currentScreen !== 'ar_scanner' && (
               <nav className="mobile-bottom-nav">
                 {NAV_TABS.map((tab) => {
