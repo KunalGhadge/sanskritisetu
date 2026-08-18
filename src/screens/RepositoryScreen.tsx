@@ -1,6 +1,6 @@
 import React from 'react';
 import { MonumentData } from '../data/monuments';
-import { Database, Award, Clock, MapPin, ArrowRight, ShieldCheck, FileText, Box } from 'lucide-react';
+import { Database, Award, ArrowRight, MapPin, Calendar, Layers, Box } from 'lucide-react';
 
 interface RepositoryScreenProps {
   monument: MonumentData;
@@ -9,121 +9,101 @@ interface RepositoryScreenProps {
 
 export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({ monument, onOpenVault }) => {
   return (
-    <div style={{
-      maxWidth: '860px',
-      margin: '0 auto',
-      padding: 'clamp(24px, 4vw, 48px) 20px 60px',
-    }}>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-        <span className="gov-badge" style={{ marginBottom: '10px' }}>
-          <Database size={14} /> National Heritage Repository
-        </span>
-        <h1 style={{
-          fontSize: 'clamp(1.8rem, 4vw, 2.4rem)',
-          fontWeight: 800,
-          color: '#0f172a',
-          margin: '0 0 8px 0',
-          letterSpacing: '-0.03em',
-        }}>
-          Preservation Catalog
-        </h1>
-        <p style={{ fontSize: '0.95rem', color: '#64748b', margin: 0 }}>
-          Central sovereign registry for digital twins, architectural data, and historical records.
-        </p>
-      </div>
-
-      {/* Featured Monument Database Entry */}
-      <div className="vault-card" style={{
-        padding: 'clamp(20px, 4vw, 36px)',
-        marginBottom: '28px',
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid #e2e8f0',
-          paddingBottom: '16px',
-          marginBottom: '24px',
-          flexWrap: 'wrap',
-          gap: '8px',
-        }}>
-          <div>
-            <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block' }}>
-              Registry Record #ASI-IND-2026-0356
-            </span>
-            <strong style={{ fontSize: '0.92rem', color: '#0f172a' }}>
-              Primary Preservation Asset
-            </strong>
-          </div>
-
-          <span className="unesco-badge">
-            <Award size={13} /> {monument.status}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      {/* Header Pill */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <span style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>
+            National Archive Database
           </span>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+            Preservation Catalog
+          </h2>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
-          gap: '24px',
+        <span style={{
+          background: '#fef3c7',
+          color: '#b45309',
+          fontSize: '0.7rem',
+          fontWeight: 700,
+          padding: '4px 10px',
+          borderRadius: '12px',
+          border: '1px solid #fde68a',
+          display: 'flex',
           alignItems: 'center',
-          marginBottom: '28px',
+          gap: '4px',
         }}>
-          {/* Image */}
+          <Award size={13} /> UNESCO #356
+        </span>
+      </div>
+
+      {/* Featured Monument Card */}
+      <div className="app-card" style={{ padding: '14px', overflow: 'hidden' }}>
+        {/* Monument Image with Gradient Tag */}
+        <div style={{
+          position: 'relative',
+          height: '170px',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          backgroundColor: '#0b1528',
+          marginBottom: '14px',
+        }}>
+          <img
+            src={monument.heroImage}
+            alt={monument.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
           <div style={{
-            height: '220px',
-            borderRadius: '10px',
-            overflow: 'hidden',
-            backgroundColor: '#0b1528',
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(180deg, transparent 40%, rgba(11,21,40,0.85) 100%)',
+            display: 'flex',
+            alignItems: 'flex-end',
+            padding: '12px',
           }}>
-            <img
-              src={monument.heroImage}
-              alt={monument.name}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </div>
-
-          {/* Details */}
-          <div>
-            <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0f172a', margin: '0 0 4px 0' }}>
-              {monument.name}
-            </h2>
-            <p style={{ fontSize: '0.95rem', color: '#64748b', margin: '0 0 16px 0', fontWeight: 500 }}>
-              {monument.hindiName}
-            </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.88rem', color: '#334155' }}>
-              <div>
-                <span style={{ color: '#64748b' }}>Location: </span>
-                <strong>{monument.location.site}, {monument.location.district}, {monument.location.state}</strong>
-              </div>
-              <div>
-                <span style={{ color: '#64748b' }}>Period: </span>
-                <strong>{monument.period} ({monument.century})</strong>
-              </div>
-              <div>
-                <span style={{ color: '#64748b' }}>Empire: </span>
-                <strong>{monument.empire}</strong>
-              </div>
-              <div>
-                <span style={{ color: '#64748b' }}>Digital Archive: </span>
-                <strong style={{ color: '#16a34a' }}>✓ 3D GLB Sub-millimeter Model</strong>
-              </div>
+            <div>
+              <span style={{ color: '#fbbf24', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                Featured Heritage Asset
+              </span>
+              <h3 style={{ color: '#ffffff', fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>
+                {monument.name}
+              </h3>
             </div>
           </div>
         </div>
 
-        {/* Action Button */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button
-            onClick={onOpenVault}
-            className="btn-primary"
-            style={{ width: '100%', maxWidth: '320px', padding: '14px 24px', fontSize: '0.95rem' }}
-          >
-            <span>Open Heritage Vault</span>
-            <ArrowRight size={18} />
-          </button>
+        {/* Monument Quick Metadata Chips */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#334155' }}>
+            <MapPin size={15} color="#d97706" />
+            <span><strong>Location:</strong> {monument.location.site}, {monument.location.state}</span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#334155' }}>
+            <Calendar size={15} color="#2563eb" />
+            <span><strong>Period:</strong> {monument.period} ({monument.century})</span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#334155' }}>
+            <Layers size={15} color="#9333ea" />
+            <span><strong>Empire:</strong> {monument.empire}</span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#16a34a' }}>
+            <Box size={15} />
+            <span><strong>Status:</strong> 3D GLB Digital Twin Preserved</span>
+          </div>
         </div>
+
+        {/* Action Button */}
+        <button
+          onClick={onOpenVault}
+          className="btn-app-primary"
+          style={{ fontSize: '0.88rem' }}
+        >
+          <span>Open Heritage Vault</span>
+          <ArrowRight size={16} />
+        </button>
       </div>
     </div>
   );

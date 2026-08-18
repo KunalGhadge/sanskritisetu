@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MonumentData } from '../data/monuments';
-import { ArrowLeft, CheckCircle2, QrCode, ArrowRight, Volume2, VolumeX, RotateCw } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, QrCode, ArrowRight } from 'lucide-react';
 
 interface ARScannerScreenProps {
   monument: MonumentData;
@@ -15,100 +15,88 @@ export const ARScannerScreen: React.FC<ARScannerScreenProps> = ({
   onBackToIntro,
   onOpenMarkerModal,
 }) => {
-  const [audioActive, setAudioActive] = useState(true);
-
   return (
     <div style={{
-      position: 'relative',
-      minHeight: '85vh',
-      backgroundColor: '#0b1528',
+      position: 'absolute',
+      inset: 0,
+      backgroundColor: '#000000',
       color: '#ffffff',
       display: 'flex',
       flexDirection: 'column',
+      zIndex: 500,
     }}>
-      {/* Top Header */}
+      {/* Top Floating Mini Header */}
       <div style={{
-        padding: '12px 16px',
+        position: 'absolute',
+        top: '12px',
+        left: '12px',
+        right: '12px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: '#08101d',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        background: 'rgba(11, 21, 40, 0.85)',
+        backdropFilter: 'blur(16px)',
+        border: '1px solid rgba(255, 255, 255, 0.15)',
+        borderRadius: '16px',
+        padding: '8px 12px',
         zIndex: 50,
-        flexWrap: 'wrap',
-        gap: '8px',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button
-            onClick={onBackToIntro}
-            className="btn-secondary"
-            style={{
-              padding: '6px 12px',
-              fontSize: '0.8rem',
-              backgroundColor: '#162a45',
-              borderColor: 'rgba(255, 255, 255, 0.2)',
-              color: '#ffffff',
-              borderRadius: '6px',
-            }}
-          >
-            <ArrowLeft size={14} />
-            <span>Back</span>
-          </button>
+        <button
+          onClick={onBackToIntro}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: 'none',
+            color: '#ffffff',
+            padding: '6px 10px',
+            borderRadius: '10px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          <ArrowLeft size={14} />
+          <span>Exit</span>
+        </button>
 
-          <div>
-            <h2 style={{ fontSize: '0.92rem', fontWeight: 700, margin: 0 }}>
-              Live AR Experience • {monument.name}
-            </h2>
-            <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
-              Place marker inside the scanning frame
-            </span>
-          </div>
-        </div>
+        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#38bdf8' }}>
+          AR Scanner
+        </span>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <button
-            onClick={onOpenMarkerModal}
-            className="btn-accent"
-            style={{ padding: '6px 12px', fontSize: '0.78rem', borderRadius: '6px' }}
-          >
-            <QrCode size={14} />
-            <span>Marker Pattern</span>
-          </button>
-
-          <button
-            onClick={onFinishExploration}
-            className="btn-primary"
-            style={{
-              backgroundColor: '#22c55e',
-              borderColor: '#16a34a',
-              padding: '6px 14px',
-              fontSize: '0.78rem',
-              borderRadius: '6px',
-            }}
-          >
-            <span>Finish Mission</span>
-            <ArrowRight size={14} />
-          </button>
-        </div>
+        <button
+          onClick={onOpenMarkerModal}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            background: 'linear-gradient(135deg, #d97706, #b45309)',
+            border: 'none',
+            color: '#ffffff',
+            padding: '6px 10px',
+            borderRadius: '10px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          <QrCode size={13} />
+          <span>Marker</span>
+        </button>
       </div>
 
       {/* Live AR Camera Viewport via Iframe */}
-      <div style={{
-        position: 'relative',
-        flexGrow: 1,
-        minHeight: 'clamp(420px, 70vh, 700px)',
-        backgroundColor: '#000000',
-      }}>
+      <div style={{ position: 'relative', flexGrow: 1, width: '100%', height: '100%' }}>
         <iframe
           src="/ar/index.html"
           title="SanskritiSetu AR Camera"
           allow="camera; microphone; accelerometer; gyroscope; xr-spatial-tracking"
           style={{
-            position: 'absolute',
-            inset: 0,
             width: '100%',
             height: '100%',
             border: 'none',
+            backgroundColor: '#000000',
           }}
         />
 
@@ -118,10 +106,10 @@ export const ARScannerScreen: React.FC<ARScannerScreenProps> = ({
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 'min(240px, 65vw)',
-          height: 'min(240px, 65vw)',
-          border: '2px solid rgba(56, 189, 248, 0.6)',
-          borderRadius: '12px',
+          width: '210px',
+          height: '210px',
+          border: '2px solid rgba(56, 189, 248, 0.7)',
+          borderRadius: '16px',
           pointerEvents: 'none',
           display: 'flex',
           alignItems: 'center',
@@ -130,20 +118,39 @@ export const ARScannerScreen: React.FC<ARScannerScreenProps> = ({
           <div className="hud-laser" />
           <div style={{
             position: 'absolute',
-            bottom: '-28px',
-            background: 'rgba(11, 21, 40, 0.9)',
+            bottom: '-30px',
+            background: 'rgba(11, 21, 40, 0.92)',
             color: '#38bdf8',
             padding: '3px 10px',
-            borderRadius: '6px',
-            fontSize: '0.7rem',
-            fontWeight: 700,
+            borderRadius: '8px',
+            fontSize: '0.68rem',
+            fontWeight: 800,
             letterSpacing: '0.04em',
             textTransform: 'uppercase',
             whiteSpace: 'nowrap',
+            border: '1px solid rgba(56, 189, 248, 0.3)',
           }}>
             Scanning for Marker...
           </div>
         </div>
+      </div>
+
+      {/* Bottom Floating Complete Button */}
+      <div style={{
+        position: 'absolute',
+        bottom: '16px',
+        left: '16px',
+        right: '16px',
+        zIndex: 50,
+      }}>
+        <button
+          onClick={onFinishExploration}
+          className="btn-app-accent"
+          style={{ width: '100%', padding: '12px 18px', fontSize: '0.88rem', borderRadius: '14px' }}
+        >
+          <span>Complete AR Experience</span>
+          <ArrowRight size={16} />
+        </button>
       </div>
     </div>
   );

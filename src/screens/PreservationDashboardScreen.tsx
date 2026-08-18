@@ -1,94 +1,68 @@
 import React from 'react';
-import { ShieldCheck, CheckCircle2, Award, FileCheck, ArrowRight, Database, Box, Camera, Headphones, Layers, FileText } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, Award, ArrowRight, Layers, Box, Camera, Headphones, FileText } from 'lucide-react';
 
 interface PreservationDashboardScreenProps {
   onProceedToARExplorer: () => void;
 }
 
 const AUDIT_ITEMS = [
-  { label: 'Historical records archived', desc: '1336 CE to present chronology verified with ASI epigraphic sources', icon: FileText },
-  { label: 'Architectural information archived', desc: 'Granite joinery, dimensions, and stone wheel kinetics cataloged', icon: Layers },
-  { label: '3D model archived', desc: 'Sub-millimeter GLB photogrammetry digital twin recorded (184,200 polygons)', icon: Box },
-  { label: 'Photographs archived', desc: '1856 Alexander Greenlaw historical plates, present-day HD, and aerial LiDAR', icon: Camera },
-  { label: 'Audio narration archived', desc: 'English and Hindi voice guides with synced interactive transcripts', icon: Headphones },
-  { label: 'Cultural significance documented', desc: 'UNESCO Site #356 criteria and Vijayanagara royal patronage recorded', icon: Award },
+  { label: 'Historical records archived', desc: '1336 CE to present chronology recorded', icon: FileText },
+  { label: 'Architectural joinery archived', desc: 'Granite tolerances and dimensions cataloged', icon: Layers },
+  { label: '3D digital twin archived', desc: 'Sub-mm GLB photogrammetry (184,200 polygons)', icon: Box },
+  { label: 'Photographs collection archived', desc: '1856 glass plates, HD photos & LiDAR plates', icon: Camera },
+  { label: 'Audio narration archived', desc: 'English & Hindi voice guides with transcripts', icon: Headphones },
+  { label: 'Cultural significance registered', desc: 'UNESCO Site #356 Universal Value verified', icon: Award },
 ];
 
 export const PreservationDashboardScreen: React.FC<PreservationDashboardScreenProps> = ({
   onProceedToARExplorer,
 }) => {
   return (
-    <div style={{
-      maxWidth: '820px',
-      margin: '0 auto',
-      padding: 'clamp(24px, 4vw, 48px) 20px 60px',
-    }}>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-        <span className="gov-badge" style={{ marginBottom: '10px' }}>
-          <ShieldCheck size={14} /> Official Preservation Verification
-        </span>
-        <h1 style={{
-          fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
-          fontWeight: 800,
-          color: '#0f172a',
-          margin: '0 0 8px 0',
-          letterSpacing: '-0.03em',
-        }}>
-          Digital Preservation Status
-        </h1>
-        <p style={{ fontSize: '0.95rem', color: '#64748b', margin: 0 }}>
-          Sovereign verification checklist for Stone Chariot (Vijaya Vittala Temple, Hampi).
-        </p>
-      </div>
-
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
       {/* 100% Score Card */}
-      <div style={{
-        backgroundColor: '#0b1528',
-        borderRadius: '16px',
-        padding: 'clamp(24px, 4vw, 36px)',
-        color: '#ffffff',
+      <div className="app-card-dark" style={{
+        padding: '18px 16px',
+        background: 'linear-gradient(135deg, #0b1528 0%, #162a45 100%)',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '20px',
-        marginBottom: '28px',
+        gap: '12px',
       }}>
         <div>
-          <span style={{ fontSize: '0.75rem', color: '#c2902d', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
-            National Preservation Audit
+          <span style={{ fontSize: '0.68rem', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, display: 'block', marginBottom: '2px' }}>
+            National Audit Verification
           </span>
-          <h2 style={{ fontSize: 'clamp(1.4rem, 3vw, 1.8rem)', fontWeight: 800, margin: '0 0 4px 0' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 2px 0', color: '#ffffff' }}>
             Preservation Score: 100%
           </h2>
-          <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: 0 }}>
-            All 6 preservation tiers successfully ingested into the permanent national vault.
+          <p style={{ fontSize: '0.78rem', color: '#cbd5e1', margin: 0 }}>
+            All 6 preservation tiers verified.
           </p>
         </div>
 
         <div style={{
-          width: '72px',
-          height: '72px',
+          width: '54px',
+          height: '54px',
           borderRadius: '50%',
-          backgroundColor: 'rgba(34, 197, 94, 0.15)',
-          border: '2px solid #22c55e',
+          backgroundColor: 'rgba(16, 185, 129, 0.15)',
+          border: '2px solid #10b981',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#22c55e',
+          color: '#10b981',
+          flexShrink: 0,
         }}>
-          <CheckCircle2 size={38} />
+          <CheckCircle2 size={28} />
         </div>
       </div>
 
-      {/* Preservation Checklist Grid */}
-      <div className="vault-card" style={{ padding: 'clamp(20px, 4vw, 32px)', marginBottom: '32px' }}>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', marginBottom: '20px' }}>
+      {/* Preservation Checklist Items */}
+      <div className="app-card" style={{ padding: '14px' }}>
+        <h4 style={{ fontSize: '0.88rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>
           Archival Verification Breakdown
-        </h3>
+        </h4>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {AUDIT_ITEMS.map((item, idx) => {
             const Icon = item.icon;
             return (
@@ -97,33 +71,33 @@ export const PreservationDashboardScreen: React.FC<PreservationDashboardScreenPr
                 style={{
                   display: 'flex',
                   alignItems: 'flex-start',
-                  gap: '14px',
-                  padding: '14px 16px',
-                  borderRadius: '10px',
+                  gap: '10px',
+                  padding: '10px 12px',
+                  borderRadius: '12px',
                   backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #f1f5f9',
                 }}
               >
                 <div style={{
-                  width: '24px',
-                  height: '24px',
+                  width: '20px',
+                  height: '20px',
                   borderRadius: '50%',
-                  backgroundColor: '#22c55e',
+                  backgroundColor: '#10b981',
                   color: '#ffffff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
-                  marginTop: '2px',
+                  marginTop: '1px',
                 }}>
-                  <CheckCircle2 size={16} />
+                  <CheckCircle2 size={13} strokeWidth={3} />
                 </div>
 
                 <div style={{ flexGrow: 1 }}>
-                  <strong style={{ fontSize: '0.92rem', color: '#0f172a', display: 'block', marginBottom: '2px' }}>
+                  <strong style={{ fontSize: '0.82rem', color: '#0f172a', display: 'block', lineHeight: 1.3 }}>
                     {item.label}
                   </strong>
-                  <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
                     {item.desc}
                   </span>
                 </div>
@@ -134,22 +108,14 @@ export const PreservationDashboardScreen: React.FC<PreservationDashboardScreenPr
       </div>
 
       {/* Action to Proceed to AR Explorer */}
-      <div style={{ textAlign: 'center' }}>
-        <button
-          onClick={onProceedToARExplorer}
-          className="btn-accent"
-          style={{
-            padding: '14px 32px',
-            fontSize: '1rem',
-            borderRadius: '10px',
-            width: '100%',
-            maxWidth: '340px',
-          }}
-        >
-          <span>Experience in AR Explorer</span>
-          <ArrowRight size={18} />
-        </button>
-      </div>
+      <button
+        onClick={onProceedToARExplorer}
+        className="btn-app-accent"
+        style={{ fontSize: '0.88rem' }}
+      >
+        <span>Experience in AR Explorer</span>
+        <ArrowRight size={16} />
+      </button>
     </div>
   );
 };

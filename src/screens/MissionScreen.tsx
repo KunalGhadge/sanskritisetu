@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, ShieldCheck, ArrowRight, Wind, Droplets, BookX, Hammer } from 'lucide-react';
+import { AlertTriangle, ShieldCheck, ArrowRight, Wind, Droplets, BookX, Hammer, Sparkles } from 'lucide-react';
 
 interface MissionScreenProps {
   onEnterRepository: () => void;
@@ -7,103 +7,96 @@ interface MissionScreenProps {
 
 export const MissionScreen: React.FC<MissionScreenProps> = ({ onEnterRepository }) => {
   return (
-    <div style={{
-      maxWidth: '720px',
-      margin: '0 auto',
-      padding: 'clamp(24px, 4vw, 48px) 20px 60px',
-    }}>
-      {/* Top Tag */}
-      <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-        <span className="gov-badge" style={{ marginBottom: '12px' }}>
-          <ShieldCheck size={14} /> National Digital Preservation Mission
-        </span>
-        <h1 style={{
-          fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
-          fontWeight: 800,
-          color: '#0f172a',
-          margin: '0 0 12px 0',
-          letterSpacing: '-0.03em',
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      {/* Top Banner Card */}
+      <div className="app-card-dark" style={{
+        padding: '20px 18px',
+        background: 'linear-gradient(135deg, #0b1528 0%, #162a45 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '5px',
+          background: 'rgba(217, 119, 6, 0.2)',
+          border: '1px solid rgba(217, 119, 6, 0.4)',
+          color: '#fbbf24',
+          fontSize: '0.68rem',
+          fontWeight: 700,
+          padding: '4px 10px',
+          borderRadius: '12px',
+          marginBottom: '10px',
         }}>
+          <ShieldCheck size={13} /> National Digital Mission
+        </div>
+
+        <h2 style={{ fontSize: '1.35rem', fontWeight: 800, margin: '0 0 6px 0', lineHeight: 1.25 }}>
           Preserving India's Cultural Heritage
-        </h1>
-        <p style={{
-          fontSize: '1.05rem',
-          color: '#475569',
-          lineHeight: 1.6,
-          margin: 0,
-        }}>
-          India is home to thousands of historically significant monuments, temples, forts, and cultural shrines.
+        </h2>
+
+        <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.5, margin: 0 }}>
+          India is home to thousands of historic monuments, temples, and sacred shrines facing continuous risk.
         </p>
       </div>
 
-      {/* The Problem Card */}
-      <div className="vault-card" style={{
-        padding: 'clamp(20px, 4vw, 32px)',
-        marginBottom: '28px',
-        borderLeft: '4px solid #ef4444',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#991b1b', fontWeight: 700, fontSize: '0.9rem', marginBottom: '12px' }}>
-          <AlertTriangle size={18} /> Many Monuments Face Continuous Deterioration:
+      {/* The Problem Breakdown */}
+      <div className="app-card" style={{ padding: '16px' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          color: '#b91c1c',
+          fontWeight: 700,
+          fontSize: '0.82rem',
+          marginBottom: '12px',
+        }}>
+          <AlertTriangle size={15} /> Many Monuments Face Deterioration:
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: '#f8fafc', borderRadius: '8px' }}>
-            <Wind size={18} color="#b45309" />
-            <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600 }}>Weathering & Erosion</span>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', background: '#fef2f2', borderRadius: '12px' }}>
+            <Wind size={16} color="#dc2626" />
+            <span style={{ fontSize: '0.78rem', color: '#1e293b', fontWeight: 600 }}>Weathering</span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: '#f8fafc', borderRadius: '8px' }}>
-            <Droplets size={18} color="#1e3a8a" />
-            <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600 }}>Environmental Damage</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', background: '#eff6ff', borderRadius: '12px' }}>
+            <Droplets size={16} color="#2563eb" />
+            <span style={{ fontSize: '0.78rem', color: '#1e293b', fontWeight: 600 }}>Pollution</span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: '#f8fafc', borderRadius: '8px' }}>
-            <BookX size={18} color="#991b1b" />
-            <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600 }}>Loss of Historical Records</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', background: '#fdf4ff', borderRadius: '12px' }}>
+            <BookX size={16} color="#9333ea" />
+            <span style={{ fontSize: '0.78rem', color: '#1e293b', fontWeight: 600 }}>Record Loss</span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: '#f8fafc', borderRadius: '8px' }}>
-            <Hammer size={18} color="#64748b" />
-            <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600 }}>Physical Deterioration</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', background: '#f8fafc', borderRadius: '12px' }}>
+            <Hammer size={16} color="#64748b" />
+            <span style={{ fontSize: '0.78rem', color: '#1e293b', fontWeight: 600 }}>Erosion</span>
           </div>
         </div>
       </div>
 
-      {/* The Mission Statement */}
-      <div style={{
-        backgroundColor: '#0b1528',
-        borderRadius: '16px',
-        padding: 'clamp(24px, 4vw, 36px)',
-        color: '#ffffff',
-        textAlign: 'center',
-        marginBottom: '32px',
+      {/* Mission Directive Card */}
+      <div className="app-card" style={{
+        padding: '18px 16px',
+        background: '#fffbeb',
+        border: '1px solid #fde68a',
       }}>
-        <span style={{ fontSize: '0.78rem', color: '#c2902d', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>
-          ✦ Our National Mission ✦
+        <span style={{ fontSize: '0.7rem', color: '#b45309', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' }}>
+          ✦ Sovereign Mandate ✦
         </span>
-        <blockquote style={{
-          fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
-          fontWeight: 700,
-          lineHeight: 1.5,
-          margin: '0 0 24px 0',
-          color: '#f8fafc',
-        }}>
-          "Digitally preserve cultural heritage for future generations through permanent 3D archives and immersive spatial exploration."
-        </blockquote>
+        <p style={{ fontSize: '0.9rem', fontWeight: 700, color: '#78350f', lineHeight: 1.4, margin: '0 0 16px 0' }}>
+          "Digitally preserve cultural heritage for future generations through permanent 3D archives and immersive AR."
+        </p>
 
         <button
           onClick={onEnterRepository}
-          className="btn-accent"
-          style={{
-            padding: '14px 32px',
-            fontSize: '1rem',
-            borderRadius: '10px',
-            width: '100%',
-            maxWidth: '280px',
-          }}
+          className="btn-app-accent"
+          style={{ width: '100%', fontSize: '0.88rem' }}
         >
           <span>Enter Repository</span>
-          <ArrowRight size={18} />
+          <ArrowRight size={16} />
         </button>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, CheckCircle2, RotateCcw, Database, ShieldCheck } from 'lucide-react';
+import { Award, CheckCircle2, RotateCcw, Database, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface CompletionScreenProps {
   onReturnToRepository: () => void;
@@ -11,56 +11,58 @@ export const CompletionScreen: React.FC<CompletionScreenProps> = ({
   onReopenVault,
 }) => {
   return (
-    <div style={{
-      maxWidth: '640px',
-      margin: '0 auto',
-      padding: 'clamp(32px, 5vw, 60px) 20px 80px',
-      textAlign: 'center',
-    }}>
-      {/* Success Icon */}
-      <div style={{
-        width: '72px',
-        height: '72px',
-        margin: '0 auto 20px',
-        borderRadius: '50%',
-        backgroundColor: '#dcfce7',
-        color: '#16a34a',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'center' }}>
+      {/* Celebration Card */}
+      <div className="app-card" style={{
+        padding: '24px 18px',
+        background: 'linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%)',
+        border: '1px solid #a7f3d0',
       }}>
-        <CheckCircle2 size={40} />
+        <div style={{
+          width: '64px',
+          height: '64px',
+          margin: '0 auto 12px',
+          borderRadius: '50%',
+          backgroundColor: '#10b981',
+          color: '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 10px 25px rgba(16, 185, 129, 0.3)',
+        }}>
+          <CheckCircle2 size={36} strokeWidth={2.5} />
+        </div>
+
+        <span style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '4px',
+          background: '#dcfce7',
+          color: '#166534',
+          fontSize: '0.7rem',
+          fontWeight: 700,
+          padding: '3px 10px',
+          borderRadius: '12px',
+          marginBottom: '8px',
+        }}>
+          <ShieldCheck size={13} /> Mission Complete
+        </span>
+
+        <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', margin: '0 0 6px 0' }}>
+          Thank You for Exploring
+        </h3>
+
+        <p style={{ fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, margin: 0 }}>
+          You have successfully explored and verified the digital twin preservation archive for India's <strong>Stone Chariot of Hampi</strong>.
+        </p>
       </div>
 
-      <span className="gov-badge" style={{ marginBottom: '12px' }}>
-        <ShieldCheck size={14} /> Mission Completed Successfully
-      </span>
-
-      <h1 style={{
-        fontSize: 'clamp(1.8rem, 4vw, 2.4rem)',
-        fontWeight: 800,
-        color: '#0f172a',
-        margin: '0 0 10px 0',
-        letterSpacing: '-0.03em',
-      }}>
-        Thank You for Exploring
-      </h1>
-
-      <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.6, marginBottom: '32px' }}>
-        You have successfully explored and verified the digital twin preservation archive for India's historic <strong>Stone Chariot of Hampi</strong>.
-      </p>
-
-      {/* Completion Summary Card */}
-      <div className="vault-card" style={{
-        padding: '24px',
-        marginBottom: '32px',
-        textAlign: 'left',
-        background: '#f8fafc',
-      }}>
-        <strong style={{ fontSize: '0.92rem', color: '#0f172a', display: 'block', marginBottom: '12px' }}>
-          Mission Highlights:
+      {/* Highlights Card */}
+      <div className="app-card" style={{ padding: '14px', textAlign: 'left' }}>
+        <strong style={{ fontSize: '0.82rem', color: '#0f172a', display: 'block', marginBottom: '8px' }}>
+          Preservation Highlights:
         </strong>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.86rem', color: '#475569' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.78rem', color: '#475569' }}>
           <div>✓ Monolithic granite architecture preserved</div>
           <div>✓ 184,200 polygon 3D digital twin archived</div>
           <div>✓ Spatial augmented reality exploration completed</div>
@@ -68,12 +70,12 @@ export const CompletionScreen: React.FC<CompletionScreenProps> = ({
         </div>
       </div>
 
-      {/* Actions */}
-      <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+      {/* Action Buttons */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <button
           onClick={onReturnToRepository}
-          className="btn-primary"
-          style={{ padding: '12px 24px', fontSize: '0.9rem' }}
+          className="btn-app-primary"
+          style={{ fontSize: '0.88rem' }}
         >
           <Database size={16} />
           <span>Return to Repository</span>
@@ -81,10 +83,10 @@ export const CompletionScreen: React.FC<CompletionScreenProps> = ({
 
         <button
           onClick={onReopenVault}
-          className="btn-secondary"
-          style={{ padding: '12px 20px', fontSize: '0.9rem' }}
+          className="btn-app-secondary"
+          style={{ fontSize: '0.84rem' }}
         >
-          <RotateCcw size={16} />
+          <RotateCcw size={15} />
           <span>Re-open Heritage Vault</span>
         </button>
       </div>

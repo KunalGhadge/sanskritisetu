@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Database } from 'lucide-react';
 
 interface LoadingScreenProps {
   onLoaded: () => void;
@@ -18,7 +18,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoaded }) => {
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prev) => {
-        const next = prev + 4;
+        const next = prev + 5;
         if (next >= 100) {
           clearInterval(timer);
           setTimeout(onLoaded, 250);
@@ -26,14 +26,14 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoaded }) => {
         }
         return next;
       });
-    }, 35);
+    }, 40);
 
     return () => clearInterval(timer);
   }, [onLoaded]);
 
   return (
     <div style={{
-      position: 'fixed',
+      position: 'absolute',
       inset: 0,
       zIndex: 9998,
       backgroundColor: '#0b1528',
@@ -43,27 +43,26 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoaded }) => {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '24px',
+      background: 'radial-gradient(circle at 50% 40%, #162a45 0%, #08101d 100%)',
     }}>
       <div style={{
-        maxWidth: '420px',
+        maxWidth: '340px',
         width: '100%',
         backgroundColor: '#162a45',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '16px',
-        padding: '32px 28px',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        borderRadius: '24px',
+        padding: '28px 22px',
         boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
       }}>
-        <h3 style={{
-          fontSize: '1.25rem',
-          fontWeight: 800,
-          marginBottom: '20px',
-          letterSpacing: '-0.02em',
-        }}>
-          Loading Heritage Assets...
-        </h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: '#d97706' }}>
+          <Database size={18} />
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: '#ffffff' }}>
+            Loading Heritage Assets...
+          </h3>
+        </div>
 
         {/* Checklist */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '28px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
           {ITEMS.map((item, idx) => {
             const isDone = progress >= (idx + 1) * 23;
             return (
@@ -73,22 +72,23 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoaded }) => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
-                  fontSize: '0.9rem',
+                  fontSize: '0.84rem',
                   color: isDone ? '#ffffff' : '#64748b',
                   transition: 'color 0.2s',
                 }}
               >
                 <div style={{
-                  width: '18px',
-                  height: '18px',
+                  width: '20px',
+                  height: '20px',
                   borderRadius: '50%',
-                  backgroundColor: isDone ? '#22c55e' : 'rgba(255,255,255,0.1)',
+                  backgroundColor: isDone ? '#10b981' : 'rgba(255,255,255,0.08)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '10px',
                   color: '#ffffff',
                   transition: 'background-color 0.2s',
+                  flexShrink: 0,
                 }}>
                   {isDone && <Check size={12} strokeWidth={3} />}
                 </div>
@@ -103,14 +103,14 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoaded }) => {
           width: '100%',
           height: '6px',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '3px',
+          borderRadius: '4px',
           overflow: 'hidden',
-          marginBottom: '10px',
+          marginBottom: '8px',
         }}>
           <div style={{
             height: '100%',
             width: `${progress}%`,
-            backgroundColor: '#c2902d',
+            background: 'linear-gradient(90deg, #d97706, #f59e0b)',
             transition: 'width 0.1s linear',
           }} />
         </div>
@@ -118,11 +118,12 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoaded }) => {
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
-          fontSize: '0.75rem',
-          color: '#64748b',
+          fontSize: '0.72rem',
+          color: '#94a3b8',
           fontFamily: 'monospace',
+          fontWeight: 600,
         }}>
-          <span>NATIONAL ARCHIVES</span>
+          <span>NATIONAL VAULT</span>
           <span>{progress}%</span>
         </div>
       </div>
