@@ -39,8 +39,9 @@
       }
     </style>
     <script>
+      // Component to scale up to an impressive visible size and center on target
       AFRAME.registerComponent('auto-fit', {
-        schema: { size: { type: 'number', default: 0.65 } },
+        schema: { size: { type: 'number', default: 1.35 } },
         init: function () {
           this.el.addEventListener('model-loaded', () => {
             const obj = this.el.getObject3D('mesh');
@@ -58,8 +59,9 @@
     </script>
   </head>
   <body>
+    <!-- Heavy Jitter Smoothing Filter + Extended Miss Tolerance (Keeps model visible even when camera tilts away) -->
     <a-scene
-      mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.001; filterBeta: 1000; warmupTolerance: 1; missTolerance: 5;"
+      mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 1; missTolerance: 80;"
       color-space="sRGB"
       renderer="colorManagement: true, physicallyCorrectLights: true"
       vr-mode-ui="enabled: false"
@@ -70,19 +72,19 @@
         <a-asset-item id="monumentModel" src="./asset.glb"></a-asset-item>
       </a-assets>
 
-      <a-entity light="type: ambient; color: #FFFFFF; intensity: 1.6"></a-entity>
-      <a-entity light="type: directional; color: #FFF; intensity: 2.2" position="1 4 2"></a-entity>
+      <a-entity light="type: ambient; color: #FFFFFF; intensity: 1.8"></a-entity>
+      <a-entity light="type: directional; color: #FFF; intensity: 2.4" position="1 4 3"></a-entity>
+      <a-entity light="type: directional; color: #CFD8DC; intensity: 1.0" position="-2 -1 1"></a-entity>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- 3D Monument rendered on top of target -->
+        <!-- 3D Monument standing proud and large on top of target -->
         <a-gltf-model
           rotation="90 0 0"
-          position="0 0 0.1"
-          scale="0.005 0.005 0.005"
+          position="0 0 0.15"
           src="#monumentModel"
-          auto-fit="size: 0.65"
+          auto-fit="size: 1.35"
         ></a-gltf-model>
       </a-entity>
     </a-scene>
