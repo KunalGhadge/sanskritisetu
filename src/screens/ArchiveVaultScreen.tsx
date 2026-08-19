@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MonumentData, PhotoAsset } from '../data/monuments';
 import { ModelViewer3D } from '../components/ModelViewer3D';
+import { GoogleARViewer } from '../components/GoogleARViewer';
 import { AudioGuide } from '../components/AudioGuide';
 import { HeritageImage } from '../components/HeritageImage';
 import { SkeletonLoader } from '../components/SkeletonLoader';
@@ -439,13 +440,14 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
               </div>
             )}
 
-            {/* TIER 6: 3D DIGITAL TWIN */}
+            {/* TIER 6: 3D DIGITAL TWIN & GOOGLE AR */}
             {activeTier === '3d' && (
               <div className="digi-card" style={{ padding: '16px', margin: 0 }}>
-                <ModelViewer3D
-                  modelPath={monument.glbModelPath}
+                <GoogleARViewer
+                  src={monument.glbModelPath}
+                  alt={displayName}
                   monumentName={displayName}
-                  onLaunchAR={onLaunchAR}
+                  currentLanguage={currentLanguage}
                 />
               </div>
             )}
