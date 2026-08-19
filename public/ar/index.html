@@ -5,7 +5,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
   <body>
-    <a-scene mindar-image="imageTargetSrc: ./targets.mind; showStats: false; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 1; missTolerance: 10;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 1; missTolerance: 10;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
       <a-assets>
         <a-asset-item id="chariot" src="./asset.glb"></a-asset-item>
@@ -14,8 +14,16 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
+        <!-- Blue confirmation plane - tracks image -->
         <a-plane color="blue" opacity="0.5" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
-        <a-gltf-model rotation="0 0 0" position="0 0 0.1" scale="0.5 0.5 0.5" src="#chariot" animation="property: position; to: 0 0.05 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"></a-gltf-model>
+
+        <!-- Use a-entity gltf-model instead of a-gltf-model so it inherits parent transform correctly -->
+        <a-entity
+          gltf-model="#chariot"
+          position="0 0 0.1"
+          scale="0.5 0.5 0.5"
+          animation="property: position; to: 0 0.05 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
+        ></a-entity>
       </a-entity>
 
     </a-scene>
