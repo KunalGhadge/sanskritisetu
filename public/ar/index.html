@@ -1,27 +1,282 @@
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-  </head>
-  <body>
-    <a-scene mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 1; missTolerance: 10;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>AR - Stone Chariot</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; overflow: hidden; font-family: system-ui, sans-serif; }
 
-      <a-assets>
-        <a-asset-item id="chariot" src="./asset.glb"></a-asset-item>
-      </a-assets>
+    #overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
 
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    #start-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.85);
+      z-index: 20;
+      gap: 24px;
+      padding: 32px;
+    }
+    #start-screen h1 {
+      color: #fff;
+      font-size: 22px;
+      text-align: center;
+    }
+    #start-screen p {
+      color: #aaa;
+      font-size: 14px;
+      text-align: center;
+      line-height: 1.6;
+    }
+    #ar-btn {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 48px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      pointer-events: all;
+      box-shadow: 0 4px 24px rgba(124,58,237,0.5);
+    }
+    #not-supported {
+      color: #f87171;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
 
-      <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Model scaled to fit nicely on top of the target image -->
-        <a-entity
-          gltf-model="#chariot"
-          position="0 0 0.05"
-          scale="0.15 0.15 0.15"
-        ></a-entity>
-      </a-entity>
+    #instructions {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 14px;
+      white-space: nowrap;
+      display: none;
+    }
 
-    </a-scene>
-  </body>
+    #placed-msg {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(124,58,237,0.85);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 14px;
+      white-space: nowrap;
+      display: none;
+    }
+
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+
+  <div id="start-screen">
+    <h1>🏛️ Stone Chariot AR</h1>
+    <p>Point your camera at a flat surface (floor or table), then tap to place the Stone Chariot of Vittala Temple in real space.</p>
+    <button id="ar-btn">Start AR</button>
+    <p id="not-supported">WebXR AR is not supported on this device/browser.<br>Please open in Chrome on an ARCore-compatible Android device.</p>
+  </div>
+
+  <div id="overlay">
+    <div id="instructions">Slowly move your camera to detect a surface…</div>
+    <div id="placed-msg">✅ Chariot placed! Move around to explore.</div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const arBtn = document.getElementById('ar-btn');
+    const startScreen = document.getElementById('start-screen');
+    const notSupported = document.getElementById('not-supported');
+    const instructions = document.getElementById('instructions');
+    const placedMsg = document.getElementById('placed-msg');
+
+    // ── Check WebXR support ────────────────────────────────────────────
+    if (!navigator.xr) {
+      arBtn.style.display = 'none';
+      notSupported.style.display = 'block';
+    } else {
+      navigator.xr.isSessionSupported('immersive-ar').then(supported => {
+        if (!supported) {
+          arBtn.style.display = 'none';
+          notSupported.style.display = 'block';
+        }
+      });
+    }
+
+    // ── Three.js setup ─────────────────────────────────────────────────
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.xr.enabled = true;
+    document.body.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+
+    // ── Lighting ───────────────────────────────────────────────────────
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
+    hemi.position.set(0, 1, 0);
+    scene.add(hemi);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    dirLight.position.set(1, 2, 1);
+    scene.add(dirLight);
+
+    // ── Reticle (surface indicator ring) ───────────────────────────────
+    const reticleGeo = new THREE.RingGeometry(0.08, 0.13, 36).rotateX(-Math.PI / 2);
+    const reticleMat = new THREE.MeshBasicMaterial({ color: 0x7c3aed, side: THREE.DoubleSide });
+    const reticle = new THREE.Mesh(reticleGeo, reticleMat);
+    reticle.matrixAutoUpdate = false;
+    reticle.visible = false;
+    scene.add(reticle);
+
+    // Inner dot
+    const dotGeo = new THREE.CircleGeometry(0.03, 24).rotateX(-Math.PI / 2);
+    const dotMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+    const dot = new THREE.Mesh(dotGeo, dotMat);
+    reticle.add(dot);
+
+    // ── Load GLB model ─────────────────────────────────────────────────
+    let chariot = null;
+    let modelPlaced = false;
+
+    const loader = new GLTFLoader();
+    loader.load('./asset.glb', (gltf) => {
+      chariot = gltf.scene;
+      // Our model spans -1 to 1 (2 units). Scale to ~0.4m wide.
+      chariot.scale.set(0.2, 0.2, 0.2);
+      chariot.visible = false;
+      scene.add(chariot);
+    }, undefined, (err) => {
+      console.error('GLB load error:', err);
+    });
+
+    // ── Hit-test state ─────────────────────────────────────────────────
+    let hitTestSource = null;
+    let hitTestSourceRequested = false;
+
+    // ── Start AR session ───────────────────────────────────────────────
+    arBtn.addEventListener('click', async () => {
+      try {
+        const session = await navigator.xr.requestSession('immersive-ar', {
+          requiredFeatures: ['hit-test'],
+          optionalFeatures: ['dom-overlay'],
+          domOverlay: { root: document.getElementById('overlay') }
+        });
+
+        renderer.xr.setSession(session);
+        startScreen.style.display = 'none';
+        instructions.style.display = 'block';
+
+        session.addEventListener('end', () => {
+          hitTestSource = null;
+          hitTestSourceRequested = false;
+          modelPlaced = false;
+          instructions.style.display = 'none';
+          placedMsg.style.display = 'none';
+          startScreen.style.display = 'flex';
+          if (chariot) chariot.visible = false;
+          reticle.visible = false;
+        });
+
+        // ── Tap to place ─────────────────────────────────────────────
+        session.addEventListener('select', () => {
+          if (!chariot || !reticle.visible) return;
+
+          if (!modelPlaced) {
+            // First placement
+            chariot.position.setFromMatrixPosition(reticle.matrix);
+            // Keep model upright using reticle's Y rotation
+            const mat = reticle.matrix;
+            chariot.rotation.set(0, Math.atan2(mat.elements[8], mat.elements[10]), 0);
+            chariot.visible = true;
+            modelPlaced = true;
+            instructions.style.display = 'none';
+            placedMsg.style.display = 'block';
+            setTimeout(() => { placedMsg.style.display = 'none'; }, 3000);
+          } else {
+            // Move model to new position
+            chariot.position.setFromMatrixPosition(reticle.matrix);
+          }
+        });
+
+      } catch (e) {
+        console.error('AR session error:', e);
+        notSupported.style.display = 'block';
+        notSupported.textContent = `AR Error: ${e.message}`;
+      }
+    });
+
+    // ── Render loop ────────────────────────────────────────────────────
+    renderer.setAnimationLoop((timestamp, frame) => {
+      if (frame) {
+        const refSpace = renderer.xr.getReferenceSpace();
+        const session = renderer.xr.getSession();
+
+        if (!hitTestSourceRequested) {
+          session.requestReferenceSpace('viewer').then((viewerSpace) => {
+            session.requestHitTestSource({ space: viewerSpace }).then((source) => {
+              hitTestSource = source;
+            });
+          });
+          session.addEventListener('end', () => {
+            hitTestSourceRequested = false;
+            hitTestSource = null;
+          });
+          hitTestSourceRequested = true;
+        }
+
+        if (hitTestSource) {
+          const hits = frame.getHitTestResults(hitTestSource);
+          if (hits.length > 0) {
+            const pose = hits[0].getPose(refSpace);
+            reticle.visible = true;
+            reticle.matrix.fromArray(pose.transform.matrix);
+          } else {
+            reticle.visible = false;
+          }
+        }
+      }
+
+      renderer.render(scene, camera);
+    });
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+  </script>
+</body>
 </html>
