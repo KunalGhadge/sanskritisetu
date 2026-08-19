@@ -1,73 +1,23 @@
-<!doctype html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SanskritiSetu MindAR 3D</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      html, body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background: transparent !important;
-      }
-      video {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        z-index: 1 !important;
-      }
-      .a-canvas {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        background-color: transparent !important;
-        z-index: 2 !important;
-      }
-    </style>
   </head>
   <body>
-    <a-scene
-      mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 1; missTolerance: 80;"
-      color-space="sRGB"
-      renderer="colorManagement: true, physicallyCorrectLights: true"
-      vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: false"
-      embedded
-    >
-      <a-assets>
-        <a-asset-item id="monumentModel" src="./asset.glb"></a-asset-item>
-      </a-assets>
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind; showStats: false; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 1; missTolerance: 10;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
-      <!-- Ambient & Directional Lighting -->
-      <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.0"></a-entity>
-      <a-entity light="type: directional; color: #FFF; intensity: 2.5" position="1 4 3"></a-entity>
-      <a-entity light="type: directional; color: #CFD8DC; intensity: 1.2" position="-2 -1 1"></a-entity>
+      <a-assets>
+        <a-asset-item id="chariot" src="./asset.glb"></a-asset-item>
+      </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Exact Tutorial Alignment: rotation="0 0 0", grounded at position="0 0 0", compact mobile-fit scale="0.08 0.08 0.08" -->
-        <a-gltf-model
-          rotation="0 0 0"
-          position="0 0 0"
-          scale="0.08 0.08 0.08"
-          src="#monumentModel"
-        ></a-gltf-model>
+        <a-plane color="blue" opacity="0.5" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+        <a-gltf-model rotation="0 0 0" position="0 0 0.1" scale="0.5 0.5 0.5" src="#chariot" animation="property: position; to: 0 0.05 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"></a-gltf-model>
       </a-entity>
+
     </a-scene>
   </body>
 </html>
