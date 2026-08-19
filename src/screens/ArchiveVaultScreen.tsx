@@ -183,26 +183,32 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
               {monument.location.site} • {monument.unescoId}
             </span>
 
-            {/* Quick Facts Grid (2x2) */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '14px' }}>
-              <div style={{ background: '#f8f9fe', border: '1px solid #eceef5', borderRadius: '12px', padding: '8px 10px' }}>
-                <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase' }}>{t.periodLabel}</span>
-                <strong style={{ fontSize: '0.76rem', color: '#181c32', display: 'block', marginTop: '2px' }}>{monument.period}</strong>
+            {/* Quick Facts Grid (2x2) - 100% Mobile Responsive */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: '8px',
+              marginBottom: '14px',
+              width: '100%',
+            }}>
+              <div style={{ background: '#f8f9fe', border: '1px solid #eceef5', borderRadius: '12px', padding: '8px 10px', minWidth: 0, boxSizing: 'border-box' }}>
+                <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>{t.periodLabel}</span>
+                <strong style={{ fontSize: '0.74rem', color: '#181c32', display: 'block', marginTop: '2px', wordBreak: 'break-word', lineHeight: 1.3 }}>{monument.period}</strong>
               </div>
 
-              <div style={{ background: '#f8f9fe', border: '1px solid #eceef5', borderRadius: '12px', padding: '8px 10px' }}>
-                <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase' }}>{t.patronLabel}</span>
-                <strong style={{ fontSize: '0.76rem', color: '#181c32', display: 'block', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{monument.patronKing}</strong>
+              <div style={{ background: '#f8f9fe', border: '1px solid #eceef5', borderRadius: '12px', padding: '8px 10px', minWidth: 0, boxSizing: 'border-box' }}>
+                <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>{t.patronLabel}</span>
+                <strong style={{ fontSize: '0.74rem', color: '#181c32', display: 'block', marginTop: '2px', wordBreak: 'break-word', lineHeight: 1.3 }}>{monument.patronKing}</strong>
               </div>
 
-              <div style={{ background: '#f8f9fe', border: '1px solid #eceef5', borderRadius: '12px', padding: '8px 10px' }}>
-                <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase' }}>{t.styleLabel}</span>
-                <strong style={{ fontSize: '0.76rem', color: '#181c32', display: 'block', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{monument.architecturalArchive.specifications.style}</strong>
+              <div style={{ background: '#f8f9fe', border: '1px solid #eceef5', borderRadius: '12px', padding: '8px 10px', minWidth: 0, boxSizing: 'border-box' }}>
+                <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>{t.styleLabel}</span>
+                <strong style={{ fontSize: '0.74rem', color: '#181c32', display: 'block', marginTop: '2px', wordBreak: 'break-word', lineHeight: 1.3 }}>{monument.architecturalArchive.specifications.style}</strong>
               </div>
 
-              <div style={{ background: '#f8f9fe', border: '1px solid #eceef5', borderRadius: '12px', padding: '8px 10px' }}>
-                <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase' }}>{t.materialLabel}</span>
-                <strong style={{ fontSize: '0.76rem', color: '#181c32', display: 'block', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{monument.architecturalArchive.specifications.primaryMaterial}</strong>
+              <div style={{ background: '#f8f9fe', border: '1px solid #eceef5', borderRadius: '12px', padding: '8px 10px', minWidth: 0, boxSizing: 'border-box' }}>
+                <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>{t.materialLabel}</span>
+                <strong style={{ fontSize: '0.74rem', color: '#181c32', display: 'block', marginTop: '2px', wordBreak: 'break-word', lineHeight: 1.3 }}>{monument.architecturalArchive.specifications.primaryMaterial}</strong>
               </div>
             </div>
 
@@ -350,14 +356,14 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
                   {t.dimensionalEngineeringTitle}
                 </h4>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '12px' }}>
-                  <div style={{ background: '#f8f9fe', borderRadius: '10px', padding: '8px', border: '1px solid #eceef5' }}>
-                    <span style={{ fontSize: '0.62rem', color: '#8b92ab' }}>{t.heightLabel}</span>
-                    <strong style={{ fontSize: '0.76rem', color: '#181c32', display: 'block' }}>{monument.architecturalArchive.specifications.height}</strong>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px', marginBottom: '12px', width: '100%' }}>
+                  <div style={{ background: '#f8f9fe', borderRadius: '10px', padding: '8px', border: '1px solid #eceef5', minWidth: 0, boxSizing: 'border-box' }}>
+                    <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>{t.heightLabel}</span>
+                    <strong style={{ fontSize: '0.74rem', color: '#181c32', display: 'block', marginTop: '2px', wordBreak: 'break-word', lineHeight: 1.3 }}>{monument.architecturalArchive.specifications.height}</strong>
                   </div>
-                  <div style={{ background: '#f8f9fe', borderRadius: '10px', padding: '8px', border: '1px solid #eceef5' }}>
-                    <span style={{ fontSize: '0.62rem', color: '#8b92ab' }}>{t.baseAreaLabel}</span>
-                    <strong style={{ fontSize: '0.76rem', color: '#181c32', display: 'block' }}>{monument.architecturalArchive.specifications.baseArea}</strong>
+                  <div style={{ background: '#f8f9fe', borderRadius: '10px', padding: '8px', border: '1px solid #eceef5', minWidth: 0, boxSizing: 'border-box' }}>
+                    <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>{t.baseAreaLabel}</span>
+                    <strong style={{ fontSize: '0.74rem', color: '#181c32', display: 'block', marginTop: '2px', wordBreak: 'break-word', lineHeight: 1.3 }}>{monument.architecturalArchive.specifications.baseArea}</strong>
                   </div>
                 </div>
 

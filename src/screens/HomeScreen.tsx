@@ -424,8 +424,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           <span onClick={() => onNavigateTab('repository')} className="digi-view-all">{t.viewAll}</span>
         </div>
 
-        {/* State Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+        {/* State Grid - 100% Mobile Responsive */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px', width: '100%' }}>
           {STATES_DATA.slice(0, 4).map((state) => {
             const localizedStateName = currentLanguage !== 'en' && state.hindiName ? state.hindiName : state.name;
 
@@ -442,6 +442,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                   flexDirection: 'column',
                   alignItems: 'center',
                   textAlign: 'center',
+                  minWidth: 0,
+                  boxSizing: 'border-box',
                 }}
               >
                 <div style={{
