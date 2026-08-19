@@ -5,7 +5,6 @@
     <title>SanskritiSetu MindAR 3D</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
     <style>
       * {
         box-sizing: border-box;
@@ -39,6 +38,53 @@
         z-index: 2 !important;
       }
     </style>
+
+    <script>
+      AFRAME.registerComponent('chariot-model', {
+        init: function () {
+          const el = this.el;
+          
+          el.addEventListener('model-loaded', () => {
+            const obj = el.getObject3D('mesh');
+            if (!obj) return;
+
+            // Ensure materials are rendered double-sided with proper lighting
+            obj.traverse((child) => {
+              if (child.isMesh && child.material) {
+                child.material.side = THREE.DoubleSide;
+                child.material.needsUpdate = true;
+              }
+            });
+
+            // 1. Calculate true bounding box
+            const bbox = new THREE.Box3().setFromObject(obj);
+            const size = new THREE.Vector3();
+            const center = new THREE.Vector3();
+            bbox.getSize(size);
+            bbox.getCenter(center);
+
+            console.log('✅ Chariot Loaded BBox Size:', size);
+            console.log('✅ Chariot Loaded BBox Center:', center);
+
+            // 2. Center mesh and place base on top of target plane
+            obj.position.x = -center.x;
+            obj.position.y = -center.y;
+            obj.position.z = -bbox.min.z;
+
+            // 3. Proportional scale (fit to 65% of target width)
+            const maxDim = Math.max(size.x, size.y, size.z);
+            if (maxDim > 0) {
+              const scale = 0.65 / maxDim;
+              el.setAttribute('scale', `${scale} ${scale} ${scale}`);
+            }
+          });
+
+          el.addEventListener('model-error', (error) => {
+            console.error('❌ Model load error:', error);
+          });
+        }
+      });
+    </script>
   </head>
   <body>
     <a-scene
@@ -53,31 +99,30 @@
         <a-asset-item id="monumentModel" src="./asset.glb"></a-asset-item>
       </a-assets>
 
-      <!-- Ambient & Directional Lighting -->
-      <a-entity light="type: ambient; color: #FFFFFF; intensity: 1.8"></a-entity>
-      <a-entity light="type: directional; color: #FFF; intensity: 2.4" position="1 4 3"></a-entity>
-      <a-entity light="type: directional; color: #CFD8DC; intensity: 1.0" position="-2 -1 1"></a-entity>
+      <!-- Ambient & Directional Lights -->
+      <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.0"></a-entity>
+      <a-entity light="type: directional; color: #FFF; intensity: 2.5" position="1 4 3"></a-entity>
+      <a-entity light="type: directional; color: #CFD8DC; intensity: 1.2" position="-2 -1 1"></a-entity>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Visual Target Overlay Confirmation -->
+        <!-- Target Plate -->
         <a-plane
           color="#4c35de"
-          opacity="0.35"
+          opacity="0.3"
           position="0 0 0"
           height="0.75"
           width="1"
           rotation="0 0 0"
         ></a-plane>
 
-        <!-- 3D Stone Chariot Model: 65,534 vertex units scaled by 0.00001 = 0.65 units (65% width of target image) -->
+        <!-- 3D Stone Chariot Model -->
         <a-gltf-model
-          rotation="90 0 0"
-          position="0 0 0.1"
-          scale="0.00001 0.00001 0.00001"
+          id="chariot"
           src="#monumentModel"
-          animation-mixer="loop: repeat"
+          chariot-model
+          position="0 0 0.02"
         ></a-gltf-model>
       </a-entity>
     </a-scene>
