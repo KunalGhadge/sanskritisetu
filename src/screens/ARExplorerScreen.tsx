@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MonumentData, MONUMENTS } from '../data/monuments';
 import { HeritageImage } from '../components/HeritageImage';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
-import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft, Layers, Sparkles } from 'lucide-react';
+import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft, Layers, Sparkles, Shield, Eye } from 'lucide-react';
 
 interface ARExplorerScreenProps {
   currentLanguage: LanguageCode;
@@ -72,9 +72,14 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               <span>{t.exitARButton}</span>
             </button>
 
-            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#a594fd', fontFamily: 'Outfit, sans-serif', maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {displayName}
-            </span>
+            <div style={{ textAlign: 'center', maxWidth: '160px' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#a594fd', fontFamily: 'Outfit, sans-serif', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {displayName}
+              </span>
+              <span style={{ fontSize: '0.6rem', color: '#94a3b8', display: 'block' }}>
+                {selectedMonument.location.state}
+              </span>
+            </div>
 
             <button
               onClick={onOpenMarkerModal}
@@ -95,6 +100,30 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               <QrCode size={13} />
               <span>Marker</span>
             </button>
+          </div>
+
+          {/* Active Target Floating HUD Pill */}
+          <div style={{
+            position: 'absolute',
+            top: '72px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(76, 53, 222, 0.88)',
+            backdropFilter: 'blur(10px)',
+            color: '#ffffff',
+            padding: '4px 12px',
+            borderRadius: '20px',
+            fontSize: '0.68rem',
+            fontWeight: 800,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            zIndex: 50,
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            whiteSpace: 'nowrap',
+          }}>
+            <div className="pulse-dot" />
+            <span>Universal 3D Target: {displayName}</span>
           </div>
 
           {/* Iframe Viewport */}
@@ -227,7 +256,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
             <div className="digi-section-header">
               <h3 className="digi-section-title">
                 <Layers size={17} color="#4c35de" />
-                <span>Select Target Model</span>
+                <span>Select Heritage Target</span>
               </h3>
               <span style={{ fontSize: '0.72rem', color: '#4c35de', fontWeight: 700 }}>
                 {MONUMENTS.length} Ready
@@ -246,8 +275,8 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                     onClick={() => setSelectedMonument(m)}
                     className="digi-card"
                     style={{
-                      minWidth: '135px',
-                      maxWidth: '135px',
+                      minWidth: '140px',
+                      maxWidth: '140px',
                       padding: '10px',
                       margin: 0,
                       cursor: 'pointer',
@@ -258,12 +287,13 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                       flexShrink: 0,
                       border: isSelected ? '2px solid #4c35de' : '1px solid #eceef5',
                       background: isSelected ? '#f7f5ff' : '#ffffff',
+                      transition: 'all 0.15s ease',
                     }}
                   >
                     <div style={{
-                      width: '46px',
-                      height: '46px',
-                      borderRadius: '12px',
+                      width: '50px',
+                      height: '50px',
+                      borderRadius: '14px',
                       overflow: 'hidden',
                       marginBottom: '6px',
                       boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
@@ -272,7 +302,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                     </div>
 
                     <strong style={{
-                      fontSize: '0.74rem',
+                      fontSize: '0.76rem',
                       color: isSelected ? '#4c35de' : '#181c32',
                       display: 'block',
                       lineHeight: 1.2,
@@ -285,7 +315,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                     }}>
                       {mName}
                     </strong>
-                    <span style={{ fontSize: '0.62rem', color: '#8b92ab', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>
+                    <span style={{ fontSize: '0.64rem', color: '#8b92ab', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>
                       {m.location.state}
                     </span>
                   </div>
@@ -301,7 +331,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                 {t.targetHeritageModel}
               </span>
               <span style={{ fontSize: '0.64rem', color: '#10b981', fontWeight: 800, background: '#ecfdf5', padding: '2px 6px', borderRadius: '6px' }}>
-                Anchor Calibrated
+                Universal AR Anchor Ready
               </span>
             </div>
 
@@ -313,15 +343,29 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               <HeritageImage src={selectedMonument.heroImage} alt={displayName} />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px', fontSize: '0.74rem', color: '#4b526d' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '14px', fontSize: '0.74rem', color: '#4b526d' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <CheckCircle2 size={14} color="#10b981" />
-                <span>Binary glTF 2.0 • 184,200 Triangles</span>
+                <span>Binary glTF 2.0 • 184,200 High-Density Triangles</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <CheckCircle2 size={14} color="#10b981" />
-                <span>Compatible with Universal AR Tracking Marker</span>
+                <span>Universal Marker Alignment (Default Marker Anchor)</span>
               </div>
+            </div>
+
+            {/* Smart Universal Note */}
+            <div style={{
+              padding: '8px 10px',
+              backgroundColor: '#f8f9fe',
+              borderRadius: '10px',
+              border: '1px solid #eceef5',
+              fontSize: '0.68rem',
+              color: '#4c35de',
+              marginBottom: '14px',
+              lineHeight: 1.3,
+            }}>
+              <strong>Universal Sovereign Pipeline:</strong> Calibrated with the Universal AR Tracking Anchor for instant classroom and field deployment across all national circles.
             </div>
 
             {/* Actions */}
