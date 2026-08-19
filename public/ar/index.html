@@ -39,27 +39,38 @@
       }
     </style>
     <script>
-      // Component to scale up to an impressive visible size and center on target
-      AFRAME.registerComponent('auto-fit', {
-        schema: { size: { type: 'number', default: 1.35 } },
+      // Component to center the model's pivot exactly at (0,0,0) and scale to target
+      AFRAME.registerComponent('auto-center-fit', {
+        schema: { size: { type: 'number', default: 0.75 } },
         init: function () {
           this.el.addEventListener('model-loaded', () => {
-            const obj = this.el.getObject3D('mesh');
-            if (!obj) return;
-            const box = new THREE.Box3().setFromObject(obj);
+            const mesh = this.el.getObject3D('mesh');
+            if (!mesh) return;
+
+            // 1. Calculate true 3D bounding box
+            const box = new THREE.Box3().setFromObject(mesh);
+            const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
+
+            // 2. Re-center mesh geometry directly over the target image center (0,0,0)
+            mesh.position.x = -center.x;
+            mesh.position.y = -center.y;
+            mesh.position.z = -center.z + (size.z / 2);
+
+            // 3. Proportional scale normalized to 0.75 of target width
             const maxDim = Math.max(size.x, size.y, size.z);
             if (maxDim > 0) {
               const s = this.data.size / maxDim;
               this.el.setAttribute('scale', `${s} ${s} ${s}`);
             }
+
+            console.log('✅ Model centered at target pivot:', { center, size });
           });
         }
       });
     </script>
   </head>
   <body>
-    <!-- Heavy Jitter Smoothing Filter + Extended Miss Tolerance (Keeps model visible even when camera tilts away) -->
     <a-scene
       mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 1; missTolerance: 80;"
       color-space="sRGB"
@@ -79,12 +90,12 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- 3D Monument standing proud and large on top of target -->
+        <!-- 3D Monument perfectly centered and normalized on target image -->
         <a-gltf-model
           rotation="90 0 0"
-          position="0 0 0.15"
+          position="0 0 0"
           src="#monumentModel"
-          auto-fit="size: 1.35"
+          auto-center-fit="size: 0.75"
         ></a-gltf-model>
       </a-entity>
     </a-scene>
