@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Sparkles } from 'lucide-react';
+import { Shield, Sparkles, CheckCircle2, Lock, ArrowRight } from 'lucide-react';
 
 interface SplashScreenProps {
   onFinish: () => void;
@@ -7,18 +7,24 @@ interface SplashScreenProps {
 
 export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   const [progress, setProgress] = useState(0);
+  const [statusText, setStatusText] = useState('Initializing Sovereign Cloud Node...');
 
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(timer);
-          setTimeout(onFinish, 200);
+          setTimeout(onFinish, 300);
           return 100;
         }
-        return prev + 6;
+
+        const next = prev + 5;
+        if (next === 25) setStatusText('Verifying ASI Circle Digital Keys...');
+        if (next === 55) setStatusText('Loading 3D Photogrammetry Telemetry...');
+        if (next === 85) setStatusText('Sovereign Archival Node Authenticated.');
+        return next;
       });
-    }, 40);
+    }, 45);
 
     return () => clearInterval(timer);
   }, [onFinish]);
@@ -28,103 +34,161 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
       position: 'absolute',
       inset: 0,
       zIndex: 9999,
-      backgroundColor: '#0b1528',
-      color: '#ffffff',
+      backgroundColor: '#f8f9fe',
+      color: '#181c32',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: '48px 24px 36px',
-      background: 'radial-gradient(circle at 50% 30%, #162a45 0%, #08101d 100%)',
     }}>
-      {/* Top Ministry Tag */}
+      {/* Top Government Strip */}
       <div style={{ textAlign: 'center' }}>
-        <span style={{
+        <div style={{
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '5px',
-          background: 'rgba(255, 255, 255, 0.08)',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
-          padding: '4px 12px',
+          gap: '8px',
+          background: '#ffffff',
+          border: '1px solid #e2e8f0',
+          padding: '6px 14px',
           borderRadius: '20px',
-          color: '#94a3b8',
-          fontSize: '0.68rem',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          fontWeight: 700,
+          boxShadow: '0 2px 8px rgba(80, 85, 130, 0.04)',
         }}>
-          🇮🇳 Government of India • Ministry of Culture
-        </span>
+          <div style={{
+            height: '10px',
+            width: '18px',
+            background: 'linear-gradient(180deg, #ff9933 0%, #ffffff 50%, #138808 100%)',
+            borderRadius: '2px',
+            border: '0.5px solid #cbd5e1',
+          }} />
+          <span style={{
+            color: '#181c32',
+            fontSize: '0.68rem',
+            letterSpacing: '0.04em',
+            fontWeight: 800,
+          }}>
+            GOVERNMENT OF INDIA • MINISTRY OF CULTURE
+          </span>
+        </div>
       </div>
 
-      {/* Center Icon & Branding */}
-      <div style={{ textAlign: 'center', maxWidth: '320px' }}>
+      {/* Center Branding & Emblem */}
+      <div style={{ textAlign: 'center', maxWidth: '320px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{
-          width: '76px',
-          height: '76px',
-          margin: '0 auto 20px',
-          borderRadius: '22px',
-          backgroundColor: '#162a45',
-          border: '1.5px solid rgba(217, 119, 6, 0.4)',
+          width: '84px',
+          height: '84px',
+          borderRadius: '26px',
+          backgroundColor: '#ffffff',
+          border: '2px solid #e3dfff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#d97706',
-          boxShadow: '0 12px 30px rgba(217, 119, 6, 0.25)',
+          color: '#4c35de',
+          boxShadow: '0 12px 32px rgba(76, 53, 222, 0.18)',
+          marginBottom: '20px',
+          position: 'relative',
         }}>
-          <Shield size={38} strokeWidth={2.2} />
+          <Shield size={44} strokeWidth={2.2} />
+          <div style={{
+            position: 'absolute',
+            bottom: '-4px',
+            right: '-4px',
+            width: '24px',
+            height: '24px',
+            borderRadius: '50%',
+            backgroundColor: '#10b981',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '2px solid #ffffff',
+          }}>
+            <CheckCircle2 size={14} />
+          </div>
         </div>
 
         <h1 style={{
-          fontSize: '2rem',
+          fontSize: '2.2rem',
           fontWeight: 800,
-          letterSpacing: '-0.03em',
-          margin: '0 0 4px 0',
-          color: '#ffffff',
+          letterSpacing: '-0.02em',
+          margin: '0 0 2px 0',
+          color: '#181c32',
+          fontFamily: 'Outfit, sans-serif',
         }}>
-          SanskritiSetu
+          Sanskriti<span style={{ color: '#4c35de' }}>Setu</span>
         </h1>
 
         <p style={{
-          fontSize: '1.15rem',
-          color: '#d97706',
-          margin: '0 0 10px 0',
-          fontWeight: 700,
+          fontSize: '1.25rem',
+          color: '#4c35de',
+          margin: '0 0 8px 0',
+          fontWeight: 800,
+          fontFamily: 'Outfit, sans-serif',
         }}>
           संस्कृतिसेतु
         </p>
 
-        <p style={{
-          fontSize: '0.84rem',
-          color: '#94a3b8',
-          margin: 0,
-          lineHeight: 1.5,
+        <span style={{
+          background: '#f2efff',
+          color: '#4c35de',
+          padding: '4px 12px',
+          borderRadius: '12px',
+          fontSize: '0.72rem',
+          fontWeight: 800,
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase',
+          marginBottom: '16px',
         }}>
-          Preserving India's Cultural Heritage for Future Generations
+          National Digital Heritage Cloud
+        </span>
+
+        <p style={{
+          fontSize: '0.78rem',
+          color: '#8b92ab',
+          margin: 0,
+          lineHeight: 1.4,
+        }}>
+          Immutable 3D preservation & zero-install Spatial AR repository for 3,690+ national monuments.
         </p>
       </div>
 
-      {/* Bottom Progress Indicator */}
-      <div style={{ width: '100%', maxWidth: '260px', textAlign: 'center' }}>
-        <div style={{
-          width: '100%',
-          height: '4px',
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '4px',
-          overflow: 'hidden',
-          marginBottom: '10px',
-        }}>
-          <div style={{
-            height: '100%',
-            width: `${progress}%`,
-            background: 'linear-gradient(90deg, #d97706, #f59e0b)',
-            transition: 'width 0.1s linear',
-          }} />
+      {/* Bottom Progress & Skip */}
+      <div style={{ width: '100%', maxWidth: '320px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+        {/* Progress Bar */}
+        <div style={{ width: '100%' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', color: '#8b92ab', marginBottom: '6px', fontWeight: 600 }}>
+            <span>{statusText}</span>
+            <span>{progress}%</span>
+          </div>
+          <div style={{ width: '100%', height: '6px', backgroundColor: '#e2e8f0', borderRadius: '3px', overflow: 'hidden' }}>
+            <div style={{
+              width: `${progress}%`,
+              height: '100%',
+              background: 'linear-gradient(90deg, #4c35de 0%, #644bf5 100%)',
+              transition: 'width 0.15s ease',
+            }} />
+          </div>
         </div>
 
-        <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>
-          Initializing Sovereign Vault...
-        </span>
+        {/* Instant Skip Button */}
+        <button
+          onClick={onFinish}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#4c35de',
+            fontSize: '0.76rem',
+            fontWeight: 800,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            padding: '6px 12px',
+          }}
+        >
+          <span>Tap to Enter Dashboard</span>
+          <ArrowRight size={14} />
+        </button>
       </div>
     </div>
   );
