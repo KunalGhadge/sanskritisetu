@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SplashScreen } from './screens/SplashScreen';
 import { LoadingScreen } from './screens/LoadingScreen';
 import { MissionScreen } from './screens/MissionScreen';
@@ -18,7 +18,10 @@ import {
   Layers,
   Award,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Smartphone,
+  Globe,
+  Sliders
 } from 'lucide-react';
 
 export type ScreenState =
@@ -32,12 +35,37 @@ export type ScreenState =
   | 'ar_scanner'
   | 'completion';
 
+export type NotchMode = 'auto' | 'webapp' | 'app';
+
 export const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenState>('splash');
   const [isMarkerModalOpen, setIsMarkerModalOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [notchMode, setNotchMode] = useState<NotchMode>('auto');
+  const [showDisplayMenu, setShowDisplayMenu] = useState(false);
 
   const selectedMonument = MONUMENTS[0]; // Stone Chariot, Hampi
+
+  // Auto-detect standalone app mode on mount
+  useEffect(() => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone ||
+      document.referrer.includes('android-app://');
+    
+    // If running in browser without standalone, default to auto (which uses 0 notch space)
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+      setIsFullscreen(false);
+    }
+  };
 
   // Bottom Navigation Tabs
   const NAV_TABS = [
@@ -55,7 +83,10 @@ export const App: React.FC = () => {
 
   return (
     <div className="mobile-app-wrapper">
-      <div className={`mobile-phone-frame ${isFullscreen ? 'is-fullscreen' : ''}`}>
+      <div className={`mobile-phone-frame notch-mode-${notchMode} ${isFullscreen ? 'is-fullscreen' : ''}`}>
+        {/* Optional Top Notch Spacer (active in app mode or device notch) */}
+        <div className="notch-top-spacer" />
+
         {/* SCREEN 1: SPLASH */}
         {currentScreen === 'splash' && (
           <SplashScreen onFinish={() => setCurrentScreen('loading')} />
@@ -101,7 +132,131 @@ export const App: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', position: 'relative' }}>
+                {/* Notch / Display Mode Switcher */}
+                <button
+                  onClick={() => setShowDisplayMenu(!showDisplayMenu)}
+                  title="Display & Notch Mode Options"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    background: notchMode === 'webapp' ? '#f1f5f9' : notchMode === 'app' ? '#fef3c7' : '#e0f2fe',
+                    border: '1px solid #e2e8f0',
+                    color: notchMode === 'webapp' ? '#475569' : notchMode === 'app' ? '#b45309' : '#0369a1',
+                    padding: '5px 8px',
+                    borderRadius: '10px',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {notchMode === 'webapp' ? <Globe size={13} /> : notchMode === 'app' ? <Smartphone size={13} /> : <Sliders size={13} />}
+                  <span style={{ textTransform: 'capitalize' }}>{notchMode}</span>
+                </button>
+
+                {/* Display Menu Dropdown */}
+                {showDisplayMenu && (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      position: 'absolute',
+                      top: '38px',
+                      right: 0,
+                      background: '#ffffff',
+                      borderRadius: '14px',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+                      border: '1px solid #e2e8f0',
+                      padding: '8px',
+                      zIndex: 2000,
+                      width: '210px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px',
+                    }}
+                  >
+                    <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', padding: '4px 8px' }}>
+                      Notch & View Mode
+                    </span>
+
+                    <button
+                      onClick={() => { setNotchMode('auto'); setShowDisplayMenu(false); }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: notchMode === 'auto' ? '#f1f5f9' : 'transparent',
+                        color: '#0f172a',
+                        fontSize: '0.78rem',
+                        fontWeight: notchMode === 'auto' ? 700 : 500,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        width: '100%',
+                      }}
+                    >
+                      <Sliders size={14} color="#0284c7" />
+                      <div>
+                        <strong>Auto Detect</strong>
+                        <span style={{ display: 'block', fontSize: '0.66rem', color: '#64748b' }}>Adapts to standalone / web</span>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setNotchMode('webapp'); setShowDisplayMenu(false); }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: notchMode === 'webapp' ? '#f1f5f9' : 'transparent',
+                        color: '#0f172a',
+                        fontSize: '0.78rem',
+                        fontWeight: notchMode === 'webapp' ? 700 : 500,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        width: '100%',
+                      }}
+                    >
+                      <Globe size={14} color="#16a34a" />
+                      <div>
+                        <strong>Webapp Mode</strong>
+                        <span style={{ display: 'block', fontSize: '0.66rem', color: '#64748b' }}>0 extra notch space (Browser)</span>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setNotchMode('app'); setShowDisplayMenu(false); }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: notchMode === 'app' ? '#f1f5f9' : 'transparent',
+                        color: '#0f172a',
+                        fontSize: '0.78rem',
+                        fontWeight: notchMode === 'app' ? 700 : 500,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        width: '100%',
+                      }}
+                    >
+                      <Smartphone size={14} color="#d97706" />
+                      <div>
+                        <strong>App / Notch Mode</strong>
+                        <span style={{ display: 'block', fontSize: '0.66rem', color: '#64748b' }}>Leaves space for notch/island</span>
+                      </div>
+                    </button>
+                  </div>
+                )}
+
+                {/* Marker Button */}
                 <button
                   onClick={() => setIsMarkerModalOpen(true)}
                   style={{
@@ -111,7 +266,7 @@ export const App: React.FC = () => {
                     background: '#f1f5f9',
                     border: '1px solid #e2e8f0',
                     color: '#0f172a',
-                    padding: '6px 10px',
+                    padding: '5px 9px',
                     borderRadius: '10px',
                     fontSize: '0.74rem',
                     fontWeight: 700,
@@ -122,10 +277,10 @@ export const App: React.FC = () => {
                   <span>Marker</span>
                 </button>
 
-                {/* View toggle (Phone Frame / Full Screen) */}
+                {/* Fullscreen Web Toggle */}
                 <button
-                  onClick={() => setIsFullscreen(!isFullscreen)}
-                  title={isFullscreen ? "Switch to Phone Frame" : "Switch to Fullscreen"}
+                  onClick={toggleFullscreen}
+                  title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -145,7 +300,7 @@ export const App: React.FC = () => {
             </header>
 
             {/* Scrollable Main Body with Internal Scroll */}
-            <main className="mobile-content-scroll">
+            <main className="mobile-content-scroll" onClick={() => setShowDisplayMenu(false)}>
               {/* SCREEN 3: MISSION */}
               {currentScreen === 'mission' && (
                 <MissionScreen onEnterRepository={() => setCurrentScreen('repository')} />
@@ -201,7 +356,7 @@ export const App: React.FC = () => {
               )}
             </main>
 
-            {/* Fixed Floating Bottom Navigation Dock (Always accessible without page scroll) */}
+            {/* Fixed Floating Bottom Navigation Dock */}
             {currentScreen !== 'ar_scanner' && (
               <nav className="mobile-bottom-nav">
                 {NAV_TABS.map((tab) => {
