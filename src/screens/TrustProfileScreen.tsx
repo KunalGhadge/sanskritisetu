@@ -45,29 +45,6 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
 
   const t = TRANSLATIONS[currentLanguage];
 
-  const FAQS = [
-    {
-      q: 'How are monument 3D digital twins photogrammetrically scanned & verified?',
-      a: 'Each monument undergoes multi-spectral photogrammetry combining high-density Terrestrial Laser Scanning (TLS) and drone captures, capturing over 5,000 overlapping RAW images to reconstruct millimeter-accurate 3D topology.'
-    },
-    {
-      q: 'Does SanskritiSetu comply with international UNESCO standards?',
-      a: 'Yes. SanskritiSetu adheres to Article 3 of the UNESCO Charter on the Preservation of Digital Heritage (2003) and the London Charter for Computer-based Visualisation of Cultural Heritage.'
-    },
-    {
-      q: 'Can schools and citizens use the AR Explorer on low-cost devices?',
-      a: 'Yes! SanskritiSetu is engineered as a zero-install WebAR application that runs directly in any modern mobile browser without requiring app store downloads or expensive LiDAR hardware.'
-    },
-    {
-      q: 'How is digital data tamper-proofing achieved?',
-      a: 'Every 3D mesh, texture atlas, and historical audio guide is hashed using SHA-256 cryptographic algorithms and committed to sovereign National Data Center nodes.'
-    },
-    {
-      q: 'How are state archaeological departments integrated?',
-      a: 'State archaeology directorates (e.g. Maharashtra, Karnataka, Tamil Nadu) securely ingest verified cadastral and site excavation records through sovereign API pipelines.'
-    }
-  ];
-
   const LANGUAGES: { code: LanguageCode; label: string; native: string; flag: string }[] = [
     { code: 'en', label: 'English', native: 'English', flag: '🇬🇧' },
     { code: 'hi', label: 'Hindi', native: 'हिंदी', flag: '🇮🇳' },
@@ -98,9 +75,9 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
 
           <div style={{ flexGrow: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <strong style={{ fontSize: '1rem', fontFamily: 'Outfit, sans-serif' }}>Sovereign Citizen ID</strong>
+              <strong style={{ fontSize: '1rem', fontFamily: 'Outfit, sans-serif' }}>{t.sovereignCitizenId}</strong>
               <div style={{ background: '#10b981', color: '#ffffff', padding: '1px 6px', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 800 }}>
-                Active
+                {t.activeStatus}
               </div>
             </div>
             <span style={{ fontSize: '0.72rem', color: '#e0dbff', display: 'block', fontFamily: 'monospace' }}>
@@ -120,8 +97,8 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
           fontSize: '0.7rem',
           color: '#e0dbff',
         }}>
-          <span>3,690 National Assets Synced</span>
-          <span style={{ fontWeight: 800, color: '#ffffff' }}>100% Verified</span>
+          <span>{t.recordsSynced}</span>
+          <span style={{ fontWeight: 800, color: '#ffffff' }}>{t.verifiedRecordBadge}</span>
         </div>
       </div>
 
@@ -157,7 +134,7 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
                 {t.appLanguageTitle}
               </strong>
               <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>
-                {t.languageName} (Active)
+                {t.languageName} ({t.activeStatus})
               </span>
             </div>
           </div>
@@ -237,6 +214,10 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
             <CheckCircle2 size={14} color="#10b981" />
             <span>{t.unescoCharterCompliance}</span>
           </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <CheckCircle2 size={14} color="#10b981" />
+            <span>{t.asiCadastralSync}</span>
+          </div>
         </div>
 
         <button
@@ -278,7 +259,7 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
         )}
       </div>
 
-      {/* Settings Group 3: Frequently Asked Questions (FAQ) */}
+      {/* Settings Group 3: Frequently Asked Questions (FAQ - Fully Translated) */}
       <div>
         <div className="digi-section-header">
           <h3 className="digi-section-title">
@@ -288,7 +269,7 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {FAQS.map((faq, idx) => {
+          {t.faqs.map((faq, idx) => {
             const isOpen = openFaqIdx === idx;
             return (
               <div

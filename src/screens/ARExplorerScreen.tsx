@@ -256,7 +256,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
             <div className="digi-section-header">
               <h3 className="digi-section-title">
                 <Layers size={17} color="#4c35de" />
-                <span>Select Heritage Target</span>
+                <span>{t.selectTargetModel}</span>
               </h3>
               <span style={{ fontSize: '0.72rem', color: '#4c35de', fontWeight: 700 }}>
                 {MONUMENTS.length} Ready
@@ -365,7 +365,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               marginBottom: '14px',
               lineHeight: 1.3,
             }}>
-              <strong>Universal Sovereign Pipeline:</strong> Calibrated with the Universal AR Tracking Anchor for instant classroom and field deployment across all national circles.
+              {t.universalPipelineDesc}
             </div>
 
             {/* Actions */}

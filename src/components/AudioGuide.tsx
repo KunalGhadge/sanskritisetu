@@ -11,8 +11,10 @@ import {
   Sparkles,
   Gauge
 } from 'lucide-react';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
 interface AudioGuideProps {
+  currentLanguage?: LanguageCode;
   audioData: {
     duration: string;
     narratorEn: string;
@@ -23,17 +25,32 @@ interface AudioGuideProps {
   monumentName: string;
 }
 
-export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName }) => {
+export const AudioGuide: React.FC<AudioGuideProps> = ({
+  currentLanguage = 'en',
+  audioData,
+  monumentName,
+}) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [language, setLanguage] = useState<'en' | 'hi'>('en');
+  const [audioLang, setAudioLang] = useState<'en' | 'hi'>(currentLanguage === 'hi' || currentLanguage === 'mr' ? 'hi' : 'en');
   const [activeSentenceIdx, setActiveSentenceIdx] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [isMuted, setIsMuted] = useState(false);
 
-  const transcript = language === 'en' ? audioData.transcriptEn : audioData.transcriptHi;
-  const narrator = language === 'en' ? audioData.narratorEn : audioData.narratorHi;
+  const t = TRANSLATIONS[currentLanguage];
+
+  const transcript = audioLang === 'en' ? audioData.transcriptEn : audioData.transcriptHi;
+  const narrator = audioLang === 'en' ? audioData.narratorEn : audioData.narratorHi;
 
   const transcriptRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Auto-sync audio language with parent currentLanguage if changed
+  useEffect(() => {
+    if (currentLanguage === 'hi' || currentLanguage === 'mr') {
+      setAudioLang('hi');
+    } else {
+      setAudioLang('en');
+    }
+  }, [currentLanguage]);
 
   // Speech synthesis audio playback
   useEffect(() => {
@@ -43,7 +60,7 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
       window.speechSynthesis.cancel();
       const textToSpeak = transcript[activeSentenceIdx] || transcript[0];
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.lang = language === 'en' ? 'en-IN' : 'hi-IN';
+      utterance.lang = audioLang === 'en' ? 'en-IN' : 'hi-IN';
       utterance.rate = playbackSpeed;
       utterance.pitch = 1.0;
 
@@ -70,7 +87,7 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
     return () => {
       window.speechSynthesis.cancel();
     };
-  }, [isPlaying, activeSentenceIdx, language, isMuted, playbackSpeed, transcript]);
+  }, [isPlaying, activeSentenceIdx, audioLang, isMuted, playbackSpeed, transcript]);
 
   // Auto-scroll active transcript card smoothly into view
   useEffect(() => {
@@ -151,10 +168,10 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
             </div>
             <div>
               <span style={{ fontSize: '0.62rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>
-                Voice Archive
+                {t.voiceArchiveTitle}
               </span>
               <strong style={{ fontSize: '0.84rem', color: '#181c32', fontFamily: 'Outfit, sans-serif' }}>
-                Official Audio Guide
+                {t.officialAudioGuide}
               </strong>
             </div>
           </div>
@@ -170,7 +187,7 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
             <button
               onClick={() => {
                 window.speechSynthesis.cancel();
-                setLanguage('en');
+                setAudioLang('en');
                 setActiveSentenceIdx(0);
               }}
               style={{
@@ -179,18 +196,18 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
                 border: 'none',
                 fontSize: '0.7rem',
                 fontWeight: 800,
-                background: language === 'en' ? '#4c35de' : 'transparent',
-                color: language === 'en' ? '#ffffff' : '#8b92ab',
+                background: audioLang === 'en' ? '#4c35de' : 'transparent',
+                color: audioLang === 'en' ? '#ffffff' : '#8b92ab',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
             >
-              English
+              EN
             </button>
             <button
               onClick={() => {
                 window.speechSynthesis.cancel();
-                setLanguage('hi');
+                setAudioLang('hi');
                 setActiveSentenceIdx(0);
               }}
               style={{
@@ -199,13 +216,13 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
                 border: 'none',
                 fontSize: '0.7rem',
                 fontWeight: 800,
-                background: language === 'hi' ? '#4c35de' : 'transparent',
-                color: language === 'hi' ? '#ffffff' : '#8b92ab',
+                background: audioLang === 'hi' ? '#4c35de' : 'transparent',
+                color: audioLang === 'hi' ? '#ffffff' : '#8b92ab',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
             >
-              हिंदी
+              हिं
             </button>
           </div>
         </div>
@@ -240,8 +257,8 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
         {/* Interactive Scrubbing Timeline */}
         <div style={{ marginBottom: '14px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', color: '#8b92ab', marginBottom: '6px', fontWeight: 700 }}>
-            <span>Section {activeSentenceIdx + 1} of {transcript.length}</span>
-            <span>{progressPercent}% Complete</span>
+            <span>{t.sectionOf} {activeSentenceIdx + 1} / {transcript.length}</span>
+            <span>{progressPercent}% {t.percentComplete}</span>
           </div>
 
           <div
@@ -370,14 +387,14 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
 
         {/* Narrator Attribution */}
         <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '0.68rem', color: '#8b92ab' }}>
-          Official Voice Synthesizer: <strong style={{ color: '#181c32' }}>{narrator}</strong>
+          {t.voiceSynthesizerLabel} <strong style={{ color: '#181c32' }}>{narrator}</strong>
         </div>
       </div>
 
       {/* Interactive Synced Transcript List */}
       <div className="digi-card" style={{ padding: '16px', margin: 0 }}>
         <h4 style={{ fontSize: '0.84rem', fontWeight: 800, color: '#181c32', marginBottom: '10px', fontFamily: 'Outfit, sans-serif' }}>
-          Interactive Synced Transcript
+          {t.interactiveTranscriptTitle}
         </h4>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '280px', overflowY: 'auto' }}>
@@ -399,11 +416,11 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName 
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px', fontSize: '0.64rem' }}>
                   <span style={{ color: isActive ? '#4c35de' : '#8b92ab', fontWeight: 700 }}>
-                    Section {idx + 1}
+                    {t.sectionOf} {idx + 1}
                   </span>
                   {isActive && (
                     <span style={{ color: '#4c35de', fontWeight: 800 }}>
-                      {isPlaying ? '● Speaking' : '● Selected'}
+                      {isPlaying ? t.speakingLabel : t.selectedLabel}
                     </span>
                   )}
                 </div>

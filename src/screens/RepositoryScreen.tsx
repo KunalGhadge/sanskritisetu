@@ -172,8 +172,8 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
 
       {/* Search Telemetry Subtitle */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 4px', fontSize: '0.7rem', color: '#8b92ab' }}>
-        <span>Showing {filteredSites.length} Cadastral Records</span>
-        <span style={{ color: '#10b981', fontWeight: 700 }}>● Sovereign Verified</span>
+        <span>{t.showingCadastralRecords} ({filteredSites.length})</span>
+        <span style={{ color: '#10b981', fontWeight: 700 }}>{t.sovereignVerifiedStatus}</span>
       </div>
 
       {isFiltering ? (
@@ -181,149 +181,149 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
       ) : (
         /* Rich Interactive Heritage Cards List */
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {filteredSites.map((site) => {
-          const isLive = site.isFullyArchived;
+          {filteredSites.map((site) => {
+            const isLive = site.isFullyArchived;
 
-          return (
-            <div
-              key={site.id}
-              onClick={() => {
-                if (isLive) {
-                  onOpenMonument(site.id);
-                } else {
-                  setSelectedUpcomingSite(site);
-                }
-              }}
-              className="digi-card"
-              style={{
-                padding: '12px',
-                margin: 0,
-                cursor: 'pointer',
-                display: 'flex',
-                gap: '12px',
-                alignItems: 'center',
-                border: isLive ? '1px solid #eceef5' : '1px dashed #d1d5db',
-                background: isLive ? '#ffffff' : '#fafafa',
-              }}
-            >
-              {/* Monument Thumbnail */}
-              <div style={{
-                width: '74px',
-                height: '74px',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                flexShrink: 0,
-                backgroundColor: '#f4f5fb',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                position: 'relative',
-              }}>
-                <HeritageImage src={site.image} alt={site.name} />
-                {isLive && (
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '4px',
-                    right: '4px',
-                    background: 'rgba(76, 53, 222, 0.9)',
-                    color: '#ffffff',
-                    borderRadius: '6px',
-                    padding: '1px 4px',
-                    fontSize: '0.55rem',
-                    fontWeight: 800,
-                  }}>
-                    3D
-                  </div>
-                )}
-              </div>
-
-              {/* Monument Content */}
-              <div style={{ flexGrow: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
-                  <span style={{
-                    fontSize: '0.62rem',
-                    fontWeight: 800,
-                    color: isLive ? '#4c35de' : '#6b7280',
-                    background: isLive ? '#f2efff' : '#f3f4f6',
-                    padding: '2px 6px',
-                    borderRadius: '6px',
-                    textTransform: 'uppercase',
-                  }}>
-                    {site.stateName}
-                  </span>
-
-                  {isLive ? (
-                    <span style={{ fontSize: '0.6rem', color: '#10b981', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '2px' }}>
-                      <CheckCircle2 size={10} />
-                      <span>Live Dossier</span>
-                    </span>
-                  ) : (
-                    <span style={{ fontSize: '0.6rem', color: '#f59e0b', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '2px' }}>
-                      <Clock size={10} />
-                      <span>{t.phase2Badge}</span>
-                    </span>
-                  )}
-                </div>
-
-                <h4 style={{
-                  fontSize: '0.88rem',
-                  fontWeight: 800,
-                  color: '#181c32',
-                  margin: '0 0 2px 0',
-                  fontFamily: 'Outfit, sans-serif',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}>
-                  {site.name}
-                </h4>
-
-                <p style={{
-                  fontSize: '0.68rem',
-                  color: '#8b92ab',
+            return (
+              <div
+                key={site.id}
+                onClick={() => {
+                  if (isLive) {
+                    onOpenMonument(site.id);
+                  } else {
+                    setSelectedUpcomingSite(site);
+                  }
+                }}
+                className="digi-card"
+                style={{
+                  padding: '12px',
                   margin: 0,
-                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  gap: '12px',
+                  alignItems: 'center',
+                  border: isLive ? '1px solid #eceef5' : '1px dashed #d1d5db',
+                  background: isLive ? '#ffffff' : '#fafafa',
+                }}
+              >
+                {/* Monument Thumbnail */}
+                <div style={{
+                  width: '74px',
+                  height: '74px',
+                  borderRadius: '16px',
                   overflow: 'hidden',
-                  textOverflow: 'ellipsis',
+                  flexShrink: 0,
+                  backgroundColor: '#f4f5fb',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                  position: 'relative',
                 }}>
-                  {site.authority}
-                </p>
-
-                {/* Card Action Row */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
-                  <span style={{ fontSize: '0.66rem', color: '#4c35de', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '2px' }}>
-                    <span>{isLive ? 'Open Dossier' : 'View Schedule'}</span>
-                    <ChevronRight size={12} />
-                  </span>
-
+                  <HeritageImage src={site.image} alt={site.name} />
                   {isLive && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onLaunchAR(site.id);
-                      }}
-                      style={{
-                        background: '#f2efff',
-                        border: 'none',
-                        color: '#4c35de',
-                        padding: '3px 8px',
-                        borderRadius: '8px',
-                        fontSize: '0.62rem',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '3px',
-                      }}
-                    >
-                      <Camera size={11} />
-                      <span>AR</span>
-                    </button>
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '4px',
+                      right: '4px',
+                      background: 'rgba(76, 53, 222, 0.9)',
+                      color: '#ffffff',
+                      borderRadius: '6px',
+                      padding: '1px 4px',
+                      fontSize: '0.55rem',
+                      fontWeight: 800,
+                    }}>
+                      3D
+                    </div>
                   )}
                 </div>
+
+                {/* Monument Content */}
+                <div style={{ flexGrow: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                    <span style={{
+                      fontSize: '0.62rem',
+                      fontWeight: 800,
+                      color: isLive ? '#4c35de' : '#6b7280',
+                      background: isLive ? '#f2efff' : '#f3f4f6',
+                      padding: '2px 6px',
+                      borderRadius: '6px',
+                      textTransform: 'uppercase',
+                    }}>
+                      {site.stateName}
+                    </span>
+
+                    {isLive ? (
+                      <span style={{ fontSize: '0.6rem', color: '#10b981', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                        <CheckCircle2 size={10} />
+                        <span>{t.liveDossier}</span>
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: '0.6rem', color: '#f59e0b', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                        <Clock size={10} />
+                        <span>{t.phase2Badge}</span>
+                      </span>
+                    )}
+                  </div>
+
+                  <h4 style={{
+                    fontSize: '0.88rem',
+                    fontWeight: 800,
+                    color: '#181c32',
+                    margin: '0 0 2px 0',
+                    fontFamily: 'Outfit, sans-serif',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}>
+                    {site.name}
+                  </h4>
+
+                  <p style={{
+                    fontSize: '0.68rem',
+                    color: '#8b92ab',
+                    margin: 0,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}>
+                    {site.authority}
+                  </p>
+
+                  {/* Card Action Row */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
+                    <span style={{ fontSize: '0.66rem', color: '#4c35de', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                      <span>{isLive ? t.openDossierButton : t.viewSchedule}</span>
+                      <ChevronRight size={12} />
+                    </span>
+
+                    {isLive && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onLaunchAR(site.id);
+                        }}
+                        style={{
+                          background: '#f2efff',
+                          border: 'none',
+                          color: '#4c35de',
+                          padding: '3px 8px',
+                          borderRadius: '8px',
+                          fontSize: '0.62rem',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '3px',
+                        }}
+                      >
+                        <Camera size={11} />
+                        <span>AR</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
       )}
 
       {/* Phase 2 Scanning Ingestion Schedule Modal */}
@@ -369,7 +369,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
             </div>
 
             <span style={{ fontSize: '0.66rem', color: '#d97706', fontWeight: 800, textTransform: 'uppercase' }}>
-              Phase 2 Archival Ingestion
+              {t.phase2IngestionTitle}
             </span>
             <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#181c32', margin: '2px 0 8px 0', fontFamily: 'Outfit, sans-serif' }}>
               {selectedUpcomingSite.name}
@@ -380,7 +380,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
             </div>
 
             <p style={{ fontSize: '0.74rem', color: '#4b526d', margin: '0 0 12px 0', lineHeight: 1.4 }}>
-              Photogrammetric 3D point-cloud LiDAR scan scheduled by {selectedUpcomingSite.authority} under the National Heritage Digital Ingestion Mandate 2026.
+              {t.phase2IngestionDesc} ({selectedUpcomingSite.authority})
             </p>
 
             <button
