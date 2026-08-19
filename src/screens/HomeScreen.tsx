@@ -46,7 +46,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       isLive: true,
       title: 'Stone Chariot, Hampi',
       subtitle: 'Vijayanagara Empire • 16th Century CE',
-      image: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=1200&q=80',
+      image: '/assets/images/stonechariot.jpg',
       actionText: 'Launch AR Scanner',
       action: () => onNavigateTab('ar_explorer'),
       gradient: 'linear-gradient(180deg, rgba(76,53,222,0.25) 0%, rgba(30,15,100,0.94) 100%)',
@@ -57,7 +57,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       isLive: false,
       title: 'Raigad Hill Fortress',
       subtitle: 'Capital of Chhatrapati Shivaji Maharaj',
-      image: 'https://images.unsplash.com/photo-1626014303757-656c5354924c?auto=format&fit=crop&w=1200&q=80',
+      image: '/assets/images/raigad.jpg',
       actionText: 'Explore Collection',
       action: () => onOpenState('maharashtra'),
       gradient: 'linear-gradient(180deg, rgba(37,99,235,0.25) 0%, rgba(15,23,42,0.94) 100%)',
@@ -256,7 +256,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
               <HeritageImage
-                src="https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=300&q=80"
+                src="/assets/images/stonechariot.jpg"
                 alt="Stone Chariot"
               />
             </div>
@@ -298,7 +298,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
               <HeritageImage
-                src="https://images.unsplash.com/photo-1626014303757-656c5354924c?auto=format&fit=crop&w=300&q=80"
+                src="/assets/images/raigad.jpg"
                 alt="Raigad Fort"
               />
             </div>

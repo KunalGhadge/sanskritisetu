@@ -28,7 +28,7 @@ export const STATES_DATA: StateHeritage[] = [
     monumentCount: 4,
     featuredSite: 'Stone Chariot, Hampi',
     authority: 'Archaeological Survey of India (Hampi Circle)',
-    coverImage: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=1000&auto=format&fit=crop',
+    coverImage: '/assets/images/stonechariot.jpg',
     sites: [
       {
         id: 'stone-chariot',
@@ -37,7 +37,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '16th Century CE',
         unescoStatus: 'UNESCO Site #356',
         isFullyArchived: true,
-        image: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=1000&auto=format&fit=crop',
+        image: '/assets/images/stonechariot.jpg',
         description: 'Monolithic granite Garuda shrine engineered with rotating wheels and interlocking stone joinery.'
       },
       {
@@ -47,7 +47,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '7th–16th Century CE',
         unescoStatus: 'UNESCO Site #356',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1000&q=80',
         description: 'Sacred active sanctuary dedicated to Lord Shiva with an iconic 50-meter eastern Gopuram tower.'
       },
       {
@@ -57,7 +57,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '16th Century CE',
         unescoStatus: 'UNESCO Site #356',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1000&q=80',
         description: 'Indo-Islamic secular pavilion built with multi-layered lobed arches and natural terracotta cooling pipes.'
       },
       {
@@ -67,7 +67,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '12th Century CE',
         unescoStatus: 'UNESCO Site #1670',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1000&q=80',
         description: 'Chloritic schist soapstone temple renowned for intricate friezes of deities, celestial dancers, and elephants.'
       }
     ]
@@ -80,7 +80,7 @@ export const STATES_DATA: StateHeritage[] = [
     monumentCount: 4,
     featuredSite: 'Raigad Fort',
     authority: 'Directorate of Archaeology & Museums, Maharashtra',
-    coverImage: 'https://images.unsplash.com/photo-1626014303757-656c5354924c?q=80&w=1000&auto=format&fit=crop',
+    coverImage: '/assets/images/raigad.jpg',
     sites: [
       {
         id: 'raigad-fort',
@@ -89,7 +89,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '17th Century CE',
         unescoStatus: 'Tentative UNESCO List',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1626014303757-656c5354924c?q=80&w=1000&auto=format&fit=crop',
+        image: '/assets/images/raigad.jpg',
         description: 'Impregnable hill fortress situated at 2,700 ft, coronation seat of the Maratha Empire.'
       },
       {
@@ -99,7 +99,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '2nd BCE – 5th CE',
         unescoStatus: 'UNESCO Site #242',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1000&q=80',
         description: '30 rock-cut Buddhist cave monuments featuring masterwork murals and fresco paintings.'
       },
       {
@@ -109,7 +109,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '1664 CE',
         unescoStatus: 'Tentative UNESCO List',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1000&q=80',
         description: 'Engineering marvel ocean bastion built on an offshore island with foundation stones fixed in molten lead.'
       },
       {
@@ -119,7 +119,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '8th Century CE',
         unescoStatus: 'UNESCO Site #243',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1000&q=80',
         description: 'Largest single monolithic rock excavation in the world, carved vertically top-down from volcanic basalt.'
       }
     ]
@@ -132,7 +132,7 @@ export const STATES_DATA: StateHeritage[] = [
     monumentCount: 3,
     featuredSite: 'Brihadisvara Temple, Thanjavur',
     authority: 'Archaeological Survey of India (Chennai Circle)',
-    coverImage: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop',
+    coverImage: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1000&q=80',
     sites: [
       {
         id: 'brihadisvara-temple',
@@ -141,7 +141,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '1010 CE',
         unescoStatus: 'UNESCO Site #250',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1000&q=80',
         description: 'Magnificent 216-foot granite Vimana constructed under Raja Raja Chola I with an 80-tonne monolithic cupola.'
       },
       {
@@ -151,7 +151,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '8th Century CE',
         unescoStatus: 'UNESCO Site #249',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1000&q=80',
         description: 'Dravidian structural rock temple perched directly on the Bay of Bengal coastline built under Narasimhavarman II.'
       },
       {
@@ -161,7 +161,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '14th–17th Century CE',
         unescoStatus: 'National Monument Registry',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1000&q=80',
         description: 'Historic Hindu temple with 14 towering gopurams adorned with thousands of colorful stucco sculptures.'
       }
     ]
@@ -174,7 +174,7 @@ export const STATES_DATA: StateHeritage[] = [
     monumentCount: 3,
     featuredSite: 'Amer Fort, Jaipur',
     authority: 'Archaeological Survey of India (Jaipur Circle)',
-    coverImage: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=1000&auto=format&fit=crop',
+    coverImage: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1000&q=80',
     sites: [
       {
         id: 'amer-fort',
@@ -183,7 +183,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '16th Century CE',
         unescoStatus: 'UNESCO Site #247',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1000&q=80',
         description: 'Red sandstone and marble palace fortress known for its concave mirror-inlaid Sheesh Mahal.'
       },
       {
@@ -193,7 +193,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '1799 CE',
         unescoStatus: 'UNESCO Site #1470',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1000&q=80',
         description: 'Five-story pink honeycomb facade containing 953 intricate jharokhas engineered for cross-ventilation.'
       },
       {
@@ -203,7 +203,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '7th Century CE',
         unescoStatus: 'UNESCO Site #247',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1000&q=80',
         description: 'Largest fort in India spanning 700 acres, iconic symbol of Rajput valor, featuring the 9-story Vijay Stambha.'
       }
     ]
@@ -216,7 +216,7 @@ export const STATES_DATA: StateHeritage[] = [
     monumentCount: 3,
     featuredSite: 'Rani ki Vav, Patan',
     authority: 'Archaeological Survey of India (Vadodara Circle)',
-    coverImage: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1000&auto=format&fit=crop',
+    coverImage: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1000&q=80',
     sites: [
       {
         id: 'rani-ki-vav',
@@ -225,7 +225,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '11th Century CE',
         unescoStatus: 'UNESCO Site #922',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1000&q=80',
         description: 'Subterranean stepwell designed as an inverted temple with seven levels of sculpted stone panels.'
       },
       {
@@ -235,7 +235,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '1026 CE',
         unescoStatus: 'Tentative UNESCO List',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1000&q=80',
         description: 'Solanki-era solar shrine with the stepped Surya Kund water reservoir containing 108 miniature shrines.'
       },
       {
@@ -245,7 +245,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: 'Ancient–1951 CE',
         unescoStatus: 'National Sacred Shrine Registry',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=1000&q=80',
         description: 'First of the twelve Jyotirlinga shrines of Shiva, located on the Arabian Sea coast.'
       }
     ]
@@ -258,7 +258,7 @@ export const STATES_DATA: StateHeritage[] = [
     monumentCount: 2,
     featuredSite: 'Konark Sun Temple',
     authority: 'Archaeological Survey of India (Bhubaneswar Circle)',
-    coverImage: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1000&auto=format&fit=crop',
+    coverImage: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1000&q=80',
     sites: [
       {
         id: 'konark-sun-temple',
@@ -267,7 +267,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '13th Century CE',
         unescoStatus: 'UNESCO Site #246',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1000&q=80',
         description: 'Gigantic solar chariot temple carved with 24 colossal sundial wheels pulled by seven horses.'
       },
       {
@@ -277,7 +277,7 @@ export const STATES_DATA: StateHeritage[] = [
         period: '12th Century CE',
         unescoStatus: 'National Sacred Shrine Registry',
         isFullyArchived: false,
-        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1000&q=80',
         description: 'Monumental Kalinga temple famous for its annual Ratha Yatra chariot festival and sacred kitchen.'
       }
     ]
