@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MonumentData, PhotoAsset } from '../data/monuments';
 import { ModelViewer3D } from '../components/ModelViewer3D';
+import { SpatialCameraAR } from '../components/SpatialCameraAR';
 import { GoogleARViewer } from '../components/GoogleARViewer';
 import { AudioGuide } from '../components/AudioGuide';
 import { HeritageImage } from '../components/HeritageImage';
@@ -48,6 +49,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [activeTier, setActiveTier] = useState<string>('overview');
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoAsset | null>(null);
+  const [isSpatialAROpen, setIsSpatialAROpen] = useState<boolean>(false);
 
   const t = TRANSLATIONS[currentLanguage];
 
@@ -73,6 +75,15 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      {/* Fullscreen Spatial Camera AR View */}
+      {isSpatialAROpen && (
+        <SpatialCameraAR
+          monument={monument}
+          currentLanguage={currentLanguage}
+          onExit={() => setIsSpatialAROpen(false)}
+        />
+      )}
+
       {/* Top Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2px' }}>
         <button
@@ -440,14 +451,13 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
               </div>
             )}
 
-            {/* TIER 6: 3D DIGITAL TWIN & GOOGLE AR */}
+            {/* TIER 6: 3D DIGITAL TWIN & SPATIAL AR */}
             {activeTier === '3d' && (
               <div className="digi-card" style={{ padding: '16px', margin: 0 }}>
-                <GoogleARViewer
-                  src={monument.glbModelPath}
-                  alt={displayName}
+                <ModelViewer3D
+                  modelPath={monument.glbModelPath}
                   monumentName={displayName}
-                  currentLanguage={currentLanguage}
+                  onLaunchAR={() => setIsSpatialAROpen(true)}
                 />
               </div>
             )}
