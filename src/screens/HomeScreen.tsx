@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { STATES_DATA, ISSUING_AUTHORITIES } from '../data/states';
 import {
   Shield,
@@ -14,7 +14,12 @@ import {
   Building2,
   Box,
   QrCode,
-  Globe
+  Globe,
+  Radio,
+  Landmark,
+  ArrowUpRight,
+  TrendingUp,
+  FileCheck2
 } from 'lucide-react';
 
 interface HomeScreenProps {
@@ -30,9 +35,68 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigateTab,
   onOpenMarkerModal,
 }) => {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const CAROUSEL_SLIDES = [
+    {
+      id: 'stone-chariot',
+      tag: 'Live WebAR Target',
+      isLive: true,
+      title: 'Stone Chariot, Hampi',
+      subtitle: 'Vijayanagara Empire • 16th Century CE',
+      image: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=1200&auto=format&fit=crop',
+      actionText: 'Launch AR Scanner',
+      action: () => onNavigateTab('ar_explorer'),
+      gradient: 'linear-gradient(180deg, rgba(76,53,222,0.2) 0%, rgba(30,15,100,0.92) 100%)',
+    },
+    {
+      id: 'raigad-fort',
+      tag: 'Maratha Heritage Archive',
+      isLive: false,
+      title: 'Raigad Hill Fortress',
+      subtitle: 'Capital of Chhatrapati Shivaji Maharaj',
+      image: 'https://images.unsplash.com/photo-1626014303757-656c5354924c?q=80&w=1200&auto=format&fit=crop',
+      actionText: 'Explore Collection',
+      action: () => onOpenState('maharashtra'),
+      gradient: 'linear-gradient(180deg, rgba(37,99,235,0.2) 0%, rgba(15,23,42,0.92) 100%)',
+    },
+    {
+      id: 'konark-sun-temple',
+      tag: 'UNESCO World Heritage #246',
+      isLive: false,
+      title: 'Konark Sun Temple',
+      subtitle: '24 Monolithic Sundial Chariot Wheels',
+      image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1200&auto=format&fit=crop',
+      actionText: 'View Repository',
+      action: () => onOpenState('odisha'),
+      gradient: 'linear-gradient(180deg, rgba(217,119,6,0.2) 0%, rgba(40,15,5,0.92) 100%)',
+    },
+    {
+      id: 'brihadisvara-temple',
+      tag: 'Great Living Chola Temples',
+      isLive: false,
+      title: 'Brihadisvara Temple',
+      subtitle: '80-Tonne Monolithic Granite Vimana',
+      image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1200&auto=format&fit=crop',
+      actionText: 'View Ingestion',
+      action: () => onOpenState('tamil-nadu'),
+      gradient: 'linear-gradient(180deg, rgba(13,148,136,0.2) 0%, rgba(10,35,35,0.92) 100%)',
+    },
+  ];
+
+  // Auto-advance Carousel timer (4s)
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % CAROUSEL_SLIDES.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isPaused, CAROUSEL_SLIDES.length]);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      {/* Top Greeting Bar (Matches Reference Image) */}
+      {/* Top Greeting Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 2px 0' }}>
         <div>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#181c32', margin: 0, fontFamily: 'Outfit, sans-serif' }}>
@@ -60,69 +124,102 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-      {/* Purple Gradient Hero Banner (Matches Reference COVID-19 Card) */}
-      <div className="digi-hero-card" onClick={() => onNavigateTab('ar_explorer')} style={{ cursor: 'pointer' }}>
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          <span style={{
-            display: 'inline-block',
-            background: 'rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(8px)',
-            color: '#ffffff',
-            fontSize: '0.64rem',
-            fontWeight: 700,
-            padding: '3px 8px',
-            borderRadius: '12px',
-            marginBottom: '8px',
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase',
-          }}>
-            Spatial WebAR Engine Live
-          </span>
-          <h3 style={{ fontSize: '1.22rem', fontWeight: 800, margin: '0 0 4px 0', lineHeight: 1.2, fontFamily: 'Outfit, sans-serif' }}>
-            Digital Heritage Vault
-          </h3>
-          <p style={{ fontSize: '0.78rem', color: '#e0dbff', margin: '0 0 14px 0', maxWidth: '240px' }}>
-            Explore 3D digital twins and augmented reality monuments
-          </p>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onNavigateTab('ar_explorer');
-            }}
-            style={{
-              background: '#ffffff',
-              color: '#4c35de',
-              border: 'none',
-              borderRadius: '14px',
-              padding: '7px 16px',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            }}
-          >
-            Launch AR Experience
-          </button>
-        </div>
-
-        {/* Decorative Background Glow */}
-        <div style={{
-          position: 'absolute',
-          right: '-10px',
-          bottom: '-10px',
-          width: '120px',
-          height: '120px',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%)',
-          borderRadius: '50%',
-          pointerEvents: 'none',
-        }} />
+      {/* Live Cloud Status Ticker */}
+      <div className="live-sync-strip">
+        <div className="pulse-dot" />
+        <span style={{ fontWeight: 700, color: '#181c32' }}>Sovereign Cloud Active</span>
+        <span style={{ color: '#8b92ab' }}>• 3,690 Records Synced</span>
       </div>
 
-      {/* Section 1: Preserved Heritage Records (Matches "Issued Documents" in Reference) */}
+      {/* Interactive Auto-Advancing Hero Carousel */}
+      <div
+        className="carousel-wrapper"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+      >
+        {CAROUSEL_SLIDES.map((slide, idx) => {
+          const isActive = activeSlide === idx;
+          return (
+            <div
+              key={slide.id}
+              className={`carousel-slide ${isActive ? 'active' : ''}`}
+              style={{
+                backgroundImage: `${slide.gradient}, url(${slide.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div style={{ position: 'relative', zIndex: 3 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                  {slide.isLive && <div className="pulse-dot" />}
+                  <span style={{
+                    background: 'rgba(255, 255, 255, 0.22)',
+                    backdropFilter: 'blur(8px)',
+                    color: '#ffffff',
+                    fontSize: '0.62rem',
+                    fontWeight: 800,
+                    padding: '3px 8px',
+                    borderRadius: '10px',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                  }}>
+                    {slide.tag}
+                  </span>
+                </div>
+
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 2px 0', lineHeight: 1.15, fontFamily: 'Outfit, sans-serif' }}>
+                  {slide.title}
+                </h3>
+                <p style={{ fontSize: '0.74rem', color: '#e0dbff', margin: '0 0 12px 0' }}>
+                  {slide.subtitle}
+                </p>
+
+                <button
+                  onClick={slide.action}
+                  style={{
+                    background: '#ffffff',
+                    color: '#4c35de',
+                    border: 'none',
+                    borderRadius: '12px',
+                    padding: '6px 14px',
+                    fontSize: '0.74rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  }}
+                >
+                  <span>{slide.actionText}</span>
+                  <ArrowUpRight size={13} />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Carousel Slide Indicators */}
+        <div className="carousel-dots">
+          {CAROUSEL_SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveSlide(i)}
+              className={`carousel-dot ${activeSlide === i ? 'active' : ''}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Section 1: Preserved Heritage Records */}
       <div>
         <div className="digi-section-header">
-          <h3 className="digi-section-title">Preserved Heritage Records</h3>
+          <h3 className="digi-section-title">
+            <Layers size={17} color="#4c35de" />
+            <span>Preserved Heritage Records</span>
+          </h3>
           <span onClick={() => onNavigateTab('repository')} className="digi-view-all">View All</span>
         </div>
 
@@ -133,8 +230,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             onClick={() => onOpenMonument('stone-chariot')}
             className="digi-card"
             style={{
-              minWidth: '150px',
-              maxWidth: '150px',
+              minWidth: '155px',
+              maxWidth: '155px',
               padding: '14px 12px',
               margin: 0,
               cursor: 'pointer',
@@ -146,8 +243,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             }}
           >
             <div style={{
-              width: '50px',
-              height: '50px',
+              width: '54px',
+              height: '54px',
               borderRadius: '16px',
               backgroundColor: '#f4f5fb',
               display: 'flex',
@@ -155,6 +252,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               justifyContent: 'center',
               marginBottom: '8px',
               overflow: 'hidden',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
               <img
                 src="https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=200&auto=format&fit=crop"
@@ -162,7 +260,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
-            <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px' }}>
+            <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
               Stone Chariot
             </strong>
             <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
@@ -175,8 +273,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             onClick={() => onNavigateTab('repository')}
             className="digi-card"
             style={{
-              minWidth: '150px',
-              maxWidth: '150px',
+              minWidth: '155px',
+              maxWidth: '155px',
               padding: '14px 12px',
               margin: 0,
               cursor: 'pointer',
@@ -188,8 +286,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             }}
           >
             <div style={{
-              width: '50px',
-              height: '50px',
+              width: '54px',
+              height: '54px',
               borderRadius: '16px',
               backgroundColor: '#f4f5fb',
               display: 'flex',
@@ -197,6 +295,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               justifyContent: 'center',
               marginBottom: '8px',
               overflow: 'hidden',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
               <img
                 src="https://images.unsplash.com/photo-1626014303757-656c5354924c?q=80&w=200&auto=format&fit=crop"
@@ -204,7 +303,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
-            <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px' }}>
+            <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
               Raigad Fort
             </strong>
             <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
@@ -217,8 +316,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             onClick={() => onNavigateTab('repository')}
             className="digi-card"
             style={{
-              minWidth: '150px',
-              maxWidth: '150px',
+              minWidth: '155px',
+              maxWidth: '155px',
               padding: '14px 12px',
               margin: 0,
               cursor: 'pointer',
@@ -230,8 +329,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             }}
           >
             <div style={{
-              width: '50px',
-              height: '50px',
+              width: '54px',
+              height: '54px',
               borderRadius: '16px',
               backgroundColor: '#f4f5fb',
               display: 'flex',
@@ -239,6 +338,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               justifyContent: 'center',
               marginBottom: '8px',
               overflow: 'hidden',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
               <img
                 src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=200&auto=format&fit=crop"
@@ -246,22 +346,66 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
-            <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px' }}>
+            <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
               Brihadisvara
             </strong>
             <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
               Tamil Nadu
             </span>
           </div>
+
+          {/* Card 4: Konark Sun Temple */}
+          <div
+            onClick={() => onNavigateTab('repository')}
+            className="digi-card"
+            style={{
+              minWidth: '155px',
+              maxWidth: '155px',
+              padding: '14px 12px',
+              margin: 0,
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <div style={{
+              width: '54px',
+              height: '54px',
+              borderRadius: '16px',
+              backgroundColor: '#f4f5fb',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '8px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
+            }}>
+              <img
+                src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=200&auto=format&fit=crop"
+                alt="Konark Sun Temple"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+            <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
+              Konark Temple
+            </strong>
+            <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
+              Odisha
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Section 2: State Heritage Collection (Matches "State Government" in Reference) */}
+      {/* Section 2: State Heritage Collection */}
       <div>
         <div className="digi-section-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <h3 className="digi-section-title">State Government Archives</h3>
-          </div>
+          <h3 className="digi-section-title">
+            <Building2 size={17} color="#4c35de" />
+            <span>State Government Archives</span>
+          </h3>
           <span onClick={() => onNavigateTab('repository')} className="digi-view-all">View All</span>
         </div>
 
@@ -283,8 +427,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               }}
             >
               <div style={{
-                width: '46px',
-                height: '46px',
+                width: '48px',
+                height: '48px',
                 borderRadius: '50%',
                 backgroundColor: '#f2efff',
                 display: 'flex',
@@ -293,9 +437,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 marginBottom: '8px',
                 color: '#4c35de',
               }}>
-                <Building2 size={22} />
+                <Landmark size={22} />
               </div>
-              <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px' }}>
+              <strong style={{ fontSize: '0.84rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
                 {state.name}
               </strong>
               <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>
@@ -306,10 +450,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-      {/* Section 3: Central Government (Matches "Central Government" in Reference) */}
+      {/* Section 3: Central Government Custodians */}
       <div>
         <div className="digi-section-header">
-          <h3 className="digi-section-title">Central Government Custodians</h3>
+          <h3 className="digi-section-title">
+            <Shield size={17} color="#4c35de" />
+            <span>Central Government Custodians</span>
+          </h3>
           <span onClick={() => onNavigateTab('trust')} className="digi-view-all">View All</span>
         </div>
 
@@ -330,8 +477,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '38px',
+                  height: '38px',
                   borderRadius: '12px',
                   background: '#f2efff',
                   color: '#4c35de',
@@ -339,7 +486,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <Shield size={18} />
+                  <Award size={18} />
                 </div>
                 <div>
                   <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block' }}>{auth.name}</strong>
