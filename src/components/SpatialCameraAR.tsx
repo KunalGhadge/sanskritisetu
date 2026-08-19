@@ -5,17 +5,17 @@ import {
   ArrowLeft,
   Camera,
   RotateCw,
-  Maximize2,
-  Minimize2,
   RefreshCw,
   Sparkles,
-  Sun,
   SwitchCamera,
   CheckCircle2,
   Download,
-  Info,
+  Crosshair,
+  Move,
+  Maximize2,
+  ZoomIn,
+  ZoomOut,
   Layers,
-  Compass,
 } from 'lucide-react';
 import { MonumentData } from '../data/monuments';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
@@ -36,91 +36,81 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [cameraFacing, setCameraFacing] = useState<'environment' | 'user'>('environment');
-  const [cameraError, setCameraError] = useState<string | null>(null);
   const [modelLoading, setModelLoading] = useState<boolean>(true);
-  const [loadProgress, setLoadProgress] = useState<number>(0);
-  const [scale, setScale] = useState<number>(1.0);
-  const [isGyroEnabled, setIsGyroEnabled] = useState<boolean>(true);
+  const [isPlaced, setIsPlaced] = useState<boolean>(false);
+  const [scale, setScale] = useState<number>(0.35); // Comfortable non-zoomed initial size
   const [snapFlash, setSnapFlash] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [showControls, setShowControls] = useState<boolean>(true);
 
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const modelGroupRef = useRef<THREE.Group | null>(null);
+  const reticleRef = useRef<THREE.Group | null>(null);
+  const groundPlaneRef = useRef<THREE.Mesh | null>(null);
+  const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
+  const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2(0, -0.2));
   const animFrameIdRef = useRef<number>(0);
 
-  // Gesture state
   const touchStateRef = useRef<{
     startX: number;
     startY: number;
     startDistance: number;
     startScale: number;
-    startRotationY: number;
     isInteracting: boolean;
+    hasMoved: boolean;
   }>({
     startX: 0,
     startY: 0,
     startDistance: 0,
-    startScale: 1.0,
-    startRotationY: 0,
+    startScale: 0.35,
     isInteracting: false,
+    hasMoved: false,
   });
 
-  const gyroOffsetRef = useRef<{ alpha: number; beta: number; gamma: number }>({
-    alpha: 0,
-    beta: 0,
-    gamma: 0,
-  });
+  const gyroRef = useRef<{ beta: number; gamma: number }>({ beta: 0, gamma: 0 });
 
-  const t = TRANSLATIONS[currentLanguage];
   const displayName = currentLanguage !== 'en' && monument.hindiName ? monument.hindiName : monument.name;
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 2500);
+    setTimeout(() => setToastMessage(null), 3000);
   };
 
-  // 1. Initialize Real Camera Stream
+  // 1. Live Camera Stream
   useEffect(() => {
     let stream: MediaStream | null = null;
 
     const startCamera = async () => {
       try {
-        setCameraError(null);
         if (stream) {
-          stream.getTracks().forEach((track) => track.stop());
+          stream.getTracks().forEach((t) => t.stop());
         }
 
-        const constraints: MediaStreamConstraints = {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: { ideal: cameraFacing },
             width: { ideal: 1920 },
             height: { ideal: 1080 },
           },
           audio: false,
-        };
+        });
 
-        const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
         stream = mediaStream;
-
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
           await videoRef.current.play();
         }
-      } catch (err: any) {
-        console.warn('Camera request fallback:', err);
+      } catch (err) {
         try {
-          // Fallback to generic video
-          const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-          stream = fallbackStream;
+          const fallback = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          stream = fallback;
           if (videoRef.current) {
-            videoRef.current.srcObject = fallbackStream;
+            videoRef.current.srcObject = fallback;
             await videoRef.current.play();
           }
-        } catch (fallbackErr: any) {
-          setCameraError('Camera access denied or unavailable. You can still inspect and interact with the 3D model in Spatial AR mode.');
+        } catch (e) {
+          showToast('Camera permission needed for live background');
         }
       }
     };
@@ -128,13 +118,26 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
     startCamera();
 
     return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
+      if (stream) stream.getTracks().forEach((t) => t.stop());
     };
   }, [cameraFacing]);
 
-  // 2. Initialize Three.js WebGL Engine with Transparent Canvas
+  // 2. Gyroscope orientation
+  useEffect(() => {
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.beta !== null && e.gamma !== null) {
+        gyroRef.current = { beta: e.beta, gamma: e.gamma };
+      }
+    };
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', handleOrientation);
+    }
+    return () => {
+      window.removeEventListener('deviceorientation', handleOrientation);
+    };
+  }, []);
+
+  // 3. Three.js Engine & Surface Plane Scanner Reticle
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current) return;
 
@@ -146,13 +149,13 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    // Camera
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.set(0, 1.2, 3.2);
-    camera.lookAt(0, 0.4, 0);
+    // Realistic Wide-Angle AR Camera at Eye-Level (Looking Down at Ground)
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+    camera.position.set(0, 1.4, 3.5); // 1.4m standing eye height, 3.5m back
+    camera.lookAt(0, -0.4, 0); // Looking down toward the floor/desk
     cameraRef.current = camera;
 
-    // Renderer (Alpha enabled for live camera feed visibility)
+    // WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
       alpha: true,
@@ -164,35 +167,64 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.2;
     rendererRef.current = renderer;
 
-    // Lighting (Studio Environment setup with Ground Bounce)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xfff4e5, 2.0);
-    dirLight.position.set(3, 8, 4);
+    const dirLight = new THREE.DirectionalLight(0xfff5ea, 2.2);
+    dirLight.position.set(2, 6, 3);
     dirLight.castShadow = true;
     dirLight.shadow.mapSize.width = 1024;
     dirLight.shadow.mapSize.height = 1024;
     scene.add(dirLight);
 
-    const fillLight = new THREE.DirectionalLight(0xdbeafe, 0.8);
-    fillLight.position.set(-3, 2, -2);
+    const fillLight = new THREE.DirectionalLight(0xcfd8dc, 0.9);
+    fillLight.position.set(-3, 3, -1);
     scene.add(fillLight);
 
-    // Realistic Floor Contact Shadow Plane
-    const shadowGeo = new THREE.PlaneGeometry(6, 6);
-    const shadowMat = new THREE.ShadowMaterial({ opacity: 0.35 });
-    const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
-    shadowMesh.rotation.x = -Math.PI / 2;
-    shadowMesh.position.y = -0.01;
-    shadowMesh.receiveShadow = true;
-    scene.add(shadowMesh);
+    // Infinite Invisible Virtual Ground Plane for Surface Raycasting & Contact Shadows
+    const groundGeo = new THREE.PlaneGeometry(20, 20);
+    const groundMat = new THREE.ShadowMaterial({ opacity: 0.45 });
+    const groundMesh = new THREE.Mesh(groundGeo, groundMat);
+    groundMesh.rotation.x = -Math.PI / 2;
+    groundMesh.position.y = -0.7; // Floor level
+    groundMesh.receiveShadow = true;
+    scene.add(groundMesh);
+    groundPlaneRef.current = groundMesh;
 
-    // Model Parent Group
+    // Surface Scanning Ring / Reticle
+    const reticleGroup = new THREE.Group();
+    reticleGroup.position.set(0, -0.69, 0);
+
+    // Outer Ring
+    const ringGeo = new THREE.RingGeometry(0.28, 0.32, 32);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0x4c35de,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.85,
+    });
+    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringMesh.rotation.x = -Math.PI / 2;
+    reticleGroup.add(ringMesh);
+
+    // Inner Glowing Center Dot
+    const dotGeo = new THREE.CircleGeometry(0.06, 16);
+    const dotMat = new THREE.MeshBasicMaterial({ color: 0x10b981, side: THREE.DoubleSide });
+    const dotMesh = new THREE.Mesh(dotGeo, dotMat);
+    dotMesh.rotation.x = -Math.PI / 2;
+    reticleGroup.add(dotMesh);
+
+    scene.add(reticleGroup);
+    reticleRef.current = reticleGroup;
+
+    // Monument Model Group
     const modelGroup = new THREE.Group();
+    modelGroup.position.set(0, -0.7, 0); // Placed directly on ground
+    modelGroup.visible = false; // Initially hidden until placed or loaded
     scene.add(modelGroup);
     modelGroupRef.current = modelGroup;
 
@@ -203,60 +235,62 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
       (gltf) => {
         const root = gltf.scene;
 
-        // Auto-center & normalize dimensions
         const bbox = new THREE.Box3().setFromObject(root);
         const center = bbox.getCenter(new THREE.Vector3());
         const size = bbox.getSize(new THREE.Vector3());
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const targetSize = 1.8; // Normalized bounding height in meters
-        const initialScale = targetSize / (maxDim || 1);
+        // Normalize to a 1-meter bounding box in 3D world units
+        const normScale = 1.0 / (maxDim || 1);
 
         root.position.sub(center);
-        root.position.y += size.y / 2; // Sit on ground plane
+        root.position.y += size.y / 2; // Sits precisely on ground plane
 
         root.traverse((child: any) => {
           if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
-            if (child.material) {
-              child.material.envMapIntensity = 1.0;
-              child.material.needsUpdate = true;
-            }
           }
         });
 
-        modelGroup.scale.setScalar(initialScale);
         modelGroup.add(root);
-        modelGroup.position.set(0, -0.4, 0); // Position at comfortable AR height
+        // Apply scaled size (0.35 = ~35cm tabletop model, comfortably fits in camera view without clipping)
+        modelGroup.scale.setScalar(0.35 * normScale);
 
         setModelLoading(false);
-        showToast('🏛️ Monument loaded in physical space!');
+        // Default place in front
+        modelGroup.visible = true;
+        setIsPlaced(true);
+        showToast('🎯 Surface Detected! Tap on floor to place monument.');
       },
-      (xhr) => {
-        if (xhr.total > 0) {
-          setLoadProgress(Math.round((xhr.loaded / xhr.total) * 100));
-        }
-      },
-      (error) => {
-        console.error('GLB Load Error:', error);
+      undefined,
+      (err) => {
+        console.error(err);
         setModelLoading(false);
-        showToast('Loaded standard 3D photogrammetry asset');
       }
     );
 
-    // Animation Render Loop
+    // Animation Loop
+    let clock = new THREE.Clock();
     const animate = () => {
       animFrameIdRef.current = requestAnimationFrame(animate);
+      const delta = clock.getElapsedTime();
 
-      if (modelGroupRef.current && isGyroEnabled) {
-        // Subtle tilt responsiveness based on phone gyroscope
-        const { beta, gamma } = gyroOffsetRef.current;
-        const targetRotX = THREE.MathUtils.degToRad(Math.max(-25, Math.min(25, (beta - 45) * 0.3)));
-        const targetRotZ = THREE.MathUtils.degToRad(Math.max(-25, Math.min(25, -gamma * 0.3)));
+      // Animate pulsing reticle
+      if (reticleRef.current) {
+        const s = 1.0 + Math.sin(delta * 4) * 0.08;
+        reticleRef.current.scale.set(s, s, s);
+      }
 
-        modelGroupRef.current.rotation.x = THREE.MathUtils.lerp(modelGroupRef.current.rotation.x, targetRotX, 0.05);
-        modelGroupRef.current.rotation.z = THREE.MathUtils.lerp(modelGroupRef.current.rotation.z, targetRotZ, 0.05);
+      // Gyroscope subtle tilt perspective
+      if (modelGroupRef.current && isPlaced) {
+        const { beta, gamma } = gyroRef.current;
+        if (beta && gamma) {
+          const targetRotX = THREE.MathUtils.degToRad(Math.max(-15, Math.min(15, (beta - 50) * 0.2)));
+          const targetRotZ = THREE.MathUtils.degToRad(Math.max(-15, Math.min(15, -gamma * 0.2)));
+          modelGroupRef.current.rotation.x = THREE.MathUtils.lerp(modelGroupRef.current.rotation.x, targetRotX, 0.04);
+          modelGroupRef.current.rotation.z = THREE.MathUtils.lerp(modelGroupRef.current.rotation.z, targetRotZ, 0.04);
+        }
       }
 
       renderer.render(scene, camera);
@@ -264,7 +298,6 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
 
     animate();
 
-    // Handle Window Resize
     const handleResize = () => {
       if (!containerRef.current || !rendererRef.current || !cameraRef.current) return;
       const w = containerRef.current.clientWidth || window.innerWidth;
@@ -283,28 +316,34 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
     };
   }, [monument.glbModelPath]);
 
-  // 3. Gyroscope & Motion Sensor Listener
-  useEffect(() => {
-    const handleOrientation = (e: DeviceOrientationEvent) => {
-      if (e.beta !== null && e.gamma !== null) {
-        gyroOffsetRef.current = {
-          alpha: e.alpha || 0,
-          beta: e.beta || 0,
-          gamma: e.gamma || 0,
-        };
+  // Tap-to-Place on Ground Surface
+  const handleSurfaceTap = (clientX: number, clientY: number) => {
+    if (!containerRef.current || !cameraRef.current || !groundPlaneRef.current || !modelGroupRef.current) return;
+
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycasterRef.current.setFromCamera(new THREE.Vector2(x, y), cameraRef.current);
+    const intersects = raycasterRef.current.intersectObject(groundPlaneRef.current);
+
+    if (intersects.length > 0) {
+      const hitPoint = intersects[0].point;
+
+      // Position model at hit point on the floor
+      modelGroupRef.current.position.set(hitPoint.x, -0.7, hitPoint.z);
+      modelGroupRef.current.visible = true;
+
+      if (reticleRef.current) {
+        reticleRef.current.position.set(hitPoint.x, -0.69, hitPoint.z);
       }
-    };
 
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', handleOrientation);
+      setIsPlaced(true);
+      showToast('📍 Monument locked to physical surface!');
     }
+  };
 
-    return () => {
-      window.removeEventListener('deviceorientation', handleOrientation);
-    };
-  }, []);
-
-  // 4. Multi-Touch Gestures (Pinch to Scale, Drag to Move, Rotate)
+  // Touch Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 1) {
       touchStateRef.current = {
@@ -312,18 +351,17 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
         startX: e.touches[0].clientX,
         startY: e.touches[0].clientY,
         isInteracting: true,
+        hasMoved: false,
       };
     } else if (e.touches.length === 2) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
-      const dist = Math.hypot(dx, dy);
-
       touchStateRef.current = {
         ...touchStateRef.current,
-        startDistance: dist,
+        startDistance: Math.hypot(dx, dy),
         startScale: scale,
-        startRotationY: modelGroupRef.current ? modelGroupRef.current.rotation.y : 0,
         isInteracting: true,
+        hasMoved: true,
       };
     }
   };
@@ -332,50 +370,63 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
     if (!touchStateRef.current.isInteracting || !modelGroupRef.current) return;
 
     if (e.touches.length === 1) {
-      // 1-Finger Drag: Move horizontally and rotate
       const dx = e.touches[0].clientX - touchStateRef.current.startX;
       const dy = e.touches[0].clientY - touchStateRef.current.startY;
 
-      modelGroupRef.current.rotation.y += dx * 0.008;
-      modelGroupRef.current.position.y -= dy * 0.002;
-
-      touchStateRef.current.startX = e.touches[0].clientX;
-      touchStateRef.current.startY = e.touches[0].clientY;
+      if (Math.hypot(dx, dy) > 6) {
+        touchStateRef.current.hasMoved = true;
+        // 1-finger drag: Rotate model
+        modelGroupRef.current.rotation.y += dx * 0.01;
+        touchStateRef.current.startX = e.touches[0].clientX;
+        touchStateRef.current.startY = e.touches[0].clientY;
+      }
     } else if (e.touches.length === 2) {
-      // 2-Finger Pinch: Scale & Two-finger rotation
+      touchStateRef.current.hasMoved = true;
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
       const dist = Math.hypot(dx, dy);
 
       const ratio = dist / (touchStateRef.current.startDistance || 1);
-      const newScale = Math.max(0.2, Math.min(4.0, touchStateRef.current.startScale * ratio));
+      const newScale = Math.max(0.1, Math.min(1.5, touchStateRef.current.startScale * ratio));
 
       setScale(newScale);
       modelGroupRef.current.scale.setScalar(newScale);
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    // If it was a quick tap without drag -> perform tap-to-place!
+    if (!touchStateRef.current.hasMoved && e.changedTouches.length > 0) {
+      const touch = e.changedTouches[0];
+      handleSurfaceTap(touch.clientX, touch.clientY);
+    }
     touchStateRef.current.isInteracting = false;
   };
 
-  // 5. High-Resolution In-App AR Photo Snapshot
+  // Scale Presets
+  const handleSetScalePreset = (presetScale: number) => {
+    setScale(presetScale);
+    if (modelGroupRef.current) {
+      modelGroupRef.current.scale.setScalar(presetScale);
+      showToast(`Scale updated: ${(presetScale * 100).toFixed(0)}%`);
+    }
+  };
+
+  // Capture Photo
   const handleCapturePhoto = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Trigger visual flash
     setSnapFlash(true);
     setTimeout(() => setSnapFlash(false), 200);
 
-    const mergedCanvas = document.createElement('canvas');
-    mergedCanvas.width = canvas.width;
-    mergedCanvas.height = canvas.height;
-    const ctx = mergedCanvas.getContext('2d');
+    const merged = document.createElement('canvas');
+    merged.width = canvas.width;
+    merged.height = canvas.height;
+    const ctx = merged.getContext('2d');
     if (!ctx) return;
 
-    // Draw video background if available
     if (video && video.videoWidth > 0) {
       const vRatio = video.videoWidth / video.videoHeight;
       const cRatio = canvas.width / canvas.height;
@@ -391,50 +442,35 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
         drawH = canvas.width / vRatio;
         startY = (canvas.height - drawH) / 2;
       }
-
       ctx.drawImage(video, startX, startY, drawW, drawH);
     } else {
-      // Solid dark background if camera is unavailable
       ctx.fillStyle = '#141828';
-      ctx.fillRect(0, 0, mergedCanvas.width, mergedCanvas.height);
+      ctx.fillRect(0, 0, merged.width, merged.height);
     }
 
-    // Render WebGL 3D Layer on top
     ctx.drawImage(canvas, 0, 0);
 
-    // Watermark / Government Badge
-    ctx.fillStyle = 'rgba(24, 28, 50, 0.85)';
-    ctx.fillRect(16, mergedCanvas.height - 70, 320, 50);
+    // Seal
+    ctx.fillStyle = 'rgba(20, 24, 40, 0.88)';
+    ctx.fillRect(20, merged.height - 75, 340, 52);
     ctx.strokeStyle = '#4c35de';
     ctx.lineWidth = 2;
-    ctx.strokeRect(16, mergedCanvas.height - 70, 320, 50);
+    ctx.strokeRect(20, merged.height - 75, 340, 52);
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 16px Outfit, sans-serif';
-    ctx.fillText(displayName, 28, mergedCanvas.height - 42);
+    ctx.font = 'bold 17px Outfit, sans-serif';
+    ctx.fillText(displayName, 34, merged.height - 44);
 
     ctx.fillStyle = '#ff9933';
     ctx.font = '12px Plus Jakarta Sans, sans-serif';
-    ctx.fillText('SanskritiSetu • Physical AR Spatial Archive', 28, mergedCanvas.height - 24);
+    ctx.fillText('SanskritiSetu • Physical Surface AR', 34, merged.height - 26);
 
-    // Download to phone gallery
     const link = document.createElement('a');
     link.download = `SanskritiSetu-AR-${monument.id}-${Date.now()}.png`;
-    link.href = mergedCanvas.toDataURL('image/png');
+    link.href = merged.toDataURL('image/png');
     link.click();
 
     showToast('📸 AR Photo saved to your gallery!');
-  };
-
-  // Reset Model Orientation & Position
-  const handleResetPosition = () => {
-    if (modelGroupRef.current) {
-      modelGroupRef.current.position.set(0, -0.4, 0);
-      modelGroupRef.current.rotation.set(0, 0, 0);
-      modelGroupRef.current.scale.setScalar(1.0);
-      setScale(1.0);
-      showToast('🔄 Monument repositioned to center');
-    }
   };
 
   return (
@@ -471,7 +507,7 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
         }}
       />
 
-      {/* 2. Transparent Three.js WebGL Layer */}
+      {/* 2. WebGL 3D Canvas */}
       <canvas
         ref={canvasRef}
         style={{
@@ -484,7 +520,7 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
         }}
       />
 
-      {/* 3. Screen Flash for Snapshot */}
+      {/* 3. Screen Flash */}
       {snapFlash && (
         <div style={{
           position: 'absolute',
@@ -495,7 +531,7 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
         }} />
       )}
 
-      {/* 4. Top Header & Control Strip */}
+      {/* 4. Top Controls Header */}
       <div style={{
         position: 'absolute',
         top: '16px',
@@ -504,13 +540,13 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: 'rgba(20, 24, 40, 0.85)',
+        background: 'rgba(20, 24, 40, 0.88)',
         backdropFilter: 'blur(16px)',
         border: '1px solid rgba(255, 255, 255, 0.15)',
         borderRadius: '20px',
         padding: '8px 14px',
         zIndex: 50,
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.35)',
       }}>
         <button
           onClick={onExit}
@@ -536,32 +572,30 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
           <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#ffffff', fontFamily: 'Outfit, sans-serif', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {displayName}
           </span>
-          <span style={{ fontSize: '0.62rem', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
-            <Sparkles size={10} />
-            <span>Spatial Tracking Active</span>
+          <span style={{ fontSize: '0.62rem', color: isPlaced ? '#10b981' : '#ff9933', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
+            <Crosshair size={10} />
+            <span>{isPlaced ? 'Surface Locked' : 'Scanning Floor/Desk'}</span>
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '6px' }}>
-          <button
-            onClick={() => setCameraFacing(cameraFacing === 'environment' ? 'user' : 'environment')}
-            title="Switch Camera"
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '12px',
-              border: 'none',
-              background: 'rgba(255, 255, 255, 0.12)',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-            }}
-          >
-            <SwitchCamera size={16} />
-          </button>
-        </div>
+        <button
+          onClick={() => setCameraFacing(cameraFacing === 'environment' ? 'user' : 'environment')}
+          title="Switch Camera"
+          style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '12px',
+            border: 'none',
+            background: 'rgba(255, 255, 255, 0.12)',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+          }}
+        >
+          <SwitchCamera size={16} />
+        </button>
       </div>
 
       {/* 5. Center Toast Feedback */}
@@ -571,23 +605,47 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
           top: '76px',
           left: '50%',
           transform: 'translateX(-50%)',
-          background: 'rgba(76, 53, 222, 0.92)',
+          background: 'rgba(76, 53, 222, 0.95)',
           backdropFilter: 'blur(12px)',
           color: '#ffffff',
-          padding: '6px 16px',
+          padding: '8px 18px',
           borderRadius: '20px',
           fontSize: '0.74rem',
           fontWeight: 800,
           zIndex: 60,
-          boxShadow: '0 4px 20px rgba(76, 53, 222, 0.4)',
+          boxShadow: '0 4px 20px rgba(76, 53, 222, 0.5)',
           border: '1px solid rgba(255, 255, 255, 0.25)',
           whiteSpace: 'nowrap',
+          textAlign: 'center',
         }}>
           {toastMessage}
         </div>
       )}
 
-      {/* 6. Loading Spinner */}
+      {/* 6. Surface Scan Guidance Banner (If not placed or repositioning) */}
+      <div style={{
+        position: 'absolute',
+        top: '118px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: 'rgba(20, 24, 40, 0.85)',
+        backdropFilter: 'blur(10px)',
+        color: '#ffffff',
+        padding: '5px 14px',
+        borderRadius: '14px',
+        fontSize: '0.68rem',
+        fontWeight: 700,
+        zIndex: 45,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+      }}>
+        <Crosshair size={12} color="#10b981" />
+        <span>Tap any spot on floor/desk to anchor monument</span>
+      </div>
+
+      {/* 7. Loading Spinner */}
       {modelLoading && (
         <div style={{
           position: 'absolute',
@@ -602,14 +660,12 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
           color: '#ffffff',
         }}>
           <RotateCw size={36} color="#644bf5" style={{ animation: 'spin 1.2s linear infinite', marginBottom: '12px' }} />
-          <strong style={{ fontSize: '0.9rem', marginBottom: '4px' }}>Loading 3D Spatial Geometry...</strong>
-          <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
-            {loadProgress > 0 ? `${loadProgress}% downloaded` : 'Calibrating AR projection'}
-          </span>
+          <strong style={{ fontSize: '0.9rem', marginBottom: '4px' }}>Loading 3D Geometry...</strong>
+          <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Calibrating surface distance</span>
         </div>
       )}
 
-      {/* 7. Bottom Floating Action Controls */}
+      {/* 8. Bottom Toolbar & Scale Controls */}
       <div style={{
         position: 'absolute',
         bottom: '24px',
@@ -620,86 +676,80 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
         gap: '10px',
         zIndex: 50,
       }}>
-        {/* Scale & Quick Gesture Helpers */}
+        {/* Scale Presets Pill */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          background: 'rgba(20, 24, 40, 0.88)',
+          background: 'rgba(20, 24, 40, 0.9)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
           borderRadius: '16px',
-          padding: '8px 14px',
+          padding: '8px 12px',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700 }}>Scale:</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '0.68rem', color: '#94a3b8', fontWeight: 800 }}>Size:</span>
             <button
-              onClick={() => {
-                const s = 0.4;
-                setScale(s);
-                if (modelGroupRef.current) modelGroupRef.current.scale.setScalar(s);
-              }}
+              onClick={() => handleSetScalePreset(0.2)}
               style={{
-                background: scale < 0.6 ? '#4c35de' : 'rgba(255, 255, 255, 0.1)',
+                background: scale < 0.28 ? '#4c35de' : 'rgba(255, 255, 255, 0.1)',
                 border: 'none',
                 color: '#ffffff',
-                padding: '3px 8px',
+                padding: '4px 8px',
                 borderRadius: '8px',
                 fontSize: '0.66rem',
                 fontWeight: 800,
                 cursor: 'pointer',
               }}
             >
-              Desk (40%)
+              Mini (20%)
             </button>
             <button
-              onClick={() => {
-                const s = 1.0;
-                setScale(s);
-                if (modelGroupRef.current) modelGroupRef.current.scale.setScalar(s);
-              }}
+              onClick={() => handleSetScalePreset(0.35)}
               style={{
-                background: scale >= 0.8 && scale <= 1.2 ? '#4c35de' : 'rgba(255, 255, 255, 0.1)',
+                background: scale >= 0.28 && scale <= 0.45 ? '#4c35de' : 'rgba(255, 255, 255, 0.1)',
                 border: 'none',
                 color: '#ffffff',
-                padding: '3px 8px',
+                padding: '4px 8px',
                 borderRadius: '8px',
                 fontSize: '0.66rem',
                 fontWeight: 800,
                 cursor: 'pointer',
               }}
             >
-              Room (1:1)
+              Table (35%)
             </button>
             <button
-              onClick={() => {
-                const s = 2.2;
-                setScale(s);
-                if (modelGroupRef.current) modelGroupRef.current.scale.setScalar(s);
-              }}
+              onClick={() => handleSetScalePreset(0.7)}
               style={{
-                background: scale > 1.8 ? '#4c35de' : 'rgba(255, 255, 255, 0.1)',
+                background: scale > 0.45 ? '#4c35de' : 'rgba(255, 255, 255, 0.1)',
                 border: 'none',
                 color: '#ffffff',
-                padding: '3px 8px',
+                padding: '4px 8px',
                 borderRadius: '8px',
                 fontSize: '0.66rem',
                 fontWeight: 800,
                 cursor: 'pointer',
               }}
             >
-              Giant (220%)
+              Room (70%)
             </button>
           </div>
 
           <button
-            onClick={handleResetPosition}
+            onClick={() => {
+              if (modelGroupRef.current) {
+                modelGroupRef.current.position.set(0, -0.7, 0);
+                modelGroupRef.current.rotation.set(0, 0, 0);
+                handleSetScalePreset(0.35);
+              }
+            }}
             title="Reset Position"
             style={{
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: 'rgba(255, 255, 255, 0.12)',
               border: 'none',
               color: '#ffffff',
-              padding: '4px 8px',
+              padding: '4px 10px',
               borderRadius: '8px',
               fontSize: '0.68rem',
               fontWeight: 800,
@@ -710,34 +760,33 @@ export const SpatialCameraAR: React.FC<SpatialCameraARProps> = ({
             }}
           >
             <RefreshCw size={12} />
-            <span>Reset</span>
+            <span>Center</span>
           </button>
         </div>
 
-        {/* Big Snapshot Capture & Interaction Bar */}
+        {/* Shutter Capture Bar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
           <div style={{
             fontSize: '0.66rem',
             color: '#cbd5e1',
-            background: 'rgba(20, 24, 40, 0.75)',
+            background: 'rgba(20, 24, 40, 0.8)',
             padding: '6px 12px',
             borderRadius: '12px',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
           }}>
-            <span>👆 1-Finger: Drag/Rotate</span>
+            <span>👆 Tap floor to place</span>
             <span>•</span>
-            <span>✌️ 2-Finger: Pinch Scale</span>
+            <span>🖐️ Swipe to turn</span>
           </div>
 
-          {/* Shutter Button */}
           <button
             onClick={handleCapturePhoto}
             title="Take AR Photo"
             style={{
-              width: '60px',
-              height: '60px',
+              width: '58px',
+              height: '58px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, #4c35de 0%, #644bf5 100%)',
               border: '4px solid #ffffff',
