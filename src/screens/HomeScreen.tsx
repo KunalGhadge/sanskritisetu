@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { STATES_DATA, ISSUING_AUTHORITIES } from '../data/states';
 import { HeritageImage } from '../components/HeritageImage';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 import {
   Shield,
   Search,
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react';
 
 interface HomeScreenProps {
+  currentLanguage: LanguageCode;
   onOpenMonument: (monumentId: string) => void;
   onOpenState: (stateId: string) => void;
   onNavigateTab: (tab: 'home' | 'repository' | 'ar_explorer' | 'vault' | 'trust') => void;
@@ -31,6 +33,7 @@ interface HomeScreenProps {
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
+  currentLanguage,
   onOpenMonument,
   onOpenState,
   onNavigateTab,
@@ -39,48 +42,50 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  const t = TRANSLATIONS[currentLanguage];
+
   const CAROUSEL_SLIDES = [
     {
       id: 'stone-chariot',
-      tag: 'Live WebAR Target',
+      tag: t.liveWebARTarget,
       isLive: true,
-      title: 'Stone Chariot, Hampi',
-      subtitle: 'Vijayanagara Empire • 16th Century CE',
+      title: t.monumentNames.stoneChariot,
+      subtitle: t.monumentNames.stoneChariotSub,
       image: '/assets/images/stonechariot.jpg',
-      actionText: 'Launch AR Scanner',
+      actionText: t.launchARScanner,
       action: () => onNavigateTab('ar_explorer'),
       gradient: 'linear-gradient(180deg, rgba(76,53,222,0.25) 0%, rgba(30,15,100,0.94) 100%)',
     },
     {
       id: 'raigad-fort',
-      tag: 'Maratha Heritage Archive',
+      tag: t.marathaHeritageArchive,
       isLive: false,
-      title: 'Raigad Hill Fortress',
-      subtitle: 'Capital of Chhatrapati Shivaji Maharaj',
+      title: t.monumentNames.raigadFort,
+      subtitle: t.monumentNames.raigadFortSub,
       image: '/assets/images/raigad.jpg',
-      actionText: 'Explore Collection',
+      actionText: t.exploreCollection,
       action: () => onOpenState('maharashtra'),
       gradient: 'linear-gradient(180deg, rgba(37,99,235,0.25) 0%, rgba(15,23,42,0.94) 100%)',
     },
     {
       id: 'konark-sun-temple',
-      tag: 'UNESCO World Heritage #246',
+      tag: t.unescoWorldHeritage,
       isLive: false,
-      title: 'Konark Sun Temple',
-      subtitle: '24 Monolithic Sundial Chariot Wheels',
+      title: t.monumentNames.konarkTemple,
+      subtitle: t.monumentNames.konarkTempleSub,
       image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80',
-      actionText: 'View Repository',
+      actionText: t.viewRepository,
       action: () => onOpenState('odisha'),
       gradient: 'linear-gradient(180deg, rgba(217,119,6,0.25) 0%, rgba(40,15,5,0.94) 100%)',
     },
     {
       id: 'brihadisvara-temple',
-      tag: 'Great Living Chola Temples',
+      tag: t.greatLivingChola,
       isLive: false,
-      title: 'Brihadisvara Temple',
-      subtitle: '80-Tonne Monolithic Granite Vimana',
+      title: t.monumentNames.brihadisvaraTemple,
+      subtitle: t.monumentNames.brihadisvaraTempleSub,
       image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
-      actionText: 'View Ingestion',
+      actionText: t.viewIngestion,
       action: () => onOpenState('tamil-nadu'),
       gradient: 'linear-gradient(180deg, rgba(13,148,136,0.25) 0%, rgba(10,35,35,0.94) 100%)',
     },
@@ -101,10 +106,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 2px 0' }}>
         <div>
           <h2 style={{ fontSize: '1.28rem', fontWeight: 800, color: '#181c32', margin: 0, fontFamily: 'Outfit, sans-serif' }}>
-            Hi <span style={{ color: '#4c35de' }}>Citizen</span>
+            {t.greetingCitizen}
           </h2>
           <p style={{ fontSize: '0.76rem', color: '#8b92ab', margin: '2px 0 0 0', fontWeight: 500 }}>
-            Welcome to SanskritiSetu Digital Cloud
+            {t.welcomeCloud}
           </p>
         </div>
 
@@ -128,8 +133,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* Live Cloud Status Ticker */}
       <div className="live-sync-strip">
         <div className="pulse-dot" />
-        <span style={{ fontWeight: 700, color: '#181c32' }}>Sovereign Cloud Active</span>
-        <span style={{ color: '#8b92ab' }}>• 3,690 National Records Synced</span>
+        <span style={{ fontWeight: 700, color: '#181c32' }}>{t.sovereignActive}</span>
+        <span style={{ color: '#8b92ab' }}>• {t.recordsSynced}</span>
       </div>
 
       {/* Interactive Auto-Advancing Hero Carousel */}
@@ -219,9 +224,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         <div className="digi-section-header">
           <h3 className="digi-section-title">
             <Layers size={17} color="#4c35de" />
-            <span>Preserved Heritage Records</span>
+            <span>{t.preservedRecords}</span>
           </h3>
-          <span onClick={() => onNavigateTab('repository')} className="digi-view-all">View All</span>
+          <span onClick={() => onNavigateTab('repository')} className="digi-view-all">{t.viewAll}</span>
         </div>
 
         {/* Horizontal Slider of Preserved Record Cards */}
@@ -257,14 +262,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             }}>
               <HeritageImage
                 src="/assets/images/stonechariot.jpg"
-                alt="Stone Chariot"
+                alt={t.monumentNames.stoneChariot}
               />
             </div>
             <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
-              Stone Chariot
+              {t.monumentNames.stoneChariot}
             </strong>
             <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
-              Hampi, Karnataka
+              {t.monumentNames.stoneChariotSub}
             </span>
           </div>
 
@@ -299,14 +304,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             }}>
               <HeritageImage
                 src="/assets/images/raigad.jpg"
-                alt="Raigad Fort"
+                alt={t.monumentNames.raigadFort}
               />
             </div>
             <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
-              Raigad Fort
+              {t.monumentNames.raigadFort}
             </strong>
             <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
-              Maharashtra
+              {t.monumentNames.raigadFortSub}
             </span>
           </div>
 
@@ -341,14 +346,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             }}>
               <HeritageImage
                 src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=300&q=80"
-                alt="Brihadisvara Temple"
+                alt={t.monumentNames.brihadisvaraTemple}
               />
             </div>
             <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
-              Brihadisvara
+              {t.monumentNames.brihadisvaraTemple}
             </strong>
             <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
-              Tamil Nadu
+              {t.monumentNames.brihadisvaraTempleSub}
             </span>
           </div>
 
@@ -383,14 +388,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             }}>
               <HeritageImage
                 src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=300&q=80"
-                alt="Konark Sun Temple"
+                alt={t.monumentNames.konarkTemple}
               />
             </div>
             <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
-              Konark Temple
+              {t.monumentNames.konarkTemple}
             </strong>
             <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
-              Odisha
+              {t.monumentNames.konarkTempleSub}
             </span>
           </div>
         </div>
@@ -401,49 +406,53 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         <div className="digi-section-header">
           <h3 className="digi-section-title">
             <Building2 size={17} color="#4c35de" />
-            <span>State Government Archives</span>
+            <span>{t.stateArchives}</span>
           </h3>
-          <span onClick={() => onNavigateTab('repository')} className="digi-view-all">View All</span>
+          <span onClick={() => onNavigateTab('repository')} className="digi-view-all">{t.viewAll}</span>
         </div>
 
         {/* State Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-          {STATES_DATA.slice(0, 4).map((state) => (
-            <div
-              key={state.id}
-              onClick={() => onOpenState(state.id)}
-              className="digi-card"
-              style={{
-                padding: '16px 14px',
-                margin: 0,
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                backgroundColor: '#f2efff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '8px',
-                color: '#4c35de',
-              }}>
-                <Landmark size={22} />
+          {STATES_DATA.slice(0, 4).map((state) => {
+            const localizedStateName = currentLanguage !== 'en' && state.hindiName ? state.hindiName : state.name;
+
+            return (
+              <div
+                key={state.id}
+                onClick={() => onOpenState(state.id)}
+                className="digi-card"
+                style={{
+                  padding: '16px 14px',
+                  margin: 0,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  backgroundColor: '#f2efff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '8px',
+                  color: '#4c35de',
+                }}>
+                  <Landmark size={22} />
+                </div>
+                <strong style={{ fontSize: '0.84rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
+                  {localizedStateName}
+                </strong>
+                <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>
+                  {state.monumentCount} {t.monumentsCountSuffix}
+                </span>
               </div>
-              <strong style={{ fontSize: '0.84rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
-                {state.name}
-              </strong>
-              <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>
-                {state.monumentCount} Monuments
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -452,9 +461,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         <div className="digi-section-header">
           <h3 className="digi-section-title">
             <Shield size={17} color="#4c35de" />
-            <span>Central Government Custodians</span>
+            <span>{t.centralCustodians}</span>
           </h3>
-          <span onClick={() => onNavigateTab('trust')} className="digi-view-all">View All</span>
+          <span onClick={() => onNavigateTab('trust')} className="digi-view-all">{t.viewAll}</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

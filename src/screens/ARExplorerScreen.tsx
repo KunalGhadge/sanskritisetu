@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { MonumentData } from '../data/monuments';
 import { HeritageImage } from '../components/HeritageImage';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft } from 'lucide-react';
 
 interface ARExplorerScreenProps {
+  currentLanguage: LanguageCode;
   monument: MonumentData;
   onOpenMarkerModal: () => void;
   onBack?: () => void;
 }
 
 export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
+  currentLanguage,
   monument,
   onOpenMarkerModal,
   onBack,
 }) => {
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const t = TRANSLATIONS[currentLanguage];
+
+  const displayName = currentLanguage !== 'en' && monument.hindiName ? monument.hindiName : monument.name;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -62,11 +68,11 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               }}
             >
               <ArrowLeft size={14} />
-              <span>Exit AR</span>
+              <span>{t.exitARButton}</span>
             </button>
 
             <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#a594fd', fontFamily: 'Outfit, sans-serif' }}>
-              Stone Chariot AR
+              {displayName}
             </span>
 
             <button
@@ -134,7 +140,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                 whiteSpace: 'nowrap',
                 border: '1px solid rgba(93, 64, 245, 0.4)',
               }}>
-                Align Marker in Viewfinder
+                {t.alignMarkerHUD}
               </div>
             </div>
           </div>
@@ -152,7 +158,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               className="btn-digi-purple"
               style={{ width: '100%', padding: '14px', fontSize: '0.9rem' }}
             >
-              <span>Finish AR Exploration</span>
+              <span>{t.finishARExploration}</span>
             </button>
           </div>
         </div>
@@ -184,7 +190,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               fontFamily: 'Outfit, sans-serif',
               textAlign: 'center',
             }}>
-              Spatial AR Explorer
+              {t.spatialARExplorerTitle}
             </h2>
 
             <div style={{ width: '24px' }} />
@@ -208,24 +214,24 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
             </div>
 
             <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', margin: '0 0 4px 0', fontFamily: 'Outfit, sans-serif' }}>
-              Augmented Reality View
+              {t.augmentedRealityView}
             </h3>
             <p style={{ fontSize: '0.78rem', color: '#e0dbff', margin: 0 }}>
-              Zero-install browser camera tracking projecting 3D monuments into physical space.
+              {t.arExplorerDesc}
             </p>
           </div>
 
           {/* Selected Monument Card */}
           <div className="digi-card" style={{ padding: '18px' }}>
             <span style={{ fontSize: '0.68rem', color: '#4c35de', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              Target Heritage Model
+              {t.targetHeritageModel}
             </span>
             <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#181c32', margin: '2px 0 12px 0', fontFamily: 'Outfit, sans-serif' }}>
-              {monument.name}
+              {displayName}
             </h4>
 
             <div style={{ height: '140px', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#f4f5fb', marginBottom: '14px' }}>
-              <HeritageImage src={monument.heroImage} alt={monument.name} />
+              <HeritageImage src={monument.heroImage} alt={displayName} />
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '18px' }}>
@@ -246,7 +252,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                 className="btn-digi-purple"
               >
                 <Camera size={16} />
-                <span>Launch Camera AR View</span>
+                <span>{t.launchCameraARView}</span>
               </button>
 
               <button
@@ -254,7 +260,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                 className="btn-digi-secondary"
               >
                 <QrCode size={15} />
-                <span>View / Print AR Tracking Marker</span>
+                <span>{t.viewPrintMarker}</span>
               </button>
             </div>
           </div>

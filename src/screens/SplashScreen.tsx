@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Sparkles, CheckCircle2, Lock, ArrowRight } from 'lucide-react';
+import { Shield, CheckCircle2 } from 'lucide-react';
 
 interface SplashScreenProps {
   onFinish: () => void;
@@ -14,7 +14,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(timer);
-          setTimeout(onFinish, 300);
+          setTimeout(onFinish, 250);
           return 100;
         }
 
@@ -24,7 +24,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
         if (next === 85) setStatusText('Sovereign Archival Node Authenticated.');
         return next;
       });
-    }, 45);
+    }, 35);
 
     return () => clearInterval(timer);
   }, [onFinish]);
@@ -152,9 +152,8 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
         </p>
       </div>
 
-      {/* Bottom Progress & Skip */}
-      <div style={{ width: '100%', maxWidth: '320px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-        {/* Progress Bar */}
+      {/* Bottom Progress Bar (Clean Auto-transition, No Skip Button) */}
+      <div style={{ width: '100%', maxWidth: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ width: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', color: '#8b92ab', marginBottom: '6px', fontWeight: 600 }}>
             <span>{statusText}</span>
@@ -165,30 +164,10 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
               width: `${progress}%`,
               height: '100%',
               background: 'linear-gradient(90deg, #4c35de 0%, #644bf5 100%)',
-              transition: 'width 0.15s ease',
+              transition: 'width 0.1s ease',
             }} />
           </div>
         </div>
-
-        {/* Instant Skip Button */}
-        <button
-          onClick={onFinish}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#4c35de',
-            fontSize: '0.76rem',
-            fontWeight: 800,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            padding: '6px 12px',
-          }}
-        >
-          <span>Tap to Enter Dashboard</span>
-          <ArrowRight size={14} />
-        </button>
       </div>
     </div>
   );

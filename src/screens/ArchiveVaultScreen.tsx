@@ -3,6 +3,7 @@ import { MonumentData, PhotoAsset } from '../data/monuments';
 import { ModelViewer3D } from '../components/ModelViewer3D';
 import { AudioGuide } from '../components/AudioGuide';
 import { HeritageImage } from '../components/HeritageImage';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 import {
   ChevronLeft,
   Shield,
@@ -27,12 +28,14 @@ import {
 } from 'lucide-react';
 
 interface ArchiveVaultScreenProps {
+  currentLanguage: LanguageCode;
   monument: MonumentData;
   onLaunchAR: () => void;
   onBack?: () => void;
 }
 
 export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
+  currentLanguage,
   monument,
   onLaunchAR,
   onBack,
@@ -40,15 +43,19 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
   const [activeTier, setActiveTier] = useState<string>('overview');
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoAsset | null>(null);
 
+  const t = TRANSLATIONS[currentLanguage];
+
   const ARCHIVAL_TIERS = [
-    { id: 'overview', label: 'Overview', icon: Landmark },
-    { id: 'timeline', label: 'Timeline', icon: Calendar },
-    { id: 'architecture', label: 'Joinery', icon: Layers },
-    { id: 'photos', label: 'Photos', icon: Camera },
-    { id: 'audio', label: 'Audio', icon: Headphones },
-    { id: '3d', label: '3D Twin', icon: Box },
-    { id: 'strategy', label: 'Strategy', icon: ShieldCheck },
+    { id: 'overview', label: t.tierOverview, icon: Landmark },
+    { id: 'timeline', label: t.tierTimeline, icon: Calendar },
+    { id: 'architecture', label: t.tierJoinery, icon: Layers },
+    { id: 'photos', label: t.tierPhotos, icon: Camera },
+    { id: 'audio', label: t.tierAudio, icon: Headphones },
+    { id: '3d', label: t.tier3DTwin, icon: Box },
+    { id: 'strategy', label: t.tierStrategy, icon: ShieldCheck },
   ];
+
+  const displayName = currentLanguage !== 'en' && monument.hindiName ? monument.hindiName : monument.name;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -77,7 +84,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
           fontFamily: 'Outfit, sans-serif',
           textAlign: 'center',
         }}>
-          Heritage Archive Dossier
+          {t.heritageDossierTitle}
         </h2>
 
         <div style={{ width: '24px' }} />
@@ -98,7 +105,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
             <Shield size={18} color="#181c32" />
             <div style={{ fontSize: '0.62rem', fontWeight: 800, color: '#181c32', lineHeight: 1.1 }}>
               <div>भारत सरकार</div>
-              <div style={{ color: '#8b92ab' }}>GOVERNMENT OF INDIA</div>
+              <div style={{ color: '#8b92ab' }}>{t.govtOfIndia}</div>
             </div>
           </div>
 
@@ -129,18 +136,18 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
           }}>
             <HeritageImage
               src={monument.heroImage}
-              alt={monument.name}
+              alt={displayName}
             />
           </div>
 
           <div style={{ flexGrow: 1 }}>
             <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#181c32', margin: '0 0 4px 0', fontFamily: 'Outfit, sans-serif', lineHeight: 1.2 }}>
-              {monument.name}
+              {displayName}
             </h3>
             <div style={{ fontSize: '0.72rem', color: '#4b526d', display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <div><strong>Period:</strong> {monument.period}</div>
-              <div><strong>Patron:</strong> {monument.patronKing}</div>
-              <div><strong>Status:</strong> {monument.status}</div>
+              <div><strong>{t.periodLabel}:</strong> {monument.period}</div>
+              <div><strong>{t.patronLabel}:</strong> {monument.patronKing}</div>
+              <div><strong>{t.statusLabel}:</strong> {monument.status}</div>
             </div>
           </div>
         </div>
@@ -154,7 +161,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
           marginBottom: '14px',
         }}>
           <span style={{ fontSize: '0.64rem', color: '#8b92ab', display: 'block', marginBottom: '2px', fontWeight: 600 }}>
-            Official Site Location:
+            {t.officialSiteLocation}
           </span>
           <p style={{ fontSize: '0.76rem', color: '#181c32', margin: 0, lineHeight: 1.4 }}>
             {monument.location.site}, {monument.location.district}, {monument.location.state}, India
@@ -165,7 +172,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <span style={{ fontSize: '0.65rem', color: '#8b92ab', display: 'block', marginBottom: '4px' }}>
-              Verified by:
+              {t.verifiedBy}
             </span>
             <div style={{
               display: 'inline-flex',
@@ -180,7 +187,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
               fontWeight: 800,
             }}>
               <CheckCircle2 size={13} />
-              <span>SanskritiSetu Verified</span>
+              <span>{t.verifiedBadge}</span>
             </div>
           </div>
 
@@ -200,10 +207,26 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
         </div>
       </div>
 
+      {/* Do you know? Box */}
+      <div style={{
+        padding: '14px 16px',
+        background: '#ffffff',
+        borderRadius: '20px',
+        border: '1px solid #eceef5',
+        boxShadow: '0 4px 16px rgba(80, 85, 130, 0.04)',
+      }}>
+        <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block', marginBottom: '4px', fontFamily: 'Outfit, sans-serif' }}>
+          {t.doYouKnowTitle}
+        </strong>
+        <p style={{ fontSize: '0.74rem', color: '#4b526d', margin: 0, lineHeight: 1.5 }}>
+          {t.doYouKnowText}
+        </p>
+      </div>
+
       {/* Primary Action Button */}
       <button onClick={onLaunchAR} className="btn-digi-purple">
         <Box size={16} />
-        <span>Launch Spatial 3D & AR Explorer</span>
+        <span>{t.launchSpatialARButton}</span>
       </button>
 
       {/* 7-Tier Archival Analysis Section Header */}
@@ -211,10 +234,10 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', padding: '0 2px' }}>
           <h3 className="digi-section-title">
             <Layers size={17} color="#4c35de" />
-            <span>7-Tier Archival Analysis</span>
+            <span>{t.archivalAnalysisTitle}</span>
           </h3>
           <span style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 800 }}>
-            100% Ingested
+            {t.allIngestedBadge}
           </span>
         </div>
 
@@ -310,19 +333,19 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
             <span style={{ fontSize: '0.66rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase' }}>Structural Specifications</span>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '6px', fontSize: '0.74rem' }}>
               <div style={{ padding: '8px', background: '#f8f9fe', borderRadius: '10px' }}>
-                <span style={{ color: '#8b92ab', display: 'block', fontSize: '0.64rem' }}>Height</span>
+                <span style={{ color: '#8b92ab', display: 'block', fontSize: '0.64rem' }}>{t.heightLabel}</span>
                 <strong style={{ color: '#181c32' }}>{monument.architecturalArchive.specifications.height}</strong>
               </div>
               <div style={{ padding: '8px', background: '#f8f9fe', borderRadius: '10px' }}>
-                <span style={{ color: '#8b92ab', display: 'block', fontSize: '0.64rem' }}>Base Plinth</span>
+                <span style={{ color: '#8b92ab', display: 'block', fontSize: '0.64rem' }}>{t.baseAreaLabel}</span>
                 <strong style={{ color: '#181c32' }}>{monument.architecturalArchive.specifications.baseArea}</strong>
               </div>
               <div style={{ padding: '8px', background: '#f8f9fe', borderRadius: '10px' }}>
-                <span style={{ color: '#8b92ab', display: 'block', fontSize: '0.64rem' }}>Material</span>
+                <span style={{ color: '#8b92ab', display: 'block', fontSize: '0.64rem' }}>{t.materialLabel}</span>
                 <strong style={{ color: '#181c32' }}>{monument.architecturalArchive.specifications.primaryMaterial}</strong>
               </div>
               <div style={{ padding: '8px', background: '#f8f9fe', borderRadius: '10px' }}>
-                <span style={{ color: '#8b92ab', display: 'block', fontSize: '0.64rem' }}>Style</span>
+                <span style={{ color: '#8b92ab', display: 'block', fontSize: '0.64rem' }}>{t.styleLabel}</span>
                 <strong style={{ color: '#181c32' }}>{monument.architecturalArchive.specifications.style}</strong>
               </div>
             </div>
@@ -405,13 +428,13 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
 
       {/* TIER 5: AUDIO */}
       {activeTier === 'audio' && (
-        <AudioGuide audioData={monument.audioGuide} monumentName={monument.name} />
+        <AudioGuide audioData={monument.audioGuide} monumentName={displayName} />
       )}
 
       {/* TIER 6: 3D TWIN */}
       {activeTier === '3d' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <ModelViewer3D modelPath={monument.glbModelPath} monumentName={monument.name} />
+          <ModelViewer3D modelPath={monument.glbModelPath} monumentName={displayName} />
           <div className="digi-card" style={{ padding: '14px', margin: 0 }}>
             <h5 style={{ fontSize: '0.84rem', fontWeight: 800, color: '#181c32', marginBottom: '8px', fontFamily: 'Outfit, sans-serif' }}>Digital Twin Specifications</h5>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', fontSize: '0.72rem' }}>
@@ -430,8 +453,8 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
           <div className="digi-card" style={{ padding: '16px', margin: 0 }}>
             <span style={{ fontSize: '0.66rem', color: '#ef4444', fontWeight: 800, textTransform: 'uppercase' }}>Environmental Threat Matrix</span>
             <ul style={{ paddingLeft: '16px', marginTop: '6px', fontSize: '0.76rem', color: '#4b526d', lineHeight: 1.5 }}>
-              {monument.preservationStrategy.threats.map((t, i) => (
-                <li key={i} style={{ marginBottom: '4px' }}>{t}</li>
+              {monument.preservationStrategy.threats.map((tItem, i) => (
+                <li key={i} style={{ marginBottom: '4px' }}>{tItem}</li>
               ))}
             </ul>
           </div>

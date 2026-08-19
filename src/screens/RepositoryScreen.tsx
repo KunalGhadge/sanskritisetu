@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { STATES_DATA } from '../data/states';
 import { HeritageImage } from '../components/HeritageImage';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 import {
   ChevronLeft,
   Search,
@@ -12,6 +13,7 @@ import {
 } from 'lucide-react';
 
 interface RepositoryScreenProps {
+  currentLanguage: LanguageCode;
   selectedStateId?: string;
   onOpenMonument: (monumentId: string) => void;
   onLaunchAR: (monumentId: string) => void;
@@ -19,6 +21,7 @@ interface RepositoryScreenProps {
 }
 
 export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
+  currentLanguage,
   selectedStateId,
   onOpenMonument,
   onLaunchAR,
@@ -28,10 +31,12 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedUpcomingSite, setSelectedUpcomingSite] = useState<any | null>(null);
 
+  const t = TRANSLATIONS[currentLanguage];
+
   const allSites = STATES_DATA.flatMap((state) =>
     state.sites.map((site) => ({
       ...site,
-      stateName: state.name,
+      stateName: currentLanguage !== 'en' && state.hindiName ? state.hindiName : state.name,
       stateId: state.id,
       authority: state.authority,
     }))
@@ -72,7 +77,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
           fontFamily: 'Outfit, sans-serif',
           textAlign: 'center',
         }}>
-          Issued Heritage Records
+          {t.issuedRecordsTitle}
         </h2>
 
         <div style={{ width: '24px' }} />
@@ -82,7 +87,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
       <div className="digi-search-box">
         <input
           type="text"
-          placeholder="Search monuments, states, or periods..."
+          placeholder={t.searchPlaceholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="digi-search-input"
@@ -108,30 +113,34 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
             transition: 'all 0.15s ease',
           }}
         >
-          All States ({allSites.length})
+          {t.allStatesFilter} ({allSites.length})
         </button>
 
-        {STATES_DATA.map((state) => (
-          <button
-            key={state.id}
-            onClick={() => setActiveStateFilter(state.id)}
-            style={{
-              padding: '7px 14px',
-              borderRadius: '16px',
-              border: 'none',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              whiteSpace: 'nowrap',
-              background: activeStateFilter === state.id ? '#4c35de' : '#ffffff',
-              color: activeStateFilter === state.id ? '#ffffff' : '#8b92ab',
-              cursor: 'pointer',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            {state.name}
-          </button>
-        ))}
+        {STATES_DATA.map((state) => {
+          const localizedStateName = currentLanguage !== 'en' && state.hindiName ? state.hindiName : state.name;
+
+          return (
+            <button
+              key={state.id}
+              onClick={() => setActiveStateFilter(state.id)}
+              style={{
+                padding: '7px 14px',
+                borderRadius: '16px',
+                border: 'none',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                whiteSpace: 'nowrap',
+                background: activeStateFilter === state.id ? '#4c35de' : '#ffffff',
+                color: activeStateFilter === state.id ? '#ffffff' : '#8b92ab',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {localizedStateName}
+            </button>
+          );
+        })}
       </div>
 
       {/* Document Items List */}
@@ -166,7 +175,8 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
                 marginBottom: '2px',
                 fontFamily: 'Outfit, sans-serif'
               }}>
-                {site.name}
+                {currentLanguage !== 'en' && (site.name.includes('(') ? site.name.split('(')[0] : site.name)}
+                {currentLanguage === 'en' && site.name}
               </strong>
               <span style={{ fontSize: '0.72rem', color: '#8b92ab', display: 'block', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {site.authority}
@@ -200,7 +210,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
                   padding: '4px 8px',
                   borderRadius: '10px',
                 }}>
-                  Phase 2
+                  {t.phase2Badge}
                 </span>
               )}
             </div>
@@ -249,7 +259,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
 
             <div style={{ padding: '12px', background: '#f8f9fe', borderRadius: '14px', fontSize: '0.74rem', marginBottom: '16px', border: '1px solid #eceef5' }}>
               <div><strong>Issuing Body:</strong> {selectedUpcomingSite.authority}</div>
-              <div><strong>Archival Status:</strong> Photogrammetric Scan Ingestion Scheduled</div>
+              <div><strong>Archival Status:</strong> {t.archivalStatusText}</div>
             </div>
 
             <button
@@ -257,7 +267,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
               className="btn-digi-purple"
               style={{ fontSize: '0.82rem', padding: '12px' }}
             >
-              Close Dossier
+              {t.closeDossier}
             </button>
           </div>
         </div>

@@ -62,7 +62,7 @@ export const App: React.FC = () => {
     }
   };
 
-  // 4 Bottom Navigation Tabs
+  // 4 Bottom Navigation Tabs (Matches Exact Iconic Buttons from Reference Image)
   const NAV_TABS = [
     { id: 'home' as TabState, label: t.homeTab, icon: Home },
     { id: 'repository' as TabState, label: t.searchTab, icon: Search },
@@ -86,6 +86,7 @@ export const App: React.FC = () => {
               {/* TAB 1: HOME */}
               {activeTab === 'home' && (
                 <HomeScreen
+                  currentLanguage={currentLanguage}
                   onOpenMonument={handleOpenMonument}
                   onOpenState={handleOpenState}
                   onNavigateTab={(tab) => setActiveTab(tab)}
@@ -96,6 +97,7 @@ export const App: React.FC = () => {
               {/* TAB 2: REPOSITORY */}
               {activeTab === 'repository' && (
                 <RepositoryScreen
+                  currentLanguage={currentLanguage}
                   selectedStateId={selectedStateId}
                   onOpenMonument={handleOpenMonument}
                   onLaunchAR={handleLaunchAR}
@@ -106,6 +108,7 @@ export const App: React.FC = () => {
               {/* TAB 3: AR EXPLORER */}
               {activeTab === 'ar_explorer' && (
                 <ARExplorerScreen
+                  currentLanguage={currentLanguage}
                   monument={selectedMonument}
                   onOpenMarkerModal={() => setIsMarkerModalOpen(true)}
                   onBack={() => setActiveTab('home')}
@@ -115,6 +118,7 @@ export const App: React.FC = () => {
               {/* TAB 4: ARCHIVE VAULT */}
               {activeTab === 'vault' && (
                 <ArchiveVaultScreen
+                  currentLanguage={currentLanguage}
                   monument={selectedMonument}
                   onLaunchAR={() => handleLaunchAR(selectedMonument.id)}
                   onBack={() => setActiveTab('repository')}
@@ -134,12 +138,11 @@ export const App: React.FC = () => {
               )}
             </main>
 
-            {/* Bottom 4-Tab Navigation Bar */}
+            {/* Floating Clean White Bottom Navigation (Exact Previous Iconic Version) */}
             <nav className="digi-bottom-nav">
               {NAV_TABS.map((tab) => {
                 const Icon = tab.icon;
-                const isActive = activeTab === tab.id || (activeTab === 'vault' && tab.id === 'repository');
-
+                const isActive = activeTab === tab.id || (tab.id === 'repository' && activeTab === 'vault');
                 return (
                   <button
                     key={tab.id}
@@ -147,12 +150,10 @@ export const App: React.FC = () => {
                       if (tab.id === 'repository') setSelectedStateId(undefined);
                       setActiveTab(tab.id);
                     }}
-                    className={`digi-nav-item ${isActive ? 'active' : ''}`}
+                    className={`digi-nav-btn ${isActive ? 'active' : ''}`}
+                    title={tab.label}
                   >
-                    <div className="digi-nav-icon-container">
-                      <Icon size={20} />
-                    </div>
-                    <span className="digi-nav-label">{tab.label}</span>
+                    <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
                   </button>
                 );
               })}
