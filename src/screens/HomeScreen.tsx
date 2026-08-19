@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { STATES_DATA, ISSUING_AUTHORITIES } from '../data/states';
 import { HeritageImage } from '../components/HeritageImage';
+import { SkeletonLoader } from '../components/SkeletonLoader';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 import {
   Shield,
@@ -39,10 +40,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigateTab,
   onOpenMarkerModal,
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   const t = TRANSLATIONS[currentLanguage];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, []);
 
   const CAROUSEL_SLIDES = [
     {
@@ -137,7 +146,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         <span style={{ color: '#8b92ab' }}>• {t.recordsSynced}</span>
       </div>
 
-      {/* Interactive Auto-Advancing Hero Carousel */}
+      {isLoading ? (
+        <SkeletonLoader type="dashboard" />
+      ) : (
+        <>
+          {/* Interactive Auto-Advancing Hero Carousel */}
       <div
         className="carousel-wrapper"
         onMouseEnter={() => setIsPaused(true)}
@@ -504,6 +517,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           ))}
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 };

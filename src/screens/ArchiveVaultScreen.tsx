@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MonumentData, PhotoAsset } from '../data/monuments';
 import { ModelViewer3D } from '../components/ModelViewer3D';
 import { AudioGuide } from '../components/AudioGuide';
 import { HeritageImage } from '../components/HeritageImage';
+import { SkeletonLoader } from '../components/SkeletonLoader';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 import {
   ChevronLeft,
@@ -43,10 +44,19 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
   onLaunchAR,
   onBack,
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTier, setActiveTier] = useState<string>('overview');
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoAsset | null>(null);
 
   const t = TRANSLATIONS[currentLanguage];
+
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [monument.id]);
 
   const ARCHIVAL_TIERS = [
     { id: 'overview', label: t.tierOverview, icon: Landmark },
@@ -93,7 +103,11 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
         <div style={{ width: '24px' }} />
       </div>
 
-      {/* Main Government Dossier Master Card */}
+      {isLoading ? (
+        <SkeletonLoader type="dossier" />
+      ) : (
+        <>
+          {/* Main Government Dossier Master Card */}
       <div className="digi-card" style={{ padding: '16px', margin: 0 }}>
         {/* Government Header Strip */}
         <div style={{
@@ -506,6 +520,8 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

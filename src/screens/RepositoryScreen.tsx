@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { STATES_DATA, StateHeritage } from '../data/states';
 import { HeritageImage } from '../components/HeritageImage';
+import { SkeletonLoader } from '../components/SkeletonLoader';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 import {
   ChevronLeft,
@@ -38,8 +39,15 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
   const [activeStateFilter, setActiveStateFilter] = useState<string>(selectedStateId || 'all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedUpcomingSite, setSelectedUpcomingSite] = useState<any | null>(null);
+  const [isFiltering, setIsFiltering] = useState(false);
 
   const t = TRANSLATIONS[currentLanguage];
+
+  const handleStateChange = (stateId: string) => {
+    setIsFiltering(true);
+    setActiveStateFilter(stateId);
+    setTimeout(() => setIsFiltering(false), 300);
+  };
 
   const allSites = STATES_DATA.flatMap((state) =>
     state.sites.map((site) => ({
@@ -114,7 +122,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
       {/* State Filter Pill Tabs with Counts */}
       <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '2px' }}>
         <button
-          onClick={() => setActiveStateFilter('all')}
+          onClick={() => handleStateChange('all')}
           style={{
             padding: '6px 14px',
             borderRadius: '20px',
@@ -140,7 +148,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
           return (
             <button
               key={state.id}
-              onClick={() => setActiveStateFilter(state.id)}
+              onClick={() => handleStateChange(state.id)}
               style={{
                 padding: '6px 12px',
                 borderRadius: '20px',
@@ -168,8 +176,11 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
         <span style={{ color: '#10b981', fontWeight: 700 }}>● Sovereign Verified</span>
       </div>
 
-      {/* Rich Interactive Heritage Cards List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {isFiltering ? (
+        <SkeletonLoader type="list" />
+      ) : (
+        /* Rich Interactive Heritage Cards List */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {filteredSites.map((site) => {
           const isLive = site.isFullyArchived;
 
@@ -313,6 +324,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
           );
         })}
       </div>
+      )}
 
       {/* Phase 2 Scanning Ingestion Schedule Modal */}
       {selectedUpcomingSite && (
