@@ -17,7 +17,8 @@ import {
   Minimize2,
   Award,
   Layers,
-  Sparkles
+  Sparkles,
+  UserCheck
 } from 'lucide-react';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
@@ -38,8 +39,9 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
   isFullscreen,
   onToggleFullscreen,
 }) => {
-  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [showHashDetails, setShowHashDetails] = useState(false);
 
   const t = TRANSLATIONS[currentLanguage];
 
@@ -66,127 +68,217 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
     }
   ];
 
-  const LANGUAGES: { code: LanguageCode; label: string; native: string }[] = [
-    { code: 'en', label: 'English', native: 'English' },
-    { code: 'hi', label: 'Hindi', native: 'हिंदी' },
-    { code: 'mr', label: 'Marathi', native: 'मराठी' },
-    { code: 'kn', label: 'Kannada', native: 'ಕನ್ನಡ' },
-    { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
+  const LANGUAGES: { code: LanguageCode; label: string; native: string; flag: string }[] = [
+    { code: 'en', label: 'English', native: 'English', flag: '🇬🇧' },
+    { code: 'hi', label: 'Hindi', native: 'हिंदी', flag: '🇮🇳' },
+    { code: 'mr', label: 'Marathi', native: 'मराठी', flag: '🇮🇳' },
+    { code: 'kn', label: 'Kannada', native: 'ಕನ್ನಡ', flag: '🇮🇳' },
+    { code: 'ta', label: 'Tamil', native: 'தமிழ்', flag: '🇮🇳' },
   ];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      {/* Top Header */}
-      <div style={{ padding: '0 2px' }}>
-        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#181c32', margin: '0 0 2px 0', fontFamily: 'Outfit, sans-serif' }}>
-          National Trust & Governance Portal
-        </h2>
-        <p style={{ fontSize: '0.74rem', color: '#8b92ab', margin: 0 }}>
-          Sovereign Cloud, Language Settings & Heritage Mission
-        </p>
-      </div>
-
-      {/* Language Switcher Card */}
-      <div
-        onClick={() => setShowLanguageModal(true)}
-        className="digi-card"
-        style={{
-          padding: '16px',
-          margin: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          cursor: 'pointer',
-          border: '1.5px solid #e3dfff',
-          background: 'linear-gradient(135deg, #ffffff 0%, #f7f5ff 100%)',
-        }}
-      >
+      {/* Profile & National Cloud ID Card */}
+      <div className="digi-card" style={{ padding: '18px 16px', margin: 0, background: 'linear-gradient(135deg, #4c35de 0%, #301f9c 100%)', color: '#ffffff' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '14px',
-            backgroundColor: '#f2efff',
-            color: '#4c35de',
+            width: '48px',
+            height: '48px',
+            borderRadius: '16px',
+            backgroundColor: 'rgba(255, 255, 255, 0.18)',
+            backdropFilter: 'blur(10px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            color: '#ffffff',
+            border: '1px solid rgba(255, 255, 255, 0.25)',
           }}>
-            <Globe size={20} />
+            <Shield size={24} />
           </div>
-          <div>
-            <span style={{ fontSize: '0.64rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase' }}>
-              App Language / भाषा
+
+          <div style={{ flexGrow: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <strong style={{ fontSize: '1rem', fontFamily: 'Outfit, sans-serif' }}>Sovereign Citizen ID</strong>
+              <div style={{ background: '#10b981', color: '#ffffff', padding: '1px 6px', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 800 }}>
+                Active
+              </div>
+            </div>
+            <span style={{ fontSize: '0.72rem', color: '#e0dbff', display: 'block', fontFamily: 'monospace' }}>
+              NDHM-2026-IND-8841
             </span>
-            <strong style={{ fontSize: '0.92rem', color: '#181c32', display: 'block', fontFamily: 'Outfit, sans-serif' }}>
-              {t.languageName} (Active)
-            </strong>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ fontSize: '0.74rem', color: '#4c35de', fontWeight: 800 }}>Change</span>
-          <ChevronRight size={16} color="#4c35de" />
-        </div>
-      </div>
-
-      {/* National Mission Trust Certificate Card */}
-      <div className="digi-card" style={{ padding: '18px', margin: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Shield size={20} color="#4c35de" />
-            <strong style={{ fontSize: '0.86rem', color: '#181c32', fontFamily: 'Outfit, sans-serif' }}>
-              100% Preservation Score
-            </strong>
-          </div>
-          <span style={{
-            background: '#ecfdf5',
-            color: '#10b981',
-            fontSize: '0.66rem',
-            fontWeight: 800,
-            padding: '3px 8px',
-            borderRadius: '8px',
-            border: '1px solid #a7f3d0',
-          }}>
-            Fully Compliant
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.75rem', color: '#4b526d' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle2 size={15} color="#10b981" />
-            <span>Digital India Act 2026 Sovereign Archival Mandate</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle2 size={15} color="#10b981" />
-            <span>UNESCO Digital Heritage Charter (Article 3 Verified)</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle2 size={15} color="#10b981" />
-            <span>ASI Archaeological Circles Real-time Cadastral Sync</span>
-          </div>
-        </div>
-
-        {/* Cryptographic SHA-256 Root Seal */}
         <div style={{
-          marginTop: '12px',
-          padding: '10px 12px',
-          backgroundColor: '#f8f9fe',
+          marginTop: '14px',
+          padding: '8px 12px',
+          background: 'rgba(0, 0, 0, 0.2)',
           borderRadius: '12px',
-          border: '1px solid #eceef5',
-          fontFamily: 'monospace',
-          fontSize: '0.64rem',
-          color: '#4c35de',
-          wordBreak: 'break-all',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          fontSize: '0.7rem',
+          color: '#e0dbff',
         }}>
-          <span style={{ color: '#8b92ab', display: 'block', marginBottom: '2px', fontFamily: 'Outfit, sans-serif', fontWeight: 600 }}>
-            Root Cryptographic Hash Ledger:
-          </span>
-          SHA256: 8f9b4c1a7d6e5f2b8a9c3d4e1f0a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0
+          <span>3,690 National Assets Synced</span>
+          <span style={{ fontWeight: 800, color: '#ffffff' }}>100% Verified</span>
         </div>
       </div>
 
-      {/* Frequently Asked Questions (FAQ) */}
+      {/* Settings Group 1: Language & Display */}
+      <div className="digi-card" style={{ padding: '6px 14px', margin: 0 }}>
+        {/* Language Row */}
+        <div
+          onClick={() => setShowLanguageModal(true)}
+          style={{
+            padding: '12px 0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            borderBottom: '1px solid #f1f3fa',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '10px',
+              backgroundColor: '#f2efff',
+              color: '#4c35de',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Globe size={18} />
+            </div>
+            <div>
+              <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block' }}>
+                {t.appLanguageTitle}
+              </strong>
+              <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>
+                {t.languageName} (Active)
+              </span>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#4c35de', fontSize: '0.74rem', fontWeight: 800 }}>
+            <span>{t.changeButton}</span>
+            <ChevronRight size={15} />
+          </div>
+        </div>
+
+        {/* Notch / Safe Area Display Row */}
+        <div style={{ padding: '12px 0' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                backgroundColor: '#f2efff',
+                color: '#4c35de',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <Smartphone size={18} />
+              </div>
+              <strong style={{ fontSize: '0.82rem', color: '#181c32' }}>
+                {t.deviceDisplayModeTitle}
+              </strong>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
+            {(['auto', 'webapp', 'app'] as const).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => onSelectNotchMode(mode)}
+                style={{
+                  padding: '7px 2px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  fontSize: '0.7rem',
+                  fontWeight: 800,
+                  background: notchMode === mode ? '#4c35de' : '#f4f5fb',
+                  color: notchMode === mode ? '#ffffff' : '#8b92ab',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                {mode === 'auto' ? t.autoDetectMode : mode === 'webapp' ? t.webMode : t.nativeAppMode}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Settings Group 2: Sovereign Trust & Ledger */}
+      <div className="digi-card" style={{ padding: '14px 16px', margin: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Award size={18} color="#4c35de" />
+            <strong style={{ fontSize: '0.84rem', color: '#181c32', fontFamily: 'Outfit, sans-serif' }}>
+              {t.preservationScoreTitle}
+            </strong>
+          </div>
+          <span style={{ fontSize: '0.66rem', color: '#10b981', fontWeight: 800, background: '#ecfdf5', padding: '2px 6px', borderRadius: '6px' }}>
+            {t.fullyCompliantBadge}
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.74rem', color: '#4b526d' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <CheckCircle2 size={14} color="#10b981" />
+            <span>{t.digitalIndiaActCompliance}</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <CheckCircle2 size={14} color="#10b981" />
+            <span>{t.unescoCharterCompliance}</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setShowHashDetails(!showHashDetails)}
+          style={{
+            marginTop: '10px',
+            background: '#f8f9fe',
+            border: '1px solid #eceef5',
+            borderRadius: '10px',
+            padding: '8px 10px',
+            width: '100%',
+            fontSize: '0.68rem',
+            color: '#4c35de',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <span>{t.rootHashLabel}</span>
+          <ChevronDown size={14} style={{ transform: showHashDetails ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
+        </button>
+
+        {showHashDetails && (
+          <div style={{
+            marginTop: '6px',
+            padding: '8px',
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            border: '1px solid #e3dfff',
+            fontFamily: 'monospace',
+            fontSize: '0.62rem',
+            color: '#181c32',
+            wordBreak: 'break-all',
+          }}>
+            SHA256: 8f9b4c1a7d6e5f2b8a9c3d4e1f0a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0
+          </div>
+        )}
+      </div>
+
+      {/* Settings Group 3: Frequently Asked Questions (FAQ) */}
       <div>
         <div className="digi-section-header">
           <h3 className="digi-section-title">
@@ -202,18 +294,18 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
               <div
                 key={idx}
                 className="digi-card"
-                style={{ padding: '14px 16px', margin: 0, cursor: 'pointer' }}
+                style={{ padding: '12px 14px', margin: 0, cursor: 'pointer' }}
                 onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
-                  <strong style={{ fontSize: '0.8rem', color: '#181c32', fontFamily: 'Outfit, sans-serif', lineHeight: 1.3 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+                  <strong style={{ fontSize: '0.78rem', color: '#181c32', fontFamily: 'Outfit, sans-serif', lineHeight: 1.3 }}>
                     {faq.q}
                   </strong>
-                  {isOpen ? <ChevronDown size={16} color="#4c35de" /> : <ChevronRight size={16} color="#8b92ab" />}
+                  {isOpen ? <ChevronDown size={15} color="#4c35de" /> : <ChevronRight size={15} color="#8b92ab" />}
                 </div>
 
                 {isOpen && (
-                  <p style={{ fontSize: '0.74rem', color: '#4b526d', margin: '10px 0 0 0', lineHeight: 1.5, borderTop: '1px solid #f1f3fa', paddingTop: '8px' }}>
+                  <p style={{ fontSize: '0.74rem', color: '#4b526d', margin: '8px 0 0 0', lineHeight: 1.4, borderTop: '1px solid #f1f3fa', paddingTop: '8px' }}>
                     {faq.a}
                   </p>
                 )}
@@ -223,47 +315,8 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
         </div>
       </div>
 
-      {/* Display & Notch Mode Switcher */}
-      <div className="digi-card" style={{ padding: '16px', margin: 0 }}>
-        <h4 style={{ fontSize: '0.84rem', fontWeight: 800, color: '#181c32', margin: '0 0 10px 0', fontFamily: 'Outfit, sans-serif' }}>
-          Device & Notch Display Mode
-        </h4>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px', marginBottom: '12px' }}>
-          {(['auto', 'webapp', 'app'] as const).map((mode) => (
-            <button
-              key={mode}
-              onClick={() => onSelectNotchMode(mode)}
-              style={{
-                padding: '8px 4px',
-                borderRadius: '12px',
-                border: 'none',
-                fontSize: '0.72rem',
-                fontWeight: 800,
-                textTransform: 'capitalize',
-                background: notchMode === mode ? '#4c35de' : '#f4f5fb',
-                color: notchMode === mode ? '#ffffff' : '#8b92ab',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              {mode === 'auto' ? 'Auto Detect' : mode === 'webapp' ? 'Web (0 Dead)' : 'Native App'}
-            </button>
-          ))}
-        </div>
-
-        <button
-          onClick={onToggleFullscreen}
-          className="btn-digi-secondary"
-          style={{ width: '100%', padding: '10px', fontSize: '0.78rem' }}
-        >
-          {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
-          <span>{isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen Immersive Mode'}</span>
-        </button>
-      </div>
-
-      {/* Citizen Helpdesk & Contact Strip */}
-      <div className="digi-card" style={{ padding: '14px 16px', margin: 0, backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* Settings Group 4: Helpline & Support */}
+      <div className="digi-card" style={{ padding: '14px 16px', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
             width: '36px',
@@ -278,8 +331,8 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
             <Phone size={16} />
           </div>
           <div>
-            <strong style={{ fontSize: '0.78rem', color: '#181c32', display: 'block' }}>National Heritage Helpline</strong>
-            <span style={{ fontSize: '0.68rem', color: '#4c35de', fontWeight: 800 }}>Toll Free: 1800-11-4040</span>
+            <strong style={{ fontSize: '0.78rem', color: '#181c32', display: 'block' }}>{t.nationalHelplineTitle}</strong>
+            <span style={{ fontSize: '0.68rem', color: '#4c35de', fontWeight: 800 }}>{t.tollFreeNumber}</span>
           </div>
         </div>
       </div>
@@ -305,8 +358,8 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
             style={{ maxWidth: '340px', width: '100%', margin: 0, padding: '20px' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#181c32', margin: '0 0 12px 0', fontFamily: 'Outfit, sans-serif' }}>
-              Select Official Language / भाषा चुनें
+            <h4 style={{ fontSize: '0.96rem', fontWeight: 800, color: '#181c32', margin: '0 0 12px 0', fontFamily: 'Outfit, sans-serif' }}>
+              {t.selectLanguageModalTitle}
             </h4>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -320,7 +373,7 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
                       setShowLanguageModal(false);
                     }}
                     style={{
-                      padding: '12px 14px',
+                      padding: '10px 14px',
                       borderRadius: '14px',
                       border: isSelected ? '1.5px solid #4c35de' : '1px solid #eceef5',
                       background: isSelected ? '#f2efff' : '#ffffff',
@@ -330,9 +383,12 @@ export const TrustProfileScreen: React.FC<TrustProfileScreenProps> = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <div style={{ textAlign: 'left' }}>
-                      <strong style={{ fontSize: '0.84rem', color: '#181c32', display: 'block' }}>{lang.native}</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>{lang.label}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span style={{ fontSize: '1.2rem' }}>{lang.flag}</span>
+                      <div style={{ textAlign: 'left' }}>
+                        <strong style={{ fontSize: '0.84rem', color: '#181c32', display: 'block' }}>{lang.native}</strong>
+                        <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>{lang.label}</span>
+                      </div>
                     </div>
                     {isSelected && <CheckCircle2 size={16} color="#4c35de" />}
                   </button>

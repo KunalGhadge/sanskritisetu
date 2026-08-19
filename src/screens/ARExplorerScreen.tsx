@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { MonumentData } from '../data/monuments';
+import { MonumentData, MONUMENTS } from '../data/monuments';
 import { HeritageImage } from '../components/HeritageImage';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
-import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft } from 'lucide-react';
+import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft, Layers, Sparkles } from 'lucide-react';
 
 interface ARExplorerScreenProps {
   currentLanguage: LanguageCode;
@@ -13,14 +13,15 @@ interface ARExplorerScreenProps {
 
 export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
   currentLanguage,
-  monument,
+  monument: initialMonument,
   onOpenMarkerModal,
   onBack,
 }) => {
+  const [selectedMonument, setSelectedMonument] = useState<MonumentData>(initialMonument);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const t = TRANSLATIONS[currentLanguage];
 
-  const displayName = currentLanguage !== 'en' && monument.hindiName ? monument.hindiName : monument.name;
+  const displayName = currentLanguage !== 'en' && selectedMonument.hindiName ? selectedMonument.hindiName : selectedMonument.name;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -71,7 +72,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               <span>{t.exitARButton}</span>
             </button>
 
-            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#a594fd', fontFamily: 'Outfit, sans-serif' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#a594fd', fontFamily: 'Outfit, sans-serif', maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {displayName}
             </span>
 
@@ -196,13 +197,13 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
             <div style={{ width: '24px' }} />
           </div>
 
-          {/* Purple Hero Card */}
-          <div className="digi-hero-card" style={{ textAlign: 'center', padding: '24px 18px' }}>
+          {/* Purple Hero Banner */}
+          <div className="digi-hero-card" style={{ textAlign: 'center', padding: '20px 16px' }}>
             <div style={{
-              width: '56px',
-              height: '56px',
-              margin: '0 auto 12px',
-              borderRadius: '18px',
+              width: '52px',
+              height: '52px',
+              margin: '0 auto 10px',
+              borderRadius: '16px',
               backgroundColor: 'rgba(255, 255, 255, 0.2)',
               backdropFilter: 'blur(10px)',
               color: '#ffffff',
@@ -210,43 +211,121 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-              <Camera size={28} />
+              <Camera size={26} />
             </div>
 
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', margin: '0 0 4px 0', fontFamily: 'Outfit, sans-serif' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', margin: '0 0 4px 0', fontFamily: 'Outfit, sans-serif' }}>
               {t.augmentedRealityView}
             </h3>
-            <p style={{ fontSize: '0.78rem', color: '#e0dbff', margin: 0 }}>
+            <p style={{ fontSize: '0.76rem', color: '#e0dbff', margin: 0, lineHeight: 1.4 }}>
               {t.arExplorerDesc}
             </p>
           </div>
 
-          {/* Selected Monument Card */}
-          <div className="digi-card" style={{ padding: '18px' }}>
-            <span style={{ fontSize: '0.68rem', color: '#4c35de', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              {t.targetHeritageModel}
-            </span>
-            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#181c32', margin: '2px 0 12px 0', fontFamily: 'Outfit, sans-serif' }}>
+          {/* Select Monument Carousel Section */}
+          <div>
+            <div className="digi-section-header">
+              <h3 className="digi-section-title">
+                <Layers size={17} color="#4c35de" />
+                <span>Select Target Model</span>
+              </h3>
+              <span style={{ fontSize: '0.72rem', color: '#4c35de', fontWeight: 700 }}>
+                {MONUMENTS.length} Ready
+              </span>
+            </div>
+
+            {/* Horizontal Monument Carousel Selector */}
+            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '4px' }}>
+              {MONUMENTS.map((m) => {
+                const isSelected = selectedMonument.id === m.id;
+                const mName = currentLanguage !== 'en' && m.hindiName ? m.hindiName : m.name;
+
+                return (
+                  <div
+                    key={m.id}
+                    onClick={() => setSelectedMonument(m)}
+                    className="digi-card"
+                    style={{
+                      minWidth: '135px',
+                      maxWidth: '135px',
+                      padding: '10px',
+                      margin: 0,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      flexShrink: 0,
+                      border: isSelected ? '2px solid #4c35de' : '1px solid #eceef5',
+                      background: isSelected ? '#f7f5ff' : '#ffffff',
+                    }}
+                  >
+                    <div style={{
+                      width: '46px',
+                      height: '46px',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      marginBottom: '6px',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                    }}>
+                      <HeritageImage src={m.heroImage} alt={mName} />
+                    </div>
+
+                    <strong style={{
+                      fontSize: '0.74rem',
+                      color: isSelected ? '#4c35de' : '#181c32',
+                      display: 'block',
+                      lineHeight: 1.2,
+                      marginBottom: '2px',
+                      fontFamily: 'Outfit, sans-serif',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      width: '100%',
+                    }}>
+                      {mName}
+                    </strong>
+                    <span style={{ fontSize: '0.62rem', color: '#8b92ab', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>
+                      {m.location.state}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Active Target Preview Card */}
+          <div className="digi-card" style={{ padding: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '0.66rem', color: '#4c35de', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                {t.targetHeritageModel}
+              </span>
+              <span style={{ fontSize: '0.64rem', color: '#10b981', fontWeight: 800, background: '#ecfdf5', padding: '2px 6px', borderRadius: '6px' }}>
+                Anchor Calibrated
+              </span>
+            </div>
+
+            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#181c32', margin: '0 0 10px 0', fontFamily: 'Outfit, sans-serif' }}>
               {displayName}
             </h4>
 
-            <div style={{ height: '140px', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#f4f5fb', marginBottom: '14px' }}>
-              <HeritageImage src={monument.heroImage} alt={displayName} />
+            <div style={{ height: '130px', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#f4f5fb', marginBottom: '12px' }}>
+              <HeritageImage src={selectedMonument.heroImage} alt={displayName} />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#4b526d' }}>
-                <CheckCircle2 size={15} color="#10b981" />
-                <span>Binary glTF 2.0 (184,200 Triangles)</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px', fontSize: '0.74rem', color: '#4b526d' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <CheckCircle2 size={14} color="#10b981" />
+                <span>Binary glTF 2.0 • 184,200 Triangles</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#4b526d' }}>
-                <CheckCircle2 size={15} color="#10b981" />
-                <span>Bilingual audio narration synchronized</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <CheckCircle2 size={14} color="#10b981" />
+                <span>Compatible with Universal AR Tracking Marker</span>
               </div>
             </div>
 
             {/* Actions */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <button
                 onClick={() => setIsCameraActive(true)}
                 className="btn-digi-purple"
