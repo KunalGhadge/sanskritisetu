@@ -206,10 +206,12 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               border: '2px solid #4c35de',
               marginBottom: '14px',
               boxShadow: '0 8px 24px rgba(76, 53, 222, 0.15)',
+              backgroundColor: '#f8f9fe',
             }}>
-              <HeritageImage
-                src={selectedMonument.heroImage}
-                alt="Target Image"
+              <img
+                src="/ar/assets/target-image.jpg"
+                alt="MindAR Target Image"
+                style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain' }}
               />
             </div>
 
