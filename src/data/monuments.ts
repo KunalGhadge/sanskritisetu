@@ -111,92 +111,100 @@ export const MONUMENTS: MonumentData[] = [
     status: 'UNESCO World Heritage Site',
     unescoId: 'UNESCO Site #356',
     unescoYear: '1986',
-    heroImage: 'https://images.unsplash.com/photo-1600100397608-f010f444b02a?auto=format&fit=crop&w=1600&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=1600&q=80',
     glbModelPath: '/ar/assets/asset.glb',
     markerPatternPath: '/ar/assets/marker.patt',
     hasLiveAR: true,
     shortOverview: 'The Stone Chariot of Hampi is one of India\'s most celebrated architectural wonders, representing the zenith of Vijayanagara granite craftsmanship.',
     fullOverview: [
       'The Stone Chariot is not actually a single carved rock, but a masterfully assembled shrine constructed of intricately interlocking granite slabs.',
-      'Dedicated to Garuda, the vahana (mount) of Lord Vishnu, this chariot faces the sanctum sanctorum of the Vijaya Vittala Temple. Originally, a sculpture of Garuda was enshrined within its inner sanctum.',
-      'The chariot rests on a rectangular platform decorated with mythical battle reliefs and mythological motifs. In front of the chariot, two stone elephants stand as if drawing the celestial vehicle—these elephants were brought here to replace the original stone horses whose remnants can still be observed beside the wheels.',
-      'The ornate stone wheels were historically engineered to rotate on their granite axles before the Archaeological Survey of India stabilized them to protect against friction wear.'
+      'Dedicated to Garuda, the celestial eagle and divine mount of Lord Vishnu, this monument stands as the axial focal point facing the grand Vittala Temple sanctum.',
+      'Four monumental wheels adorned with intricate floral rosettes flank the shrine base, originally engineered to rotate freely on granite axles.'
     ],
     keyStats: [
-      { label: 'Era of Origin', value: '16th Century', sublabel: 'Vijayanagara Reign' },
-      { label: 'Material', value: 'Granite', sublabel: 'Interlocking Slabs' },
-      { label: 'UNESCO Listed', value: '1986', sublabel: 'Group of Monuments' },
-      { label: 'Digital Twin', value: 'GLB 3D Sub-mm', sublabel: 'Archived 2026' }
+      { label: 'Built Under', value: 'Krishnadevaraya', sublabel: 'Vijayanagara Golden Age' },
+      { label: 'Year of Inscription', value: '1986 CE', sublabel: 'UNESCO World Heritage' },
+      { label: 'Primary Stone', value: 'Deccan Granite', sublabel: 'Mortarless Interlocking' },
+      { label: 'Dedicated Deity', value: 'Garuda (Vahana)', sublabel: 'Facing Vishnu Sanctum' }
     ],
     timeline: [
       {
         year: '1336 CE',
-        title: 'Vijayanagara Empire Established',
+        title: 'Foundation of Vijayanagara Empire',
         description: 'Founded by brothers Harihara I and Bukka Raya I of the Sangama Dynasty on the banks of the Tungabhadra River.',
-        significance: 'Became the dominant imperial bastion of South Indian culture, arts, and monumental Dravidian architecture.'
+        significance: 'Origin Era'
       },
       {
-        year: '1513–1521 CE',
+        year: '1513 CE',
         title: 'Construction of the Stone Chariot',
         description: 'Commissioned under the golden reign of King Krishnadevaraya following his victorious Konark campaign in Odisha, inspired by the Konark Sun Temple chariot.',
-        significance: 'Constructed as the Garuda Shrine facing the Maha Mantapa of the Vijaya Vittala temple complex.'
+        significance: 'Consecration'
       },
       {
         year: '1565 CE',
         title: 'Battle of Talikota & Abandonment',
         description: 'The imperial capital of Vijayanagara fell after the coalition of Deccan Sultanates defeated Rama Raya, leading to extensive sacking of the metropolis.',
-        significance: 'Despite widespread regional destruction, the monolithic granite chariot remained substantially intact.'
+        significance: 'Historical Disruption'
       },
       {
         year: '1986 CE',
         title: 'UNESCO World Heritage Inscription',
         description: 'Hampi recognized as a UNESCO World Heritage Site (#356) for its exceptional universal cultural and artistic value.',
-        significance: 'Global conservation funding and ASI protection protocols enacted.'
+        significance: 'Global Recognition'
       },
       {
         year: '2026 CE',
-        title: 'SanskritiSetu Permanent Digital Preservation',
+        title: 'SanskritiSetu Sovereign Digital Twin Preserved',
         description: 'Comprehensive 3D digital twin, multi-spectral photography, and spatial augmented reality archive recorded for eternity.',
-        significance: 'Preserves sub-millimeter structural data against weathering and seismic vulnerabilities.'
+        significance: 'Immutable Preservation'
       }
     ],
     architecturalArchive: {
-      summary: 'The Stone Chariot is a monumental pinnacle of Dravidian shrine architecture constructed using interlocking dressed granite blocks with mortarless precision joints.',
+      summary: 'The Stone Chariot stands 4.5 meters in height upon a rectangular carved plinth. It showcases late Vijayanagara Dravidian architecture characterized by refined granite masonry, mythical Yali guardians, and floral wheel rims.',
       features: [
         {
-          title: 'Granite Monolithic Appearance',
-          category: 'Masonry & Joinery',
+          title: 'Interlocking Granite Joinery',
+          category: 'Structural Joinery',
           description: 'Engineered with disguised interlocking granite slabs giving the sublime visual illusion of being carved from a singular colossal boulder.',
-          material: 'High-density Deccan Granitoid'
+          dimensions: 'Height: 4.5m, Base: 4.2m × 3.6m',
+          material: 'Fine-grained Grey and Pink Deccan Granite',
+          iconName: 'Layers'
         },
         {
-          title: 'Stone Axle Wheels',
-          category: 'Kinetic Engineering',
+          title: 'Kinetic 16-Spoke Stone Wheels',
+          category: 'Mechanical / Kinetic Feature',
           description: 'Four monumental wheels featuring 16-spoke concentric floral hubs and lotus petal fringes, engineered to rotate freely upon granite axles.',
-          dimensions: 'Diameter: 0.95m per wheel',
-          material: 'Polished Granite'
+          dimensions: 'Diameter: 1.2m each wheel',
+          material: 'Carved Monolithic Granite',
+          iconName: 'RotateCw'
         },
         {
-          title: 'Elephant Guardians & Horse Relics',
-          category: 'Iconography',
+          title: 'Frontal Guardian Elephants',
+          category: 'Sculptural Element',
           description: 'Pair of lifelike stone elephants stationed at the frontal ramp, positioned during early colonial consolidation to flank the entrance stairway.',
-          material: 'Granite with bas-relief adornments'
+          dimensions: 'Length: 1.8m each',
+          material: 'Sculpted Granite',
+          iconName: 'Shield'
         },
         {
-          title: 'Garuda Sanctum & Dravidian Vimana Base',
+          title: 'Garuda Sanctum Cella',
           category: 'Sacred Architecture',
           description: 'Recessed cella designed to house the vahana (carrier) Garuda facing Lord Vishnu, topped by an ornate multi-tiered Dravidian entablature.',
-          material: 'Granite lower tiers, historical brick-mortar sikhara base'
+          dimensions: 'Interior Chamber: 2.1m × 1.8m',
+          material: 'Granite & Historic Brick Superstructure Remnant',
+          iconName: 'Landmark'
         },
         {
-          title: 'Frieze of Royal Processions & Floral Motifs',
-          category: 'Decorative Reliefs',
+          title: 'Continuous Narrative Plinth Reliefs',
+          category: 'Bas-Relief Friezes',
           description: 'The plinth platform is circumscribed with continuous narrative bands showing war horses, royal soldiers, court dancers, and celestial musicians.',
-          material: 'Intaglio & bas-relief stone carvings'
+          dimensions: 'Plinth Perimeter: 15.6m',
+          material: 'Low-relief Basaltic Granite Carving',
+          iconName: 'Eye'
         }
       ],
       specifications: {
-        height: '4.85 meters',
+        height: '4.5 meters (14.8 feet)',
         baseArea: '4.2m × 3.6m',
         primaryMaterial: 'Granite (Fine-grained Grey and Pink)',
         style: 'Late Vijayanagara Dravidian Temple Architecture',
@@ -210,7 +218,7 @@ export const MONUMENTS: MonumentData[] = [
         category: 'present',
         year: '2025',
         credit: 'ASI National Archives / SanskritiSetu HD photogrammetry',
-        url: 'https://images.unsplash.com/photo-1600100397608-f010f444b02a?auto=format&fit=crop&w=1200&q=80',
+        url: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=1200&q=80',
         description: 'The Stone Chariot bathed in the warm sunset hues of the boulder-strewn Hampi landscape.'
       },
       {
@@ -228,7 +236,7 @@ export const MONUMENTS: MonumentData[] = [
         category: 'detail',
         year: '2025',
         credit: 'Digital Heritage Photogrammetry Lab',
-        url: 'https://images.unsplash.com/photo-1599831104328-b14176c51ab3?auto=format&fit=crop&w=1200&q=80',
+        url: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80',
         description: 'Macro inspection of the central rosette hub and radial ornamental spokes carved on granite.'
       },
       {
@@ -237,7 +245,7 @@ export const MONUMENTS: MonumentData[] = [
         category: 'historical',
         year: '1856',
         credit: 'British Library / Archaeological Survey of India (Historical Plate)',
-        url: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80',
+        url: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80',
         description: 'One of the earliest recorded photographic exposures of the Stone Chariot with its brick tower remnants.'
       },
       {
@@ -246,7 +254,7 @@ export const MONUMENTS: MonumentData[] = [
         category: 'aerial',
         year: '2026',
         credit: 'SanskritiSetu LiDAR & Photogrammetry Division',
-        url: 'https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80',
+        url: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80',
         description: 'Sub-millimeter aerial photogrammetry mesh capturing the topological summit and cornice moldings.'
       }
     ],

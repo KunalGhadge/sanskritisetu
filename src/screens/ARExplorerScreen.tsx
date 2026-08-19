@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MonumentData } from '../data/monuments';
+import { HeritageImage } from '../components/HeritageImage';
 import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft } from 'lucide-react';
 
 interface ARExplorerScreenProps {
@@ -224,7 +225,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
             </h4>
 
             <div style={{ height: '140px', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#f4f5fb', marginBottom: '14px' }}>
-              <img src={monument.heroImage} alt={monument.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <HeritageImage src={monument.heroImage} alt={monument.name} />
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '18px' }}>

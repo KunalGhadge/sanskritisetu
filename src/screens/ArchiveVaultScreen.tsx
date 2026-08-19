@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MonumentData, PhotoAsset } from '../data/monuments';
 import { ModelViewer3D } from '../components/ModelViewer3D';
 import { AudioGuide } from '../components/AudioGuide';
+import { HeritageImage } from '../components/HeritageImage';
 import {
   ChevronLeft,
   Shield,
@@ -34,7 +35,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      {/* Top Bar (Matches Screen 3 in Reference Image) */}
+      {/* Top Bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2px' }}>
         <button
           onClick={onBack}
@@ -65,7 +66,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
         <div style={{ width: '24px' }} />
       </div>
 
-      {/* Main Government Certificate Card (Exact Screen 3 Match) */}
+      {/* Main Government Certificate Card */}
       <div className="digi-card" style={{ padding: '20px 18px', margin: 0 }}>
         {/* Government of India Header Strip */}
         <div style={{
@@ -101,7 +102,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
 
         {/* Monument Identity Info */}
         <div style={{ display: 'flex', gap: '14px', marginBottom: '14px' }}>
-          {/* Photo */}
+          {/* Photo with HeritageImage Safe Loader */}
           <div style={{
             width: '84px',
             height: '84px',
@@ -110,10 +111,9 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
             backgroundColor: '#f4f5fb',
             flexShrink: 0,
           }}>
-            <img
+            <HeritageImage
               src={monument.heroImage}
               alt={monument.name}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
 
@@ -130,7 +130,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
           </div>
         </div>
 
-        {/* Address Box (Matches Reference Image) */}
+        {/* Address Box */}
         <div style={{
           padding: '10px 12px',
           background: '#f8f9fe',
@@ -146,7 +146,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
           </p>
         </div>
 
-        {/* Verified By Strip + QR Code (Matches Reference Image) */}
+        {/* Verified By Strip + QR Code */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <span style={{ fontSize: '0.65rem', color: '#8b92ab', display: 'block', marginBottom: '4px' }}>
@@ -185,7 +185,7 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
         </div>
       </div>
 
-      {/* "Do you know?" Information Box (Matches Screen 3 in Reference Image) */}
+      {/* "Do you know?" Information Box */}
       <div style={{
         padding: '14px 16px',
         background: '#ffffff',
@@ -201,13 +201,13 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
         </p>
       </div>
 
-      {/* Primary Purple Action Button (Matches "Download PDF" in Reference) */}
+      {/* Primary Action Button */}
       <button onClick={onLaunchAR} className="btn-digi-purple">
         <Box size={16} />
         <span>Launch Spatial 3D & AR Explorer</span>
       </button>
 
-      {/* Secondary Action (Matches "Tell your friends & family about DigiLocker") */}
+      {/* Secondary Action */}
       <button
         onClick={() => setShowFullDossier(!showFullDossier)}
         className="btn-digi-secondary"
@@ -284,11 +284,11 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
 
           {/* Photos Tab */}
           {activeDossierTab === 'photos' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
               {monument.photoArchive.map((photo) => (
-                <div key={photo.id} onClick={() => setSelectedPhoto(photo)} style={{ cursor: 'pointer', borderRadius: '12px', overflow: 'hidden', height: '90px', position: 'relative' }}>
-                  <img src={photo.url} alt={photo.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: 'rgba(0,0,0,0.7)', color: '#fff', fontSize: '0.6rem', padding: '1px 4px', borderRadius: '4px' }}>
+                <div key={photo.id} onClick={() => setSelectedPhoto(photo)} style={{ cursor: 'pointer', borderRadius: '14px', overflow: 'hidden', height: '95px', position: 'relative' }}>
+                  <HeritageImage src={photo.url} alt={photo.title} />
+                  <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: 'rgba(0,0,0,0.7)', color: '#fff', fontSize: '0.6rem', padding: '1px 5px', borderRadius: '4px' }}>
                     {photo.year}
                   </span>
                 </div>
@@ -311,7 +311,9 @@ export const ArchiveVaultScreen: React.FC<ArchiveVaultScreenProps> = ({
               <strong style={{ fontSize: '0.82rem' }}>{selectedPhoto.title}</strong>
               <button onClick={() => setSelectedPhoto(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={16} /></button>
             </div>
-            <img src={selectedPhoto.url} alt={selectedPhoto.title} style={{ width: '100%', maxHeight: '40vh', objectFit: 'contain', background: '#000' }} />
+            <div style={{ height: '220px' }}>
+              <HeritageImage src={selectedPhoto.url} alt={selectedPhoto.title} />
+            </div>
             <div style={{ padding: '10px 14px', fontSize: '0.74rem', color: '#4b526d' }}>
               <p style={{ margin: '0 0 2px 0', color: '#181c32' }}>{selectedPhoto.description}</p>
               <span>Credit: {selectedPhoto.credit}</span>

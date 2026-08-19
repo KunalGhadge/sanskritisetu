@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { STATES_DATA } from '../data/states';
+import { HeritageImage } from '../components/HeritageImage';
 import {
   ChevronLeft,
   Search,
@@ -46,7 +47,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      {/* Top Header (Matches Screen 2 in Reference Image) */}
+      {/* Top Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2px' }}>
         <button
           onClick={onBack}
@@ -77,11 +78,11 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
         <div style={{ width: '24px' }} />
       </div>
 
-      {/* Search Input (Matches Reference Image "Search here...") */}
+      {/* Search Input */}
       <div className="digi-search-box">
         <input
           type="text"
-          placeholder="Search here..."
+          placeholder="Search monuments, states, or periods..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="digi-search-input"
@@ -94,16 +95,17 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
         <button
           onClick={() => setActiveStateFilter('all')}
           style={{
-            padding: '6px 12px',
-            borderRadius: '14px',
+            padding: '7px 14px',
+            borderRadius: '16px',
             border: 'none',
-            fontSize: '0.74rem',
+            fontSize: '0.75rem',
             fontWeight: 700,
             whiteSpace: 'nowrap',
             background: activeStateFilter === 'all' ? '#4c35de' : '#ffffff',
             color: activeStateFilter === 'all' ? '#ffffff' : '#8b92ab',
             cursor: 'pointer',
             boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+            transition: 'all 0.15s ease',
           }}
         >
           All States ({allSites.length})
@@ -114,16 +116,17 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
             key={state.id}
             onClick={() => setActiveStateFilter(state.id)}
             style={{
-              padding: '6px 12px',
-              borderRadius: '14px',
+              padding: '7px 14px',
+              borderRadius: '16px',
               border: 'none',
-              fontSize: '0.74rem',
+              fontSize: '0.75rem',
               fontWeight: 700,
               whiteSpace: 'nowrap',
               background: activeStateFilter === state.id ? '#4c35de' : '#ffffff',
               color: activeStateFilter === state.id ? '#ffffff' : '#8b92ab',
               cursor: 'pointer',
               boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+              transition: 'all 0.15s ease',
             }}
           >
             {state.name}
@@ -131,7 +134,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
         ))}
       </div>
 
-      {/* Document Items List (Matches Screen 2 in Reference Image) */}
+      {/* Document Items List */}
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         {filteredSites.map((site) => (
           <div
@@ -145,12 +148,11 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
             }}
             className="digi-doc-item"
           >
-            {/* Left Circular / Square Logo Badge */}
+            {/* Left Image Badge */}
             <div className="digi-icon-badge">
-              <img
+              <HeritageImage
                 src={site.image}
                 alt={site.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }}
               />
             </div>
 
@@ -178,8 +180,8 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
             <div>
               {site.isFullyArchived ? (
                 <div style={{
-                  width: '28px',
-                  height: '28px',
+                  width: '30px',
+                  height: '30px',
                   borderRadius: '50%',
                   backgroundColor: '#f2efff',
                   color: '#4c35de',
@@ -187,7 +189,7 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <ChevronRight size={16} />
+                  <ChevronRight size={17} />
                 </div>
               ) : (
                 <span style={{
@@ -228,7 +230,10 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ height: '140px', borderRadius: '18px', overflow: 'hidden', marginBottom: '14px' }}>
-              <img src={selectedUpcomingSite.image} alt={selectedUpcomingSite.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <HeritageImage
+                src={selectedUpcomingSite.image}
+                alt={selectedUpcomingSite.name}
+              />
             </div>
 
             <span style={{ fontSize: '0.68rem', color: '#4c35de', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>

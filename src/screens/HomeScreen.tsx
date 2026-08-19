@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { STATES_DATA, ISSUING_AUTHORITIES } from '../data/states';
+import { HeritageImage } from '../components/HeritageImage';
 import {
   Shield,
   Search,
@@ -45,10 +46,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       isLive: true,
       title: 'Stone Chariot, Hampi',
       subtitle: 'Vijayanagara Empire • 16th Century CE',
-      image: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=1200&auto=format&fit=crop',
+      image: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=1200&q=80',
       actionText: 'Launch AR Scanner',
       action: () => onNavigateTab('ar_explorer'),
-      gradient: 'linear-gradient(180deg, rgba(76,53,222,0.2) 0%, rgba(30,15,100,0.92) 100%)',
+      gradient: 'linear-gradient(180deg, rgba(76,53,222,0.25) 0%, rgba(30,15,100,0.94) 100%)',
     },
     {
       id: 'raigad-fort',
@@ -56,10 +57,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       isLive: false,
       title: 'Raigad Hill Fortress',
       subtitle: 'Capital of Chhatrapati Shivaji Maharaj',
-      image: 'https://images.unsplash.com/photo-1626014303757-656c5354924c?q=80&w=1200&auto=format&fit=crop',
+      image: 'https://images.unsplash.com/photo-1626014303757-656c5354924c?auto=format&fit=crop&w=1200&q=80',
       actionText: 'Explore Collection',
       action: () => onOpenState('maharashtra'),
-      gradient: 'linear-gradient(180deg, rgba(37,99,235,0.2) 0%, rgba(15,23,42,0.92) 100%)',
+      gradient: 'linear-gradient(180deg, rgba(37,99,235,0.25) 0%, rgba(15,23,42,0.94) 100%)',
     },
     {
       id: 'konark-sun-temple',
@@ -67,10 +68,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       isLive: false,
       title: 'Konark Sun Temple',
       subtitle: '24 Monolithic Sundial Chariot Wheels',
-      image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1200&auto=format&fit=crop',
+      image: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80',
       actionText: 'View Repository',
       action: () => onOpenState('odisha'),
-      gradient: 'linear-gradient(180deg, rgba(217,119,6,0.2) 0%, rgba(40,15,5,0.92) 100%)',
+      gradient: 'linear-gradient(180deg, rgba(217,119,6,0.25) 0%, rgba(40,15,5,0.94) 100%)',
     },
     {
       id: 'brihadisvara-temple',
@@ -78,10 +79,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       isLive: false,
       title: 'Brihadisvara Temple',
       subtitle: '80-Tonne Monolithic Granite Vimana',
-      image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1200&auto=format&fit=crop',
+      image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
       actionText: 'View Ingestion',
       action: () => onOpenState('tamil-nadu'),
-      gradient: 'linear-gradient(180deg, rgba(13,148,136,0.2) 0%, rgba(10,35,35,0.92) 100%)',
+      gradient: 'linear-gradient(180deg, rgba(13,148,136,0.25) 0%, rgba(10,35,35,0.94) 100%)',
     },
   ];
 
@@ -95,15 +96,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   }, [isPaused, CAROUSEL_SLIDES.length]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
       {/* Top Greeting Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 2px 0' }}>
         <div>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#181c32', margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+          <h2 style={{ fontSize: '1.28rem', fontWeight: 800, color: '#181c32', margin: 0, fontFamily: 'Outfit, sans-serif' }}>
             Hi <span style={{ color: '#4c35de' }}>Citizen</span>
           </h2>
           <p style={{ fontSize: '0.76rem', color: '#8b92ab', margin: '2px 0 0 0', fontWeight: 500 }}>
-            Welcome back to SanskritiSetu!
+            Welcome to SanskritiSetu Digital Cloud
           </p>
         </div>
 
@@ -128,7 +129,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <div className="live-sync-strip">
         <div className="pulse-dot" />
         <span style={{ fontWeight: 700, color: '#181c32' }}>Sovereign Cloud Active</span>
-        <span style={{ color: '#8b92ab' }}>• 3,690 Records Synced</span>
+        <span style={{ color: '#8b92ab' }}>• 3,690 National Records Synced</span>
       </div>
 
       {/* Interactive Auto-Advancing Hero Carousel */}
@@ -224,7 +225,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
 
         {/* Horizontal Slider of Preserved Record Cards */}
-        <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '4px' }}>
+        <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '4px' }}>
           {/* Card 1: Stone Chariot */}
           <div
             onClick={() => onOpenMonument('stone-chariot')}
@@ -254,10 +255,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               overflow: 'hidden',
               boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
-              <img
-                src="https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=200&auto=format&fit=crop"
+              <HeritageImage
+                src="https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=300&q=80"
                 alt="Stone Chariot"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
             <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
@@ -297,10 +297,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               overflow: 'hidden',
               boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
-              <img
-                src="https://images.unsplash.com/photo-1626014303757-656c5354924c?q=80&w=200&auto=format&fit=crop"
+              <HeritageImage
+                src="https://images.unsplash.com/photo-1626014303757-656c5354924c?auto=format&fit=crop&w=300&q=80"
                 alt="Raigad Fort"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
             <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
@@ -340,10 +339,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               overflow: 'hidden',
               boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
-              <img
-                src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=200&auto=format&fit=crop"
+              <HeritageImage
+                src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=300&q=80"
                 alt="Brihadisvara Temple"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
             <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
@@ -383,10 +381,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               overflow: 'hidden',
               boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
             }}>
-              <img
-                src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=200&auto=format&fit=crop"
+              <HeritageImage
+                src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=300&q=80"
                 alt="Konark Sun Temple"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
             <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px', fontFamily: 'Outfit, sans-serif' }}>
@@ -417,7 +414,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               onClick={() => onOpenState(state.id)}
               className="digi-card"
               style={{
-                padding: '14px',
+                padding: '16px 14px',
                 margin: 0,
                 cursor: 'pointer',
                 display: 'flex',
@@ -467,7 +464,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               onClick={() => onNavigateTab('trust')}
               className="digi-card"
               style={{
-                padding: '12px 14px',
+                padding: '14px 16px',
                 margin: 0,
                 display: 'flex',
                 alignItems: 'center',
@@ -475,21 +472,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 cursor: 'pointer',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: '12px',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '14px',
                   background: '#f2efff',
                   color: '#4c35de',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <Award size={18} />
+                  <Award size={20} />
                 </div>
                 <div>
-                  <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block' }}>{auth.name}</strong>
+                  <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block' }}>{auth.name}</strong>
                   <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>{auth.recordsCount}</span>
                 </div>
               </div>
