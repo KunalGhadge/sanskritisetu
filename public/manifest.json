@@ -1,0 +1,17 @@
+{
+  "short_name": "SanskritiSetu",
+  "name": "SanskritiSetu - National Heritage Cloud",
+  "description": "National Digital Heritage Cloud & Spatial WebAR Platform",
+  "icons": [
+    {
+      "src": "/emblem.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#181c32",
+  "theme_color": "#4c35de",
+  "display": "standalone",
+  "orientation": "portrait"
+}
