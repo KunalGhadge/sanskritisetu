@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { STATES_DATA, ISSUING_AUTHORITIES, StateHeritage } from '../data/states';
-import { MonumentData } from '../data/monuments';
+import React from 'react';
+import { STATES_DATA, ISSUING_AUTHORITIES } from '../data/states';
 import {
   Shield,
   Search,
@@ -8,7 +7,7 @@ import {
   Database,
   Layers,
   Award,
-  ArrowRight,
+  ChevronRight,
   Sparkles,
   MapPin,
   CheckCircle2,
@@ -31,253 +30,275 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigateTab,
   onOpenMarkerModal,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      {/* DigiLocker-Style Sovereign Header Card */}
-      <div className="app-card-dark" style={{
-        padding: '18px 16px',
-        background: 'linear-gradient(135deg, #0b1528 0%, #162a45 100%)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-          <div>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              background: 'rgba(217, 119, 6, 0.2)',
-              border: '1px solid rgba(217, 119, 6, 0.4)',
-              color: '#fbbf24',
-              fontSize: '0.66rem',
-              fontWeight: 700,
-              padding: '3px 8px',
-              borderRadius: '10px',
-              marginBottom: '6px',
-            }}>
-              🇮🇳 Government of India • Ministry of Culture
-            </span>
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, margin: '0 0 2px 0', color: '#ffffff' }}>
-              SanskritiSetu
-            </h2>
-            <p style={{ fontSize: '0.78rem', color: '#94a3b8', margin: 0 }}>
-              National Digital Heritage Preservation Cloud
-            </p>
-          </div>
-
-          <div style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '10px',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fbbf24',
-          }}>
-            <Shield size={20} />
-          </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      {/* Top Greeting Bar (Matches Reference Image) */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 2px 0' }}>
+        <div>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#181c32', margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+            Hi <span style={{ color: '#4c35de' }}>Citizen</span>
+          </h2>
+          <p style={{ fontSize: '0.76rem', color: '#8b92ab', margin: '2px 0 0 0', fontWeight: 500 }}>
+            Welcome back to SanskritiSetu!
+          </p>
         </div>
 
-        {/* Search Bar */}
+        {/* Profile Avatar / Emblem */}
         <div style={{
+          width: '42px',
+          height: '42px',
+          borderRadius: '50%',
+          backgroundColor: '#f2efff',
+          border: '2px solid #e3dfff',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px',
-          background: 'rgba(255, 255, 255, 0.12)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '12px',
-          padding: '8px 12px',
+          justifyContent: 'center',
+          color: '#4c35de',
+          boxShadow: '0 4px 12px rgba(76, 53, 222, 0.12)',
         }}>
-          <Search size={15} color="#94a3b8" />
-          <input
-            type="text"
-            placeholder="Search monuments, states, ASI records..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#ffffff',
-              fontSize: '0.8rem',
-              outline: 'none',
-              width: '100%',
-            }}
-          />
+          <Shield size={20} />
         </div>
       </div>
 
-      {/* Featured National Monument (Stone Chariot, Hampi) */}
-      <div className="app-card" style={{ padding: '14px', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-          <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#d97706', textTransform: 'uppercase' }}>
-            ★ Featured Heritage Asset
-          </span>
+      {/* Purple Gradient Hero Banner (Matches Reference COVID-19 Card) */}
+      <div className="digi-hero-card" onClick={() => onNavigateTab('ar_explorer')} style={{ cursor: 'pointer' }}>
+        <div style={{ position: 'relative', zIndex: 2 }}>
           <span style={{
-            fontSize: '0.68rem',
-            background: '#ecfdf5',
-            color: '#059669',
+            display: 'inline-block',
+            background: 'rgba(255, 255, 255, 0.2)',
+            backdropFilter: 'blur(8px)',
+            color: '#ffffff',
+            fontSize: '0.64rem',
             fontWeight: 700,
-            padding: '2px 8px',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '3px',
+            padding: '3px 8px',
+            borderRadius: '12px',
+            marginBottom: '8px',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
           }}>
-            <CheckCircle2 size={12} /> 3D & AR Live
+            Spatial WebAR Engine Live
           </span>
-        </div>
-
-        <div
-          onClick={() => onOpenMonument('stone-chariot')}
-          style={{
-            position: 'relative',
-            height: '140px',
-            borderRadius: '14px',
-            overflow: 'hidden',
-            backgroundColor: '#0b1528',
-            marginBottom: '10px',
-            cursor: 'pointer',
-          }}
-        >
-          <img
-            src="https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=1000&auto=format&fit=crop"
-            alt="Stone Chariot Hampi"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(180deg, transparent 40%, rgba(11,21,40,0.9) 100%)',
-            display: 'flex',
-            alignItems: 'flex-end',
-            padding: '10px 12px',
-          }}>
-            <div>
-              <h3 style={{ color: '#ffffff', fontSize: '1.05rem', fontWeight: 800, margin: 0 }}>
-                Stone Chariot, Hampi
-              </h3>
-              <span style={{ color: '#cbd5e1', fontSize: '0.72rem' }}>
-                UNESCO Site #356 • Vijayanagara Empire
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button
-            onClick={() => onOpenMonument('stone-chariot')}
-            className="btn-app-primary"
-            style={{ padding: '10px', fontSize: '0.8rem', flexGrow: 1 }}
-          >
-            <Layers size={14} />
-            <span>Open Vault</span>
-          </button>
-          <button
-            onClick={() => onNavigateTab('ar_explorer')}
-            className="btn-app-accent"
-            style={{ padding: '10px', fontSize: '0.8rem', flexGrow: 1 }}
-          >
-            <Compass size={14} />
-            <span>AR Experience</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Quick Access DigiLocker Grid (4 Core Action Pillars) */}
-      <div>
-        <h3 style={{ fontSize: '0.88rem', fontWeight: 800, color: '#0f172a', marginBottom: '8px', paddingLeft: '2px' }}>
-          Quick Access Services
-        </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-          <div
-            onClick={() => onNavigateTab('repository')}
-            className="app-card"
-            style={{ padding: '14px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px', margin: 0 }}
-          >
-            <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Database size={16} />
-            </div>
-            <strong style={{ fontSize: '0.82rem', color: '#0f172a' }}>Explore Heritage</strong>
-            <span style={{ fontSize: '0.68rem', color: '#64748b' }}>National Repository</span>
-          </div>
-
-          <div
-            onClick={() => onNavigateTab('vault')}
-            className="app-card"
-            style={{ padding: '14px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px', margin: 0 }}
-          >
-            <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#fdf4ff', color: '#9333ea', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Layers size={16} />
-            </div>
-            <strong style={{ fontSize: '0.82rem', color: '#0f172a' }}>Digital Vault</strong>
-            <span style={{ fontSize: '0.68rem', color: '#64748b' }}>7-Tier Archives</span>
-          </div>
-
-          <div
-            onClick={() => onNavigateTab('ar_explorer')}
-            className="app-card"
-            style={{ padding: '14px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px', margin: 0 }}
-          >
-            <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#fffbeb', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Compass size={16} />
-            </div>
-            <strong style={{ fontSize: '0.82rem', color: '#0f172a' }}>AR Explorer</strong>
-            <span style={{ fontSize: '0.68rem', color: '#64748b' }}>Marker 3D Scanner</span>
-          </div>
-
-          <div
-            onClick={onOpenMarkerModal}
-            className="app-card"
-            style={{ padding: '14px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px', margin: 0 }}
-          >
-            <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <QrCode size={16} />
-            </div>
-            <strong style={{ fontSize: '0.82rem', color: '#0f172a' }}>AR Marker</strong>
-            <span style={{ fontSize: '0.68rem', color: '#64748b' }}>Print & Scan Card</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Browse by States (6 Heritage States Collection) */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', paddingLeft: '2px' }}>
-          <h3 style={{ fontSize: '0.88rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-            Browse by State
+          <h3 style={{ fontSize: '1.22rem', fontWeight: 800, margin: '0 0 4px 0', lineHeight: 1.2, fontFamily: 'Outfit, sans-serif' }}>
+            Digital Heritage Vault
           </h3>
-          <span
-            onClick={() => onNavigateTab('repository')}
-            style={{ fontSize: '0.72rem', color: '#2563eb', fontWeight: 700, cursor: 'pointer' }}
+          <p style={{ fontSize: '0.78rem', color: '#e0dbff', margin: '0 0 14px 0', maxWidth: '240px' }}>
+            Explore 3D digital twins and augmented reality monuments
+          </p>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onNavigateTab('ar_explorer');
+            }}
+            style={{
+              background: '#ffffff',
+              color: '#4c35de',
+              border: 'none',
+              borderRadius: '14px',
+              padding: '7px 16px',
+              fontSize: '0.75rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            }}
           >
-            View All →
-          </span>
+            Launch AR Experience
+          </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
-          {STATES_DATA.map((state) => (
+        {/* Decorative Background Glow */}
+        <div style={{
+          position: 'absolute',
+          right: '-10px',
+          bottom: '-10px',
+          width: '120px',
+          height: '120px',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%)',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+        }} />
+      </div>
+
+      {/* Section 1: Preserved Heritage Records (Matches "Issued Documents" in Reference) */}
+      <div>
+        <div className="digi-section-header">
+          <h3 className="digi-section-title">Preserved Heritage Records</h3>
+          <span onClick={() => onNavigateTab('repository')} className="digi-view-all">View All</span>
+        </div>
+
+        {/* Horizontal Slider of Preserved Record Cards */}
+        <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '4px' }}>
+          {/* Card 1: Stone Chariot */}
+          <div
+            onClick={() => onOpenMonument('stone-chariot')}
+            className="digi-card"
+            style={{
+              minWidth: '150px',
+              maxWidth: '150px',
+              padding: '14px 12px',
+              margin: 0,
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <div style={{
+              width: '50px',
+              height: '50px',
+              borderRadius: '16px',
+              backgroundColor: '#f4f5fb',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '8px',
+              overflow: 'hidden',
+            }}>
+              <img
+                src="https://images.unsplash.com/photo-1600100397608-f010f4439c3e?q=80&w=200&auto=format&fit=crop"
+                alt="Stone Chariot"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+            <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px' }}>
+              Stone Chariot
+            </strong>
+            <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
+              Hampi, Karnataka
+            </span>
+          </div>
+
+          {/* Card 2: Raigad Fort */}
+          <div
+            onClick={() => onNavigateTab('repository')}
+            className="digi-card"
+            style={{
+              minWidth: '150px',
+              maxWidth: '150px',
+              padding: '14px 12px',
+              margin: 0,
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <div style={{
+              width: '50px',
+              height: '50px',
+              borderRadius: '16px',
+              backgroundColor: '#f4f5fb',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '8px',
+              overflow: 'hidden',
+            }}>
+              <img
+                src="https://images.unsplash.com/photo-1626014303757-656c5354924c?q=80&w=200&auto=format&fit=crop"
+                alt="Raigad Fort"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+            <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px' }}>
+              Raigad Fort
+            </strong>
+            <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
+              Maharashtra
+            </span>
+          </div>
+
+          {/* Card 3: Brihadisvara */}
+          <div
+            onClick={() => onNavigateTab('repository')}
+            className="digi-card"
+            style={{
+              minWidth: '150px',
+              maxWidth: '150px',
+              padding: '14px 12px',
+              margin: 0,
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <div style={{
+              width: '50px',
+              height: '50px',
+              borderRadius: '16px',
+              backgroundColor: '#f4f5fb',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '8px',
+              overflow: 'hidden',
+            }}>
+              <img
+                src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=200&auto=format&fit=crop"
+                alt="Brihadisvara Temple"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+            <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px' }}>
+              Brihadisvara
+            </strong>
+            <span style={{ fontSize: '0.66rem', color: '#8b92ab' }}>
+              Tamil Nadu
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Section 2: State Heritage Collection (Matches "State Government" in Reference) */}
+      <div>
+        <div className="digi-section-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <h3 className="digi-section-title">State Government Archives</h3>
+          </div>
+          <span onClick={() => onNavigateTab('repository')} className="digi-view-all">View All</span>
+        </div>
+
+        {/* State Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          {STATES_DATA.slice(0, 4).map((state) => (
             <div
               key={state.id}
               onClick={() => onOpenState(state.id)}
-              className="app-card"
+              className="digi-card"
               style={{
-                minWidth: '130px',
-                padding: '10px',
+                padding: '14px',
                 margin: 0,
                 cursor: 'pointer',
-                flexShrink: 0,
-                border: '1px solid #e2e8f0',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
               }}
             >
-              <div style={{ height: '70px', borderRadius: '10px', overflow: 'hidden', marginBottom: '6px', backgroundColor: '#0b1528' }}>
-                <img src={state.coverImage} alt={state.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{
+                width: '46px',
+                height: '46px',
+                borderRadius: '50%',
+                backgroundColor: '#f2efff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '8px',
+                color: '#4c35de',
+              }}>
+                <Building2 size={22} />
               </div>
-              <strong style={{ fontSize: '0.8rem', color: '#0f172a', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <strong style={{ fontSize: '0.82rem', color: '#181c32', display: 'block', lineHeight: 1.2, marginBottom: '2px' }}>
                 {state.name}
               </strong>
-              <span style={{ fontSize: '0.66rem', color: '#64748b' }}>
+              <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>
                 {state.monumentCount} Monuments
               </span>
             </div>
@@ -285,49 +306,47 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-      {/* National Preservation Statistics */}
-      <div className="app-card-dark" style={{ padding: '16px' }}>
-        <h4 style={{ fontSize: '0.85rem', fontWeight: 800, color: '#fbbf24', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-          National Preservation Metrics
-        </h4>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '0.75rem' }}>
-          <div style={{ padding: '8px 10px', background: 'rgba(255,255,255,0.06)', borderRadius: '10px' }}>
-            <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.66rem' }}>State Coverage</span>
-            <strong style={{ fontSize: '0.95rem', color: '#ffffff' }}>28 States & 8 UTs</strong>
-          </div>
-          <div style={{ padding: '8px 10px', background: 'rgba(255,255,255,0.06)', borderRadius: '10px' }}>
-            <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.66rem' }}>ASI Sovereign Records</span>
-            <strong style={{ fontSize: '0.95rem', color: '#ffffff' }}>3,690+ Monuments</strong>
-          </div>
-          <div style={{ padding: '8px 10px', background: 'rgba(255,255,255,0.06)', borderRadius: '10px' }}>
-            <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.66rem' }}>3D Digital Archives</span>
-            <strong style={{ fontSize: '0.95rem', color: '#ffffff' }}>Sub-mm GLB Mesh</strong>
-          </div>
-          <div style={{ padding: '8px 10px', background: 'rgba(255,255,255,0.06)', borderRadius: '10px' }}>
-            <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.66rem' }}>UNESCO Heritage</span>
-            <strong style={{ fontSize: '0.95rem', color: '#ffffff' }}>42 National Sites</strong>
-          </div>
+      {/* Section 3: Central Government (Matches "Central Government" in Reference) */}
+      <div>
+        <div className="digi-section-header">
+          <h3 className="digi-section-title">Central Government Custodians</h3>
+          <span onClick={() => onNavigateTab('trust')} className="digi-view-all">View All</span>
         </div>
-      </div>
 
-      {/* Verified Issuing Government Authorities (DigiLocker Style) */}
-      <div className="app-card" style={{ padding: '14px' }}>
-        <h4 style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0f172a', marginBottom: '10px' }}>
-          Verified Issuing Authorities
-        </h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {ISSUING_AUTHORITIES.map((auth, idx) => (
-            <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', background: '#f8fafc', borderRadius: '10px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Building2 size={15} color="#2563eb" />
+          {ISSUING_AUTHORITIES.slice(0, 2).map((auth, i) => (
+            <div
+              key={i}
+              onClick={() => onNavigateTab('trust')}
+              className="digi-card"
+              style={{
+                padding: '12px 14px',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '12px',
+                  background: '#f2efff',
+                  color: '#4c35de',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <Shield size={18} />
+                </div>
                 <div>
-                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>{auth.name}</strong>
-                  <span style={{ fontSize: '0.68rem', color: '#64748b' }}>{auth.recordsCount}</span>
+                  <strong style={{ fontSize: '0.8rem', color: '#181c32', display: 'block' }}>{auth.name}</strong>
+                  <span style={{ fontSize: '0.68rem', color: '#8b92ab' }}>{auth.recordsCount}</span>
                 </div>
               </div>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#16a34a', fontSize: '0.68rem', fontWeight: 700 }}>
-                <CheckCircle2 size={13} /> Verified
-              </span>
+              <ChevronRight size={16} color="#8b92ab" />
             </div>
           ))}
         </div>

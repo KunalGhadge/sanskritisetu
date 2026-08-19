@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { MonumentData } from '../data/monuments';
-import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, RotateCw } from 'lucide-react';
+import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft } from 'lucide-react';
 
 interface ARExplorerScreenProps {
   monument: MonumentData;
   onOpenMarkerModal: () => void;
+  onBack?: () => void;
 }
 
 export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
   monument,
   onOpenMarkerModal,
+  onBack,
 }) => {
   const [isCameraActive, setIsCameraActive] = useState(false);
 
@@ -26,7 +28,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
           flexDirection: 'column',
           zIndex: 5000,
         }}>
-          {/* Top Controls */}
+          {/* Top Camera Controls */}
           <div style={{
             position: 'absolute',
             top: '16px',
@@ -35,11 +37,11 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            background: 'rgba(11, 21, 40, 0.88)',
+            background: 'rgba(24, 28, 50, 0.88)',
             backdropFilter: 'blur(16px)',
             border: '1px solid rgba(255, 255, 255, 0.15)',
-            borderRadius: '16px',
-            padding: '8px 12px',
+            borderRadius: '18px',
+            padding: '8px 14px',
             zIndex: 50,
           }}>
             <button
@@ -48,13 +50,13 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
-                background: 'rgba(255, 255, 255, 0.1)',
+                background: 'rgba(255, 255, 255, 0.12)',
                 border: 'none',
                 color: '#ffffff',
-                padding: '6px 10px',
-                borderRadius: '10px',
+                padding: '6px 12px',
+                borderRadius: '12px',
                 fontSize: '0.75rem',
-                fontWeight: 600,
+                fontWeight: 700,
                 cursor: 'pointer',
               }}
             >
@@ -62,7 +64,7 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               <span>Exit AR</span>
             </button>
 
-            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#38bdf8' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#a594fd', fontFamily: 'Outfit, sans-serif' }}>
               Stone Chariot AR
             </span>
 
@@ -72,13 +74,13 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
-                background: '#d97706',
+                background: '#4c35de',
                 border: 'none',
                 color: '#ffffff',
-                padding: '6px 10px',
-                borderRadius: '10px',
+                padding: '6px 12px',
+                borderRadius: '12px',
                 fontSize: '0.75rem',
-                fontWeight: 600,
+                fontWeight: 700,
                 cursor: 'pointer',
               }}
             >
@@ -109,8 +111,8 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               transform: 'translate(-50%, -50%)',
               width: '210px',
               height: '210px',
-              border: '2px solid rgba(56, 189, 248, 0.7)',
-              borderRadius: '16px',
+              border: '2px solid rgba(93, 64, 245, 0.8)',
+              borderRadius: '20px',
               pointerEvents: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -119,19 +121,19 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
               <div className="hud-laser" />
               <div style={{
                 position: 'absolute',
-                bottom: '-30px',
-                background: 'rgba(11, 21, 40, 0.92)',
-                color: '#38bdf8',
-                padding: '3px 10px',
-                borderRadius: '8px',
+                bottom: '-32px',
+                background: 'rgba(24, 28, 50, 0.92)',
+                color: '#ffffff',
+                padding: '4px 12px',
+                borderRadius: '10px',
                 fontSize: '0.68rem',
                 fontWeight: 800,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase',
                 whiteSpace: 'nowrap',
-                border: '1px solid rgba(56, 189, 248, 0.3)',
+                border: '1px solid rgba(93, 64, 245, 0.4)',
               }}>
-                Align Marker in Frame...
+                Align Marker in Viewfinder
               </div>
             </div>
           </div>
@@ -139,15 +141,15 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
           {/* Bottom Floating Exit Action */}
           <div style={{
             position: 'absolute',
-            bottom: '16px',
+            bottom: '18px',
             left: '16px',
             right: '16px',
             zIndex: 50,
           }}>
             <button
               onClick={() => setIsCameraActive(false)}
-              className="btn-app-accent"
-              style={{ width: '100%', padding: '12px', fontSize: '0.88rem', borderRadius: '14px' }}
+              className="btn-digi-purple"
+              style={{ width: '100%', padding: '14px', fontSize: '0.9rem' }}
             >
               <span>Finish AR Exploration</span>
             </button>
@@ -156,75 +158,99 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
       ) : (
         /* Standalone AR Explorer Launch Hub */
         <>
-          {/* Top Banner Card */}
-          <div className="app-card-dark" style={{
-            padding: '20px 16px',
-            textAlign: 'center',
-            background: 'linear-gradient(135deg, #0b1528 0%, #162a45 100%)',
-          }}>
+          {/* Top Bar */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2px' }}>
+            <button
+              onClick={onBack}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#181c32',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <ChevronLeft size={24} />
+            </button>
+
+            <h2 style={{
+              fontSize: '1.1rem',
+              fontWeight: 800,
+              color: '#4c35de',
+              margin: 0,
+              fontFamily: 'Outfit, sans-serif',
+              textAlign: 'center',
+            }}>
+              Spatial AR Explorer
+            </h2>
+
+            <div style={{ width: '24px' }} />
+          </div>
+
+          {/* Purple Hero Card */}
+          <div className="digi-hero-card" style={{ textAlign: 'center', padding: '24px 18px' }}>
             <div style={{
               width: '56px',
               height: '56px',
               margin: '0 auto 12px',
-              borderRadius: '16px',
-              backgroundColor: '#1e293b',
-              color: '#38bdf8',
+              borderRadius: '18px',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(10px)',
+              color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 8px 20px rgba(56, 189, 248, 0.2)',
             }}>
               <Camera size={28} />
             </div>
 
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', margin: '0 0 4px 0' }}>
-              Spatial AR Explorer
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', margin: '0 0 4px 0', fontFamily: 'Outfit, sans-serif' }}>
+              Augmented Reality View
             </h3>
-            <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
-              Zero-install marker tracking engine projecting India's monuments in 3D.
+            <p style={{ fontSize: '0.78rem', color: '#e0dbff', margin: 0 }}>
+              Zero-install browser camera tracking projecting 3D monuments into physical space.
             </p>
           </div>
 
           {/* Selected Monument Card */}
-          <div className="app-card" style={{ padding: '14px' }}>
-            <span style={{ fontSize: '0.68rem', color: '#d97706', fontWeight: 800, textTransform: 'uppercase' }}>
-              Active AR Target Asset
+          <div className="digi-card" style={{ padding: '18px' }}>
+            <span style={{ fontSize: '0.68rem', color: '#4c35de', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              Target Heritage Model
             </span>
-            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', margin: '2px 0 10px 0' }}>
+            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#181c32', margin: '2px 0 12px 0', fontFamily: 'Outfit, sans-serif' }}>
               {monument.name}
             </h4>
 
-            <div style={{ height: '130px', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#0b1528', marginBottom: '12px' }}>
+            <div style={{ height: '140px', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#f4f5fb', marginBottom: '14px' }}>
               <img src={monument.heroImage} alt={monument.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
-                <CheckCircle2 size={14} color="#10b981" />
-                <span>Sub-millimeter photogrammetry mesh (184.2K Triangles)</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#4b526d' }}>
+                <CheckCircle2 size={15} color="#10b981" />
+                <span>Binary glTF 2.0 (184,200 Triangles)</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
-                <CheckCircle2 size={14} color="#10b981" />
-                <span>Bilingual audio narrative synchronized</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#4b526d' }}>
+                <CheckCircle2 size={15} color="#10b981" />
+                <span>Bilingual audio narration synchronized</span>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {/* Actions */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <button
                 onClick={() => setIsCameraActive(true)}
-                className="btn-app-accent"
-                style={{ fontSize: '0.88rem' }}
+                className="btn-digi-purple"
               >
                 <Camera size={16} />
-                <span>Launch AR Camera</span>
-                <ArrowRight size={15} />
+                <span>Launch Camera AR View</span>
               </button>
 
               <button
                 onClick={onOpenMarkerModal}
-                className="btn-app-secondary"
-                style={{ fontSize: '0.82rem' }}
+                className="btn-digi-secondary"
               >
                 <QrCode size={15} />
                 <span>View / Print AR Tracking Marker</span>
