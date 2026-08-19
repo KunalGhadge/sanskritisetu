@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { STATES_DATA } from '../data/states';
+import { STATES_DATA, StateHeritage } from '../data/states';
 import { HeritageImage } from '../components/HeritageImage';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 import {
@@ -9,7 +9,15 @@ import {
   Clock,
   Landmark,
   Building2,
-  ChevronRight
+  ChevronRight,
+  Filter,
+  Sparkles,
+  Camera,
+  Layers,
+  Compass,
+  FileText,
+  X,
+  ShieldCheck
 } from 'lucide-react';
 
 interface RepositoryScreenProps {
@@ -83,8 +91,9 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
         <div style={{ width: '24px' }} />
       </div>
 
-      {/* Search Input */}
-      <div className="digi-search-box">
+      {/* Modern Search Input */}
+      <div className="digi-search-box" style={{ margin: 0 }}>
+        <Search size={17} color="#4c35de" style={{ marginRight: '8px', flexShrink: 0 }} />
         <input
           type="text"
           placeholder={t.searchPlaceholder}
@@ -92,24 +101,32 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
           onChange={(e) => setSearchQuery(e.target.value)}
           className="digi-search-input"
         />
-        <Search size={16} color="#8b92ab" />
+        {searchQuery && (
+          <button
+            onClick={() => setSearchQuery('')}
+            style={{ background: 'none', border: 'none', color: '#8b92ab', cursor: 'pointer', padding: '2px', display: 'flex' }}
+          >
+            <X size={15} />
+          </button>
+        )}
       </div>
 
-      {/* State Filter Tabs */}
-      <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
+      {/* State Filter Pill Tabs with Counts */}
+      <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '2px' }}>
         <button
           onClick={() => setActiveStateFilter('all')}
           style={{
-            padding: '7px 14px',
-            borderRadius: '16px',
+            padding: '6px 14px',
+            borderRadius: '20px',
             border: 'none',
-            fontSize: '0.75rem',
-            fontWeight: 700,
-            whiteSpace: 'nowrap',
-            background: activeStateFilter === 'all' ? '#4c35de' : '#ffffff',
-            color: activeStateFilter === 'all' ? '#ffffff' : '#8b92ab',
+            fontSize: '0.72rem',
+            fontWeight: 800,
             cursor: 'pointer',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+            background: activeStateFilter === 'all' ? '#4c35de' : '#ffffff',
+            color: activeStateFilter === 'all' ? '#ffffff' : '#4b526d',
+            boxShadow: '0 2px 6px rgba(80, 85, 130, 0.04)',
             transition: 'all 0.15s ease',
           }}
         >
@@ -117,116 +134,195 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
         </button>
 
         {STATES_DATA.map((state) => {
-          const localizedStateName = currentLanguage !== 'en' && state.hindiName ? state.hindiName : state.name;
+          const isSelected = activeStateFilter === state.id;
+          const sName = currentLanguage !== 'en' && state.hindiName ? state.hindiName : state.name;
 
           return (
             <button
               key={state.id}
               onClick={() => setActiveStateFilter(state.id)}
               style={{
-                padding: '7px 14px',
-                borderRadius: '16px',
+                padding: '6px 12px',
+                borderRadius: '20px',
                 border: 'none',
-                fontSize: '0.75rem',
+                fontSize: '0.72rem',
                 fontWeight: 700,
-                whiteSpace: 'nowrap',
-                background: activeStateFilter === state.id ? '#4c35de' : '#ffffff',
-                color: activeStateFilter === state.id ? '#ffffff' : '#8b92ab',
                 cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                background: isSelected ? '#4c35de' : '#ffffff',
+                color: isSelected ? '#ffffff' : '#4b526d',
+                boxShadow: '0 2px 6px rgba(80, 85, 130, 0.04)',
                 transition: 'all 0.15s ease',
               }}
             >
-              {localizedStateName}
+              {sName} ({state.sites.length})
             </button>
           );
         })}
       </div>
 
-      {/* Document Items List */}
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {filteredSites.map((site) => (
-          <div
-            key={site.id}
-            onClick={() => {
-              if (site.isFullyArchived) {
-                onOpenMonument(site.id);
-              } else {
-                setSelectedUpcomingSite(site);
-              }
-            }}
-            className="digi-doc-item"
-          >
-            {/* Left Image Badge */}
-            <div className="digi-icon-badge">
-              <HeritageImage
-                src={site.image}
-                alt={site.name}
-              />
-            </div>
-
-            {/* Middle Details */}
-            <div style={{ flexGrow: 1, minWidth: 0 }}>
-              <strong style={{
-                fontSize: '0.88rem',
-                color: '#181c32',
-                display: 'block',
-                lineHeight: 1.2,
-                marginBottom: '2px',
-                fontFamily: 'Outfit, sans-serif'
-              }}>
-                {currentLanguage !== 'en' && (site.name.includes('(') ? site.name.split('(')[0] : site.name)}
-                {currentLanguage === 'en' && site.name}
-              </strong>
-              <span style={{ fontSize: '0.72rem', color: '#8b92ab', display: 'block', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {site.authority}
-              </span>
-              <span style={{ fontSize: '0.64rem', color: '#a6adbf', display: 'block' }}>
-                Fri, 15 Aug 2024 10:30 GMT
-              </span>
-            </div>
-
-            {/* Right Status */}
-            <div>
-              {site.isFullyArchived ? (
-                <div style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
-                  backgroundColor: '#f2efff',
-                  color: '#4c35de',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <ChevronRight size={17} />
-                </div>
-              ) : (
-                <span style={{
-                  fontSize: '0.62rem',
-                  fontWeight: 700,
-                  background: '#f4f5fb',
-                  color: '#8b92ab',
-                  padding: '4px 8px',
-                  borderRadius: '10px',
-                }}>
-                  {t.phase2Badge}
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
+      {/* Search Telemetry Subtitle */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 4px', fontSize: '0.7rem', color: '#8b92ab' }}>
+        <span>Showing {filteredSites.length} Cadastral Records</span>
+        <span style={{ color: '#10b981', fontWeight: 700 }}>● Sovereign Verified</span>
       </div>
 
-      {/* Upcoming Ingestion Modal */}
+      {/* Rich Interactive Heritage Cards List */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {filteredSites.map((site) => {
+          const isLive = site.isFullyArchived;
+
+          return (
+            <div
+              key={site.id}
+              onClick={() => {
+                if (isLive) {
+                  onOpenMonument(site.id);
+                } else {
+                  setSelectedUpcomingSite(site);
+                }
+              }}
+              className="digi-card"
+              style={{
+                padding: '12px',
+                margin: 0,
+                cursor: 'pointer',
+                display: 'flex',
+                gap: '12px',
+                alignItems: 'center',
+                border: isLive ? '1px solid #eceef5' : '1px dashed #d1d5db',
+                background: isLive ? '#ffffff' : '#fafafa',
+              }}
+            >
+              {/* Monument Thumbnail */}
+              <div style={{
+                width: '74px',
+                height: '74px',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                flexShrink: 0,
+                backgroundColor: '#f4f5fb',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                position: 'relative',
+              }}>
+                <HeritageImage src={site.image} alt={site.name} />
+                {isLive && (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '4px',
+                    right: '4px',
+                    background: 'rgba(76, 53, 222, 0.9)',
+                    color: '#ffffff',
+                    borderRadius: '6px',
+                    padding: '1px 4px',
+                    fontSize: '0.55rem',
+                    fontWeight: 800,
+                  }}>
+                    3D
+                  </div>
+                )}
+              </div>
+
+              {/* Monument Content */}
+              <div style={{ flexGrow: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                  <span style={{
+                    fontSize: '0.62rem',
+                    fontWeight: 800,
+                    color: isLive ? '#4c35de' : '#6b7280',
+                    background: isLive ? '#f2efff' : '#f3f4f6',
+                    padding: '2px 6px',
+                    borderRadius: '6px',
+                    textTransform: 'uppercase',
+                  }}>
+                    {site.stateName}
+                  </span>
+
+                  {isLive ? (
+                    <span style={{ fontSize: '0.6rem', color: '#10b981', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                      <CheckCircle2 size={10} />
+                      <span>Live Dossier</span>
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: '0.6rem', color: '#f59e0b', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                      <Clock size={10} />
+                      <span>{t.phase2Badge}</span>
+                    </span>
+                  )}
+                </div>
+
+                <h4 style={{
+                  fontSize: '0.88rem',
+                  fontWeight: 800,
+                  color: '#181c32',
+                  margin: '0 0 2px 0',
+                  fontFamily: 'Outfit, sans-serif',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}>
+                  {site.name}
+                </h4>
+
+                <p style={{
+                  fontSize: '0.68rem',
+                  color: '#8b92ab',
+                  margin: 0,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}>
+                  {site.authority}
+                </p>
+
+                {/* Card Action Row */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
+                  <span style={{ fontSize: '0.66rem', color: '#4c35de', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                    <span>{isLive ? 'Open Dossier' : 'View Schedule'}</span>
+                    <ChevronRight size={12} />
+                  </span>
+
+                  {isLive && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onLaunchAR(site.id);
+                      }}
+                      style={{
+                        background: '#f2efff',
+                        border: 'none',
+                        color: '#4c35de',
+                        padding: '3px 8px',
+                        borderRadius: '8px',
+                        fontSize: '0.62rem',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '3px',
+                      }}
+                    >
+                      <Camera size={11} />
+                      <span>AR</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Phase 2 Scanning Ingestion Schedule Modal */}
       {selectedUpcomingSite && (
         <div
           style={{
             position: 'fixed',
             inset: 0,
             zIndex: 9999,
-            backgroundColor: 'rgba(24, 28, 50, 0.6)',
-            backdropFilter: 'blur(4px)',
+            backgroundColor: 'rgba(24, 28, 50, 0.65)',
+            backdropFilter: 'blur(5px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -236,38 +332,51 @@ export const RepositoryScreen: React.FC<RepositoryScreenProps> = ({
         >
           <div
             className="digi-card"
-            style={{ maxWidth: '360px', width: '100%', margin: 0, padding: '24px' }}
+            style={{ maxWidth: '340px', width: '100%', margin: 0, padding: '20px' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ height: '140px', borderRadius: '18px', overflow: 'hidden', marginBottom: '14px' }}>
-              <HeritageImage
-                src={selectedUpcomingSite.image}
-                alt={selectedUpcomingSite.name}
-              />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '12px',
+                backgroundColor: '#fef3c7',
+                color: '#d97706',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <Clock size={20} />
+              </div>
+              <button
+                onClick={() => setSelectedUpcomingSite(null)}
+                style={{ background: 'none', border: 'none', color: '#8b92ab', cursor: 'pointer', padding: '4px' }}
+              >
+                <X size={18} />
+              </button>
             </div>
 
-            <span style={{ fontSize: '0.68rem', color: '#4c35de', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              {selectedUpcomingSite.stateName} Heritage Registry
+            <span style={{ fontSize: '0.66rem', color: '#d97706', fontWeight: 800, textTransform: 'uppercase' }}>
+              Phase 2 Archival Ingestion
             </span>
-            <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#181c32', margin: '2px 0 6px 0', fontFamily: 'Outfit, sans-serif' }}>
+            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#181c32', margin: '2px 0 8px 0', fontFamily: 'Outfit, sans-serif' }}>
               {selectedUpcomingSite.name}
             </h4>
 
-            <p style={{ fontSize: '0.8rem', color: '#4b526d', lineHeight: 1.5, marginBottom: '16px' }}>
-              {selectedUpcomingSite.description}
-            </p>
-
-            <div style={{ padding: '12px', background: '#f8f9fe', borderRadius: '14px', fontSize: '0.74rem', marginBottom: '16px', border: '1px solid #eceef5' }}>
-              <div><strong>Issuing Body:</strong> {selectedUpcomingSite.authority}</div>
-              <div><strong>Archival Status:</strong> {t.archivalStatusText}</div>
+            <div style={{ height: '110px', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f4f5fb', marginBottom: '12px' }}>
+              <HeritageImage src={selectedUpcomingSite.image} alt={selectedUpcomingSite.name} />
             </div>
+
+            <p style={{ fontSize: '0.74rem', color: '#4b526d', margin: '0 0 12px 0', lineHeight: 1.4 }}>
+              Photogrammetric 3D point-cloud LiDAR scan scheduled by {selectedUpcomingSite.authority} under the National Heritage Digital Ingestion Mandate 2026.
+            </p>
 
             <button
               onClick={() => setSelectedUpcomingSite(null)}
               className="btn-digi-purple"
-              style={{ fontSize: '0.82rem', padding: '12px' }}
+              style={{ minHeight: '40px', padding: '10px' }}
             >
-              {t.closeDossier}
+              <span>{t.closeDossier}</span>
             </button>
           </div>
         </div>
