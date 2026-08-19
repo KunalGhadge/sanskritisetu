@@ -5,6 +5,7 @@
     <title>SanskritiSetu MindAR 3D</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
     <style>
       * {
         box-sizing: border-box;
@@ -38,37 +39,6 @@
         z-index: 2 !important;
       }
     </style>
-    <script>
-      // Component to center the model's pivot exactly at (0,0,0) and scale to target
-      AFRAME.registerComponent('auto-center-fit', {
-        schema: { size: { type: 'number', default: 0.75 } },
-        init: function () {
-          this.el.addEventListener('model-loaded', () => {
-            const mesh = this.el.getObject3D('mesh');
-            if (!mesh) return;
-
-            // 1. Calculate true 3D bounding box
-            const box = new THREE.Box3().setFromObject(mesh);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
-
-            // 2. Re-center mesh geometry directly over the target image center (0,0,0)
-            mesh.position.x = -center.x;
-            mesh.position.y = -center.y;
-            mesh.position.z = -center.z + (size.z / 2);
-
-            // 3. Proportional scale normalized to 0.75 of target width
-            const maxDim = Math.max(size.x, size.y, size.z);
-            if (maxDim > 0) {
-              const s = this.data.size / maxDim;
-              this.el.setAttribute('scale', `${s} ${s} ${s}`);
-            }
-
-            console.log('✅ Model centered at target pivot:', { center, size });
-          });
-        }
-      });
-    </script>
   </head>
   <body>
     <a-scene
@@ -83,6 +53,7 @@
         <a-asset-item id="monumentModel" src="./asset.glb"></a-asset-item>
       </a-assets>
 
+      <!-- Ambient & Directional Lighting -->
       <a-entity light="type: ambient; color: #FFFFFF; intensity: 1.8"></a-entity>
       <a-entity light="type: directional; color: #FFF; intensity: 2.4" position="1 4 3"></a-entity>
       <a-entity light="type: directional; color: #CFD8DC; intensity: 1.0" position="-2 -1 1"></a-entity>
@@ -90,12 +61,23 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- 3D Monument perfectly centered and normalized on target image -->
+        <!-- Visual Target Overlay Confirmation -->
+        <a-plane
+          color="#4c35de"
+          opacity="0.35"
+          position="0 0 0"
+          height="0.75"
+          width="1"
+          rotation="0 0 0"
+        ></a-plane>
+
+        <!-- 3D Stone Chariot Model: 65,534 vertex units scaled by 0.00001 = 0.65 units (65% width of target image) -->
         <a-gltf-model
           rotation="90 0 0"
-          position="0 0 0"
+          position="0 0 0.1"
+          scale="0.00001 0.00001 0.00001"
           src="#monumentModel"
-          auto-center-fit="size: 0.75"
+          animation-mixer="loop: repeat"
         ></a-gltf-model>
       </a-entity>
     </a-scene>
