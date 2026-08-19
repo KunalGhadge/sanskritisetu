@@ -163,6 +163,31 @@ export const MarkerModal: React.FC<MarkerModalProps> = ({ isOpen, onClose }) => 
               <span>Print Marker</span>
             </button>
           </div>
+
+          {/* Direct Hosted Browser WebAR Action */}
+          <a
+            href="https://kunalghadge.github.io/stone-chariot-in-hampibg3xmn/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              textDecoration: 'none',
+              background: '#f2efff',
+              border: '1.5px solid #4c35de',
+              color: '#4c35de',
+              borderRadius: '12px',
+              padding: '10px 14px',
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+            }}
+          >
+            <span>Launch Standalone AR Web Portal ↗</span>
+          </a>
         </div>
       </div>
     </div>

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { MonumentData, MONUMENTS } from '../data/monuments';
 import { HeritageImage } from '../components/HeritageImage';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
-import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft, Layers, Sparkles, Shield, Eye } from 'lucide-react';
+import { Camera, QrCode, ArrowLeft, ArrowRight, Compass, Box, CheckCircle2, ChevronLeft, Layers, Sparkles, Shield, Eye, ExternalLink } from 'lucide-react';
+import { STANDALONE_WEBAR_URL } from '../utils/constants';
 
 interface ARExplorerScreenProps {
   currentLanguage: LanguageCode;
@@ -175,18 +176,45 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
             </div>
           </div>
 
-          {/* Bottom Floating Exit Action */}
+          {/* Bottom Floating Exit & External Fallback Action */}
           <div style={{
             position: 'absolute',
             bottom: '18px',
             left: '16px',
             right: '16px',
             zIndex: 50,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
           }}>
+            <a
+              href={STANDALONE_WEBAR_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: 'rgba(24, 28, 50, 0.88)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                borderRadius: '12px',
+                padding: '8px 12px',
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+              }}
+            >
+              <ExternalLink size={14} color="#a5b4fc" />
+              <span>Camera issue? {t.openInBrowserAR} ↗</span>
+            </a>
+
             <button
               onClick={() => setIsCameraActive(false)}
               className="btn-digi-purple"
-              style={{ width: '100%', padding: '14px', fontSize: '0.9rem' }}
+              style={{ width: '100%', padding: '12px', fontSize: '0.88rem' }}
             >
               <span>{t.finishARExploration}</span>
             </button>
@@ -377,6 +405,31 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
                 <Camera size={16} />
                 <span>{t.launchCameraARView}</span>
               </button>
+
+              <a
+                href={STANDALONE_WEBAR_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textDecoration: 'none',
+                  border: '1.5px solid #4c35de',
+                  background: '#f8f7ff',
+                  color: '#4c35de',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '12px 14px',
+                  borderRadius: '14px',
+                  fontWeight: 800,
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(76, 53, 222, 0.08)',
+                }}
+              >
+                <ExternalLink size={16} />
+                <span>{t.openInBrowserAR} ↗</span>
+              </a>
 
               <button
                 onClick={onOpenMarkerModal}

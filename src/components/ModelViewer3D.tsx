@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { RotateCw, Layers, RefreshCw, Box, Compass, Sparkles } from 'lucide-react';
+import { RotateCw, Maximize2, Minimize2, Box, Eye, Layers, Compass, RefreshCw, ExternalLink } from 'lucide-react';
+import { STANDALONE_WEBAR_URL } from '../utils/constants';
 
 interface ModelViewer3DProps {
   modelPath: string;
@@ -351,6 +352,32 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
         }}>
           360° Touch Orbit Active
         </div>
+      </div>
+
+      {/* External Direct AR Fallback Button */}
+      <div style={{ padding: '10px 12px', background: '#101322', borderTop: '1px solid #1e2438', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Issues with 3D model?</span>
+        <a
+          href={STANDALONE_WEBAR_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: '#a5b4fc',
+            textDecoration: 'none',
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            background: 'rgba(76, 53, 222, 0.25)',
+            border: '1px solid rgba(165, 180, 252, 0.3)',
+            padding: '4px 10px',
+            borderRadius: '8px',
+          }}
+        >
+          <ExternalLink size={12} />
+          <span>Launch WebAR in Browser ↗</span>
+        </a>
       </div>
     </div>
   );

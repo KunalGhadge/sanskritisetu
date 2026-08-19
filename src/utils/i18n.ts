@@ -114,6 +114,8 @@ export interface TranslationDict {
   universalPipelineDesc: string;
   launchCameraARView: string;
   viewPrintMarker: string;
+  openInBrowserAR: string;
+  openInBrowserARSub: string;
   alignMarkerHUD: string;
   finishARExploration: string;
   exitARButton: string;
@@ -262,6 +264,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     universalPipelineDesc: 'Universal Sovereign Pipeline: Calibrated with the Universal AR Tracking Anchor for instant classroom and field deployment across all national circles.',
     launchCameraARView: 'Launch Camera AR View',
     viewPrintMarker: 'View / Print AR Tracking Marker',
+    openInBrowserAR: 'Open Direct WebAR in Browser',
+    openInBrowserARSub: 'Standalone hosted scanner for seamless testing',
     alignMarkerHUD: 'Align Marker in Viewfinder',
     finishARExploration: 'Finish AR Exploration',
     exitARButton: 'Exit AR',
@@ -422,6 +426,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     universalPipelineDesc: 'सार्वभौमिक संप्रभु पाइपलाइन: सभी राष्ट्रीय मंडलों में तत्काल प्रदर्शन हेतु सार्वभौमिक एआर ट्रैकिंग एंकर से कैलिब्रेट किया गया।',
     launchCameraARView: 'कैमरा एआर दृश्य शुरू करें',
     viewPrintMarker: 'एआर ट्रैकिंग मार्कर देखें / प्रिंट करें',
+    openInBrowserAR: 'ब्राउज़र में डायरेक्ट वेबएआर खोलें',
+    openInBrowserARSub: 'सुलभ परीक्षण हेतु स्टैंडअलोन होस्टेड स्कैनर',
     alignMarkerHUD: 'व्यूफ़ाइंडर में मार्कर संरेखित करें',
     finishARExploration: 'एआर अन्वेषण समाप्त करें',
     exitARButton: 'एआर से बाहर निकलें',
@@ -582,6 +588,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     universalPipelineDesc: 'सार्वभौम प्रणाली: सर्व राष्ट्रीय मंडळांमध्ये थेट पाहण्यासाठी युनिव्हर्सल एआर ट्रॅकिंग मार्करशी जोडलेले.',
     launchCameraARView: 'कॅमेरा एआर दृश्य सुरू करा',
     viewPrintMarker: 'एआर ट्रॅकिंग मार्कर पहा / प्रिंट करा',
+    openInBrowserAR: 'ब्राउझरमध्ये थेट वेबएआर उघडा',
+    openInBrowserARSub: 'चाचणीसाठी स्वतंत्र होस्ट केलेले स्कॅनर',
     alignMarkerHUD: 'व्ह्यूफाइंडरमध्ये मार्कर जुळवा',
     finishARExploration: 'एआर पाहणी पूर्ण करा',
     exitARButton: 'एआर मधून बाहेर पडा',
@@ -742,6 +750,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     universalPipelineDesc: 'ಸಾರ್ವಭೌಮ ವ್ಯವಸ್ಥೆ: ಎಲ್ಲಾ ರಾಷ್ಟ್ರೀಯ ವೃತ್ತಗಳಲ್ಲಿ ತಕ್ಷಣ ವೀಕ್ಷಿಸಲು ಯುನಿವರ್ಸಲ್ ಎಆರ್ ಮಾರ್ಕರ್‌ನೊಂದಿಗೆ ಸಂಯೋಜಿಸಲಾಗಿದೆ.',
     launchCameraARView: 'ಕ್ಯಾಮೆರಾ ಎಆರ್ ನೋಟ ಪ್ರಾರಂಭಿಸಿ',
     viewPrintMarker: 'ಎಆರ್ ಟ್ರ್ಯಾಕಿಂಗ್ ಮಾರ್ಕರ್ ವೀಕ್ಷಿಸಿ / ಮುದ್ರಿಸಿ',
+    openInBrowserAR: 'ಬ್ರೌಸರ್‌ನಲ್ಲಿ ನೇರ ವೆಬ್‌ಎಆರ್ ತೆರೆಯಿರಿ',
+    openInBrowserARSub: 'ಸುಲಭ ಪರೀಕ್ಷೆಗಾಗಿ ಸ್ವತಂತ್ರ ಸ್ಕ್ಯಾನರ್',
     alignMarkerHUD: 'ವ್ಯೂಫೈಂಡರ್‌ನಲ್ಲಿ ಮಾರ್ಕರ್ ಜೋಡಿಸಿ',
     finishARExploration: 'ಎಆರ್ ಅನ್ವೇಷಣೆ ಪೂರ್ಣಗೊಳಿಸಿ',
     exitARButton: 'ಎಆರ್‌ನಿಂದ ನಿರ್ಗಮಿಸಿ',
@@ -902,6 +912,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     universalPipelineDesc: 'அனைத்து தேசிய வட்டங்களிலும் உடனடியாக காட்சிப்படுத்த யுனிவர்சல் ஏஆர் மார்க்கருடன் இணைக்கப்பட்டுள்ளது.',
     launchCameraARView: 'கேமரா ஏஆர் காட்சியைத் தொடங்கவும்',
     viewPrintMarker: 'ஏஆர் டிராக்கிங் மார்க்கரைக் காண்க / அச்சிடுங்கள்',
+    openInBrowserAR: 'உலாவியில் நேரடி வெப்ஏஆர்-ஐ திறக்கவும்',
+    openInBrowserARSub: 'எளிதான சோதனைக்கான பிரத்யேக ஸ்கேனர்',
     alignMarkerHUD: 'குறிப்பானை திரையில் சீரமைக்கவும்',
     finishARExploration: 'ஏஆர் பார்வையை முடிக்கவும்',
     exitARButton: 'ஏஆர்-லிருந்து வெளியேறு',
