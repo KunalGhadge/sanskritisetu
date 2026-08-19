@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, Volume2, VolumeX, Mic } from 'lucide-react';
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Mic, Headphones, Globe } from 'lucide-react';
 
 interface AudioGuideProps {
   audioData: {
@@ -12,7 +12,7 @@ interface AudioGuideProps {
   monumentName: string;
 }
 
-export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData }) => {
+export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData, monumentName }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [language, setLanguage] = useState<'en' | 'hi'>('en');
   const [activeSentenceIdx, setActiveSentenceIdx] = useState(0);
@@ -33,7 +33,7 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData }) => {
       const textToSpeak = transcript[activeSentenceIdx] || transcript[0];
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
       utterance.lang = language === 'en' ? 'en-IN' : 'hi-IN';
-      utterance.rate = 0.95;
+      utterance.rate = 0.92;
       utterance.pitch = 1.0;
 
       utterance.onend = () => {
@@ -87,225 +87,230 @@ export const AudioGuide: React.FC<AudioGuideProps> = ({ audioData }) => {
   };
 
   return (
-    <div style={{
-      backgroundColor: '#0b1528',
-      borderRadius: '12px',
-      padding: '24px',
-      color: '#ffffff',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-    }}>
-      {/* Header Bar */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '12px',
-        marginBottom: '20px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        paddingBottom: '14px',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '6px',
-            backgroundColor: '#162a45',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#38bdf8',
-          }}>
-            <Mic size={16} />
-          </div>
-          <div>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>
-              Official Audio Archive
-            </h4>
-            <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0 }}>
-              {narrator} • {audioData.duration}
-            </p>
-          </div>
-        </div>
-
-        {/* Language Selector */}
-        <div style={{
-          display: 'flex',
-          backgroundColor: '#162a45',
-          borderRadius: '6px',
-          padding: '2px',
-        }}>
-          <button
-            onClick={() => {
-              window.speechSynthesis.cancel();
-              setLanguage('en');
-              setActiveSentenceIdx(0);
-            }}
-            style={{
-              background: language === 'en' ? '#0b1528' : 'transparent',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '4px',
-              padding: '6px 12px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-          >
-            English
-          </button>
-          <button
-            onClick={() => {
-              window.speechSynthesis.cancel();
-              setLanguage('hi');
-              setActiveSentenceIdx(0);
-            }}
-            style={{
-              background: language === 'hi' ? '#0b1528' : 'transparent',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '4px',
-              padding: '6px 12px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-          >
-            हिन्दी (Hindi)
-          </button>
-        </div>
-      </div>
-
-      {/* Audio Controls */}
-      <div style={{
-        backgroundColor: '#162a45',
-        borderRadius: '8px',
-        padding: '16px',
-        marginBottom: '16px',
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '12px',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <button
-              onClick={togglePlay}
-              style={{
-                width: '42px',
-                height: '42px',
-                borderRadius: '50%',
-                backgroundColor: '#c2902d',
-                color: '#ffffff',
-                border: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              {isPlaying ? <Pause size={18} /> : <Play size={18} style={{ marginLeft: '2px' }} />}
-            </button>
-
-            <button
-              onClick={handleRestart}
-              style={{
-                background: 'rgba(255,255,255,0.08)',
-                border: 'none',
-                color: '#cbd5e1',
-                width: '34px',
-                height: '34px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-              title="Restart"
-            >
-              <RotateCcw size={14} />
-            </button>
-
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* Main Modern Player Card */}
+      <div className="digi-card" style={{ padding: '20px 18px', margin: 0 }}>
+        {/* Header Strip */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '10px',
+              backgroundColor: '#f2efff',
+              color: '#4c35de',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Headphones size={16} />
+            </div>
             <div>
-              <span style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block' }}>
-                {isPlaying ? 'Playing Narration...' : 'Audio Ready'}
+              <span style={{ fontSize: '0.64rem', color: '#8b92ab', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>
+                Voice Archive
               </span>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-                Sentence {activeSentenceIdx + 1} of {transcript.length}
-              </span>
+              <strong style={{ fontSize: '0.8rem', color: '#181c32', fontFamily: 'Outfit, sans-serif' }}>
+                Official Narration
+              </strong>
             </div>
           </div>
 
-          {/* Mute */}
+          {/* Language Toggle Pills */}
+          <div style={{
+            display: 'flex',
+            background: '#f4f5fb',
+            padding: '3px',
+            borderRadius: '12px',
+            border: '1px solid #e6e8f2',
+          }}>
+            <button
+              onClick={() => {
+                window.speechSynthesis.cancel();
+                setLanguage('en');
+                setActiveSentenceIdx(0);
+              }}
+              style={{
+                padding: '4px 10px',
+                borderRadius: '9px',
+                border: 'none',
+                fontSize: '0.7rem',
+                fontWeight: 800,
+                background: language === 'en' ? '#4c35de' : 'transparent',
+                color: language === 'en' ? '#ffffff' : '#8b92ab',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              English
+            </button>
+            <button
+              onClick={() => {
+                window.speechSynthesis.cancel();
+                setLanguage('hi');
+                setActiveSentenceIdx(0);
+              }}
+              style={{
+                padding: '4px 10px',
+                borderRadius: '9px',
+                border: 'none',
+                fontSize: '0.7rem',
+                fontWeight: 800,
+                background: language === 'hi' ? '#4c35de' : 'transparent',
+                color: language === 'hi' ? '#ffffff' : '#8b92ab',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              हिंदी
+            </button>
+          </div>
+        </div>
+
+        {/* Animated Waveform Equalizer */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '4px',
+          height: '36px',
+          background: '#f8f9fe',
+          borderRadius: '14px',
+          padding: '0 16px',
+          marginBottom: '16px',
+          border: '1px solid #eceef5',
+        }}>
+          {[14, 24, 18, 30, 20, 28, 16, 26, 18, 22, 12, 28, 18, 24, 16].map((height, i) => (
+            <div
+              key={i}
+              style={{
+                width: '3px',
+                height: isPlaying ? `${Math.max(6, (height + (i % 3) * 4) * (0.5 + Math.random() * 0.5))}px` : `${Math.max(4, height * 0.3)}px`,
+                backgroundColor: isPlaying ? '#4c35de' : '#d1d5e5',
+                borderRadius: '3px',
+                transition: 'height 0.15s ease',
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Progress Bar */}
+        <div style={{ marginBottom: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', color: '#8b92ab', marginBottom: '4px', fontWeight: 600 }}>
+            <span>Sentence {activeSentenceIdx + 1} of {transcript.length}</span>
+            <span>{progress}%</span>
+          </div>
+          <div style={{ width: '100%', height: '5px', background: '#eceef5', borderRadius: '3px', overflow: 'hidden' }}>
+            <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #4c35de 0%, #684bf8 100%)', transition: 'width 0.25s ease' }} />
+          </div>
+        </div>
+
+        {/* Player Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
           <button
-            onClick={() => setIsMuted(!isMuted)}
+            onClick={handleRestart}
+            title="Restart Audio"
             style={{
-              background: 'none',
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              backgroundColor: '#f4f5fb',
               border: 'none',
-              color: isMuted ? '#ef4444' : '#cbd5e1',
+              color: '#4b526d',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               cursor: 'pointer',
             }}
           >
-            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            <RotateCcw size={16} />
+          </button>
+
+          <button
+            onClick={togglePlay}
+            style={{
+              width: '54px',
+              height: '54px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #4c35de 0%, #644bf5 100%)',
+              border: 'none',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 8px 20px rgba(76, 53, 222, 0.35)',
+              transform: 'scale(1)',
+              transition: 'transform 0.12s ease',
+            }}
+          >
+            {isPlaying ? <Pause size={22} /> : <Play size={22} style={{ marginLeft: '2px' }} />}
+          </button>
+
+          <button
+            onClick={() => setIsMuted(!isMuted)}
+            title={isMuted ? "Unmute" : "Mute"}
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              backgroundColor: '#f4f5fb',
+              border: 'none',
+              color: isMuted ? '#ef4444' : '#4b526d',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
           </button>
         </div>
 
-        {/* Progress */}
-        <div style={{
-          width: '100%',
-          height: '4px',
-          backgroundColor: 'rgba(255,255,255,0.1)',
-          borderRadius: '2px',
-          overflow: 'hidden',
-          marginTop: '12px',
-        }}>
-          <div style={{
-            height: '100%',
-            width: `${progress}%`,
-            backgroundColor: '#c2902d',
-            transition: 'width 0.2s linear',
-          }} />
+        {/* Narrator Attribution */}
+        <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '0.68rem', color: '#8b92ab' }}>
+          Voice Synthesizer: <strong style={{ color: '#181c32' }}>{narrator}</strong>
         </div>
       </div>
 
-      {/* Transcript */}
-      <div>
-        <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+      {/* Interactive Transcripts List */}
+      <div className="digi-card" style={{ padding: '16px', margin: 0 }}>
+        <h4 style={{ fontSize: '0.84rem', fontWeight: 800, color: '#181c32', marginBottom: '10px', fontFamily: 'Outfit, sans-serif' }}>
           Interactive Synced Transcript
-        </span>
+        </h4>
 
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '6px',
-          maxHeight: '160px',
-          overflowY: 'auto',
-        }}>
-          {transcript.map((line, index) => {
-            const isActive = index === activeSentenceIdx && isPlaying;
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {transcript.map((sentence, idx) => {
+            const isActive = activeSentenceIdx === idx && isPlaying;
             return (
               <div
-                key={index}
-                onClick={() => handleSentenceClick(index)}
+                key={idx}
+                onClick={() => handleSentenceClick(idx)}
                 style={{
-                  padding: '8px 12px',
-                  borderRadius: '6px',
-                  backgroundColor: isActive ? '#1e3a5f' : 'rgba(255, 255, 255, 0.03)',
-                  color: isActive ? '#ffffff' : '#cbd5e1',
-                  fontSize: '0.82rem',
-                  lineHeight: 1.4,
+                  padding: '10px 12px',
+                  borderRadius: '12px',
+                  background: isActive ? '#f2efff' : '#f8f9fe',
+                  border: isActive ? '1.5px solid #4c35de' : '1px solid #eceef5',
                   cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '8px',
+                  transition: 'all 0.15s ease',
                 }}
               >
-                <span style={{ color: isActive ? '#38bdf8' : '#64748b', fontSize: '0.72rem', fontWeight: 700 }}>
-                  0{index + 1}
-                </span>
-                <span>{line}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px', fontSize: '0.64rem' }}>
+                  <span style={{ color: isActive ? '#4c35de' : '#8b92ab', fontWeight: 700 }}>
+                    Line {idx + 1}
+                  </span>
+                  {isActive && (
+                    <span style={{ color: '#4c35de', fontWeight: 800 }}>● Active Speaking</span>
+                  )}
+                </div>
+                <p style={{
+                  fontSize: '0.78rem',
+                  color: isActive ? '#181c32' : '#4b526d',
+                  margin: 0,
+                  lineHeight: 1.4,
+                  fontWeight: isActive ? 600 : 400,
+                }}>
+                  {sentence}
+                </p>
               </div>
             );
           })}

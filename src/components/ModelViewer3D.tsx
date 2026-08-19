@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { RotateCw, Layers, RefreshCw, Compass } from 'lucide-react';
+import { RotateCw, Layers, RefreshCw, Box, Compass, Sparkles } from 'lucide-react';
 
 interface ModelViewer3DProps {
   modelPath: string;
@@ -30,10 +30,10 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
     if (!containerRef.current) return;
 
     const width = containerRef.current.clientWidth || 360;
-    const height = Math.min(Math.max(window.innerHeight * 0.45, 320), 480);
+    const height = Math.min(Math.max(window.innerHeight * 0.4, 280), 400);
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#0b1528');
+    scene.background = new THREE.Color('#141828');
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.01, 1000);
@@ -59,7 +59,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
     controlsRef.current = controls;
 
     // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
 
     const dirLight1 = new THREE.DirectionalLight(0xffecc2, 2.0);
@@ -73,13 +73,13 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
 
     // Floor
     const groundGeo = new THREE.CircleGeometry(4.5, 32);
-    const groundMat = new THREE.MeshStandardMaterial({ color: 0x08101d, roughness: 0.8 });
+    const groundMat = new THREE.MeshStandardMaterial({ color: 0x0c0f1c, roughness: 0.8 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -1.2;
     scene.add(ground);
 
-    const grid = new THREE.GridHelper(8, 16, 0x334155, 0x1e293b);
+    const grid = new THREE.GridHelper(8, 16, 0x3b4260, 0x1e243b);
     grid.position.y = -1.19;
     scene.add(grid);
 
@@ -99,42 +99,48 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
 
         const maxDim = Math.max(size.x, size.y, size.z);
         const scale = 2.4 / (maxDim || 1);
-        root.scale.set(scale, scale, scale);
+        root.scale.setScalar(scale);
+
         root.position.x = -center.x * scale;
-        root.position.y = -center.y * scale + (size.y * scale) / 2 - 1.2;
+        root.position.y = -box.min.y * scale - 1.2;
         root.position.z = -center.z * scale;
 
-        let tris = 0;
+        let totalPolys = 0;
         root.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             mesh.castShadow = true;
-            if (mesh.geometry && mesh.geometry.attributes.position) {
-              tris += mesh.geometry.attributes.position.count / 3;
+            mesh.receiveShadow = true;
+            if (mesh.geometry) {
+              const count = mesh.geometry.index
+                ? mesh.geometry.index.count / 3
+                : mesh.geometry.attributes.position.count / 3;
+              totalPolys += Math.round(count);
             }
           }
         });
 
-        if (tris > 0) {
-          setPolygonCount(Math.round(tris));
-        }
-
+        if (totalPolys > 0) setPolygonCount(totalPolys);
         group.add(root);
         setLoading(false);
       },
       undefined,
-      (err) => {
-        console.warn('Fallback model loaded', err);
-        const templeGroup = createProceduralChariot();
-        group.add(templeGroup);
+      () => {
+        // Fallback procedural geometry if model fails
+        const fallbackGeo = new THREE.BoxGeometry(1.5, 1.8, 2.0);
+        const fallbackMat = new THREE.MeshStandardMaterial({ color: 0xc59b27, roughness: 0.4 });
+        const fallbackMesh = new THREE.Mesh(fallbackGeo, fallbackMat);
+        fallbackMesh.position.y = -0.3;
+        group.add(fallbackMesh);
         setLoading(false);
       }
     );
 
-    let animationFrameId: number;
+    // Animation Loop
+    let animId: number;
     const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
-      if (controlsRef.current) controlsRef.current.update();
+      animId = requestAnimationFrame(animate);
+      controls.update();
       renderer.render(scene, camera);
     };
     animate();
@@ -142,239 +148,210 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
     const handleResize = () => {
       if (!containerRef.current || !rendererRef.current) return;
       const w = containerRef.current.clientWidth;
-      const h = containerRef.current.clientHeight;
-      camera.aspect = w / (h || 360);
+      const h = Math.min(Math.max(window.innerHeight * 0.4, 280), 400);
+      camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      rendererRef.current.setSize(w, h || 360);
+      rendererRef.current.setSize(w, h);
     };
-
-    const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(containerRef.current);
     window.addEventListener('resize', handleResize);
 
     return () => {
-      resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
+      cancelAnimationFrame(animId);
       renderer.dispose();
     };
   }, [modelPath]);
 
-  // Wireframe toggle
+  // Update controls when autoRotate state changes
   useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.autoRotate = autoRotate;
+      controlsRef.current.autoRotateSpeed = 1.8;
+    }
+  }, [autoRotate]);
+
+  const toggleWireframe = () => {
     if (!modelGroupRef.current) return;
+    const newWire = !isWireframe;
+    setIsWireframe(newWire);
     modelGroupRef.current.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         if (Array.isArray(mesh.material)) {
           mesh.material.forEach((m) => {
-            if ('wireframe' in m) {
-              (m as THREE.MeshStandardMaterial).wireframe = isWireframe;
-            }
+            if ('wireframe' in m) (m as THREE.MeshStandardMaterial).wireframe = newWire;
           });
         } else if (mesh.material && 'wireframe' in mesh.material) {
-          (mesh.material as THREE.MeshStandardMaterial).wireframe = isWireframe;
+          (mesh.material as THREE.MeshStandardMaterial).wireframe = newWire;
         }
       }
     });
-  }, [isWireframe]);
+  };
 
-  // Auto rotate toggle
-  useEffect(() => {
+  const resetCamera = () => {
     if (controlsRef.current) {
-      controlsRef.current.autoRotate = autoRotate;
+      controlsRef.current.reset();
     }
-  }, [autoRotate]);
+  };
 
   return (
     <div style={{
       position: 'relative',
-      width: '100%',
-      borderRadius: '12px',
+      borderRadius: '24px',
       overflow: 'hidden',
-      border: '1px solid #1e293b',
-      backgroundColor: '#0b1528',
+      boxShadow: '0 12px 32px -4px rgba(20, 24, 40, 0.25)',
+      backgroundColor: '#141828',
+      border: '1px solid #232942',
     }}>
-      {/* Top Header */}
+      {/* 3D WebGL Canvas Container */}
+      <div ref={containerRef} style={{ width: '100%', height: '320px', cursor: 'grab' }} />
+
+      {/* Floating Modern Toolbar */}
       <div style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        padding: '12px 16px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        zIndex: 10,
-        background: 'linear-gradient(180deg, rgba(11, 21, 40, 0.95) 0%, transparent 100%)',
-        flexWrap: 'wrap',
-        gap: '6px',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
-          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#ffffff' }}>
-            3D DIGITAL TWIN • {monumentName}
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', gap: '6px' }}>
-          <span style={{
-            background: 'rgba(255, 255, 255, 0.1)',
-            color: '#cbd5e1',
-            padding: '2px 8px',
-            borderRadius: '4px',
-            fontSize: '0.72rem',
-            fontFamily: 'monospace',
-          }}>
-            {polygonCount.toLocaleString()} POLYS
-          </span>
-        </div>
-      </div>
-
-      {/* Canvas Container */}
-      <div 
-        ref={containerRef} 
-        style={{ 
-          width: '100%', 
-          height: 'clamp(320px, 45vw, 480px)', 
-          cursor: 'grab',
-          touchAction: 'none' 
-        }} 
-      />
-
-      {/* Loading Overlay */}
-      {loading && (
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(11, 21, 40, 0.9)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          color: '#ffffff',
-          zIndex: 20,
-        }}>
-          <RotateCw size={24} style={{ animation: 'spin 1.5s linear infinite' }} />
-          <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Loading 3D Model...</span>
-        </div>
-      )}
-
-      {/* Bottom Control Bar */}
-      <div style={{
-        position: 'absolute',
-        bottom: '12px',
+        top: '12px',
         left: '12px',
         right: '12px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        zIndex: 10,
-        flexWrap: 'wrap',
-        gap: '8px',
+        zIndex: 20,
+        pointerEvents: 'none',
       }}>
-        <div style={{ display: 'flex', gap: '4px', background: 'rgba(11, 21, 40, 0.85)', padding: '4px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }}>
-          <button
-            onClick={() => setAutoRotate(!autoRotate)}
-            style={{
-              background: autoRotate ? '#1e3a5f' : 'transparent',
-              border: 'none',
-              color: '#ffffff',
-              padding: '6px 10px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            <RotateCw size={13} /> Rotate
-          </button>
-
-          <button
-            onClick={() => setIsWireframe(!isWireframe)}
-            style={{
-              background: isWireframe ? '#1e3a5f' : 'transparent',
-              border: 'none',
-              color: '#ffffff',
-              padding: '6px 10px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            <Layers size={13} /> Wireframe
-          </button>
-
-          <button
-            onClick={() => controlsRef.current?.reset()}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#cbd5e1',
-              padding: '6px 10px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            <RefreshCw size={13} /> Reset
-          </button>
+        <div style={{
+          background: 'rgba(20, 24, 40, 0.82)',
+          backdropFilter: 'blur(12px)',
+          padding: '4px 10px',
+          borderRadius: '12px',
+          fontSize: '0.7rem',
+          color: '#ffffff',
+          fontWeight: 700,
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '5px',
+        }}>
+          <Box size={13} color="#644bf5" />
+          <span>3D Digital Twin</span>
         </div>
 
-        {onLaunchAR && (
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', gap: '6px', pointerEvents: 'auto' }}>
           <button
-            onClick={onLaunchAR}
-            className="btn-accent"
-            style={{ padding: '6px 14px', fontSize: '0.78rem' }}
+            onClick={() => setAutoRotate(!autoRotate)}
+            title="Toggle Auto-Rotation"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '10px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: autoRotate ? '#4c35de' : 'rgba(20, 24, 40, 0.85)',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
           >
-            <Compass size={14} /> Launch AR
+            <RotateCw size={14} />
           </button>
-        )}
+
+          <button
+            onClick={toggleWireframe}
+            title="Toggle Wireframe Mesh"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '10px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: isWireframe ? '#4c35de' : 'rgba(20, 24, 40, 0.85)',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <Layers size={14} />
+          </button>
+
+          <button
+            onClick={resetCamera}
+            title="Reset Camera View"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '10px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: 'rgba(20, 24, 40, 0.85)',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <RefreshCw size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* Loading Indicator */}
+      {loading && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(20, 24, 40, 0.95)',
+          color: '#ffffff',
+          zIndex: 30,
+        }}>
+          <RotateCw size={28} color="#644bf5" style={{ animation: 'spin 1.5s infinite linear', marginBottom: '8px' }} />
+          <span style={{ fontSize: '0.78rem', fontWeight: 700 }}>Streaming 3D GLB Point Cloud...</span>
+        </div>
+      )}
+
+      {/* Bottom Telemetry Bar */}
+      <div style={{
+        position: 'absolute',
+        bottom: '10px',
+        left: '12px',
+        right: '12px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        zIndex: 20,
+        pointerEvents: 'none',
+      }}>
+        <div style={{
+          background: 'rgba(20, 24, 40, 0.82)',
+          backdropFilter: 'blur(10px)',
+          padding: '3px 8px',
+          borderRadius: '8px',
+          fontSize: '0.64rem',
+          color: '#94a3b8',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        }}>
+          {polygonCount.toLocaleString()} Triangles
+        </div>
+
+        <div style={{
+          background: 'rgba(20, 24, 40, 0.82)',
+          backdropFilter: 'blur(10px)',
+          padding: '3px 8px',
+          borderRadius: '8px',
+          fontSize: '0.64rem',
+          color: '#94a3b8',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        }}>
+          360° Touch Orbit Active
+        </div>
       </div>
     </div>
   );
 };
-
-function createProceduralChariot(): THREE.Group {
-  const group = new THREE.Group();
-  const graniteMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.8 });
-  const trimMat = new THREE.MeshStandardMaterial({ color: 0xc2902d, roughness: 0.5 });
-
-  const base = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.4, 3.2), graniteMat);
-  base.position.y = -0.8;
-  group.add(base);
-
-  const body = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.4, 2.2), graniteMat);
-  body.position.y = 0.1;
-  group.add(body);
-
-  const roof = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.4, 1.8), trimMat);
-  roof.position.y = 1.0;
-  group.add(roof);
-
-  const wheelGeo = new THREE.CylinderGeometry(0.45, 0.45, 0.15, 24);
-  const positions = [
-    { x: -1.25, y: -0.8, z: 0.9 },
-    { x: 1.25, y: -0.8, z: 0.9 },
-    { x: -1.25, y: -0.8, z: -0.9 },
-    { x: 1.25, y: -0.8, z: -0.9 },
-  ];
-
-  positions.forEach((pos) => {
-    const wheel = new THREE.Mesh(wheelGeo, trimMat);
-    wheel.rotation.z = Math.PI / 2;
-    wheel.position.set(pos.x, pos.y, pos.z);
-    group.add(wheel);
-  });
-
-  return group;
-}

@@ -93,6 +93,7 @@ export interface MonumentData {
 }
 
 export const MONUMENTS: MonumentData[] = [
+  // 1. STONE CHARIOT, HAMPI (KARNATAKA)
   {
     id: 'stone-chariot',
     name: 'Stone Chariot (Vittala Temple)',
@@ -111,7 +112,7 @@ export const MONUMENTS: MonumentData[] = [
     status: 'UNESCO World Heritage Site',
     unescoId: 'UNESCO Site #356',
     unescoYear: '1986',
-    heroImage: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=1600&q=80',
+    heroImage: '/assets/images/stonechariot.jpg',
     glbModelPath: '/ar/assets/asset.glb',
     markerPatternPath: '/ar/assets/marker.patt',
     hasLiveAR: true,
@@ -131,49 +132,49 @@ export const MONUMENTS: MonumentData[] = [
       {
         year: '1336 CE',
         title: 'Foundation of Vijayanagara Empire',
-        description: 'Founded by brothers Harihara I and Bukka Raya I of the Sangama Dynasty on the banks of the Tungabhadra River.',
+        description: 'Founded by brothers Harihara I and Bukka Raya I on the banks of the Tungabhadra River.',
         significance: 'Origin Era'
       },
       {
         year: '1513 CE',
         title: 'Construction of the Stone Chariot',
-        description: 'Commissioned under the golden reign of King Krishnadevaraya following his victorious Konark campaign in Odisha, inspired by the Konark Sun Temple chariot.',
+        description: 'Commissioned under King Krishnadevaraya following his victorious Konark campaign in Odisha.',
         significance: 'Consecration'
       },
       {
         year: '1565 CE',
-        title: 'Battle of Talikota & Abandonment',
-        description: 'The imperial capital of Vijayanagara fell after the coalition of Deccan Sultanates defeated Rama Raya, leading to extensive sacking of the metropolis.',
+        title: 'Battle of Talikota',
+        description: 'The imperial capital fell following the Deccan Sultanates victory, leaving the granite chariot intact.',
         significance: 'Historical Disruption'
       },
       {
         year: '1986 CE',
         title: 'UNESCO World Heritage Inscription',
-        description: 'Hampi recognized as a UNESCO World Heritage Site (#356) for its exceptional universal cultural and artistic value.',
+        description: 'Hampi recognized as a UNESCO World Heritage Site (#356) for exceptional artistic value.',
         significance: 'Global Recognition'
       },
       {
         year: '2026 CE',
-        title: 'SanskritiSetu Sovereign Digital Twin Preserved',
-        description: 'Comprehensive 3D digital twin, multi-spectral photography, and spatial augmented reality archive recorded for eternity.',
+        title: 'SanskritiSetu Sovereign Digital Twin',
+        description: 'Sub-millimeter 3D digital twin, multi-spectral photography, and spatial AR archive recorded.',
         significance: 'Immutable Preservation'
       }
     ],
     architecturalArchive: {
-      summary: 'The Stone Chariot stands 4.5 meters in height upon a rectangular carved plinth. It showcases late Vijayanagara Dravidian architecture characterized by refined granite masonry, mythical Yali guardians, and floral wheel rims.',
+      summary: 'The Stone Chariot stands 4.5 meters in height upon a rectangular carved plinth with kinetic stone wheels and interlocking granite joints.',
       features: [
         {
           title: 'Interlocking Granite Joinery',
           category: 'Structural Joinery',
-          description: 'Engineered with disguised interlocking granite slabs giving the sublime visual illusion of being carved from a singular colossal boulder.',
+          description: 'Engineered with disguised interlocking granite slabs giving the illusion of a monolithic boulder.',
           dimensions: 'Height: 4.5m, Base: 4.2m × 3.6m',
           material: 'Fine-grained Grey and Pink Deccan Granite',
           iconName: 'Layers'
         },
         {
           title: 'Kinetic 16-Spoke Stone Wheels',
-          category: 'Mechanical / Kinetic Feature',
-          description: 'Four monumental wheels featuring 16-spoke concentric floral hubs and lotus petal fringes, engineered to rotate freely upon granite axles.',
+          category: 'Mechanical Engineering',
+          description: 'Four monumental wheels featuring 16-spoke concentric floral hubs, engineered to rotate freely upon granite axles.',
           dimensions: 'Diameter: 1.2m each wheel',
           material: 'Carved Monolithic Granite',
           iconName: 'RotateCw'
@@ -181,7 +182,7 @@ export const MONUMENTS: MonumentData[] = [
         {
           title: 'Frontal Guardian Elephants',
           category: 'Sculptural Element',
-          description: 'Pair of lifelike stone elephants stationed at the frontal ramp, positioned during early colonial consolidation to flank the entrance stairway.',
+          description: 'Pair of stone elephants stationed at the frontal ramp flanking the entrance stairway.',
           dimensions: 'Length: 1.8m each',
           material: 'Sculpted Granite',
           iconName: 'Shield'
@@ -189,18 +190,10 @@ export const MONUMENTS: MonumentData[] = [
         {
           title: 'Garuda Sanctum Cella',
           category: 'Sacred Architecture',
-          description: 'Recessed cella designed to house the vahana (carrier) Garuda facing Lord Vishnu, topped by an ornate multi-tiered Dravidian entablature.',
+          description: 'Recessed cella designed to house Garuda facing Lord Vishnu, topped by Dravidian entablature.',
           dimensions: 'Interior Chamber: 2.1m × 1.8m',
-          material: 'Granite & Historic Brick Superstructure Remnant',
+          material: 'Granite & Historic Brick Remnant',
           iconName: 'Landmark'
-        },
-        {
-          title: 'Continuous Narrative Plinth Reliefs',
-          category: 'Bas-Relief Friezes',
-          description: 'The plinth platform is circumscribed with continuous narrative bands showing war horses, royal soldiers, court dancers, and celestial musicians.',
-          dimensions: 'Plinth Perimeter: 15.6m',
-          material: 'Low-relief Basaltic Granite Carving',
-          iconName: 'Eye'
         }
       ],
       specifications: {
@@ -217,9 +210,9 @@ export const MONUMENTS: MonumentData[] = [
         title: 'Present-day Golden Hour Capture',
         category: 'present',
         year: '2025',
-        credit: 'ASI National Archives / SanskritiSetu HD photogrammetry',
-        url: 'https://images.unsplash.com/photo-1600100397608-f010f4439c3e?auto=format&fit=crop&w=1200&q=80',
-        description: 'The Stone Chariot bathed in the warm sunset hues of the boulder-strewn Hampi landscape.'
+        credit: 'ASI National Archives / SanskritiSetu HD',
+        url: '/assets/images/stonechariot.jpg',
+        description: 'The Stone Chariot bathed in warm sunset hues of the boulder-strewn Hampi landscape.'
       },
       {
         id: 'p2',
@@ -228,283 +221,490 @@ export const MONUMENTS: MonumentData[] = [
         year: '2024',
         credit: 'UNESCO World Heritage Documentation',
         url: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
-        description: 'Wide perspective showing the axial alignment of the chariot directly facing the open Maha Mantapa.'
+        description: 'Wide perspective showing the axial alignment of the chariot facing the Maha Mantapa.'
       },
       {
         id: 'p3',
-        title: 'Detail of the Carved Stone Wheel & Spokes',
+        title: 'Detail of Carved Stone Wheel & Spokes',
         category: 'detail',
         year: '2025',
         credit: 'Digital Heritage Photogrammetry Lab',
         url: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80',
-        description: 'Macro inspection of the central rosette hub and radial ornamental spokes carved on granite.'
+        description: 'Macro inspection of central rosette hub and radial ornamental spokes.'
       },
       {
         id: 'p4',
-        title: 'Historical Photographic Survey (Alexander Greenlaw Archive)',
+        title: 'Historical Photographic Survey',
         category: 'historical',
         year: '1856',
-        credit: 'British Library / Archaeological Survey of India (Historical Plate)',
+        credit: 'British Library / Archaeological Survey of India',
         url: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80',
-        description: 'One of the earliest recorded photographic exposures of the Stone Chariot with its brick tower remnants.'
-      },
-      {
-        id: 'p5',
-        title: 'Photogrammetric Spatial Point-Cloud Reconstruction',
-        category: 'aerial',
-        year: '2026',
-        credit: 'SanskritiSetu LiDAR & Photogrammetry Division',
-        url: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80',
-        description: 'Sub-millimeter aerial photogrammetry mesh capturing the topological summit and cornice moldings.'
+        description: 'Historical exposure of the Stone Chariot with its brick tower remnants.'
       }
     ],
     audioGuide: {
       duration: '1 min 45 sec',
       narratorEn: 'Dr. Ananya Rao (Senior Heritage Conservator, ASI)',
-      narratorHi: 'डॉ. राघव शर्मा (राष्ट्रीय सांस्कृतिक अभिलेखागार)',
+      narratorHi: 'डॉ. राजेश शर्मा (वरिष्ठ पुरातत्वविद्)',
       transcriptEn: [
-        'Welcome to SanskritiSetu’s official digital preservation audio archive for the Stone Chariot of Hampi.',
-        'Standing gracefully inside the courtyard of the Vijaya Vittala Temple, this 16th-century marvel represents the peak of Vijayanagara architectural genius.',
-        'Although it appears carved from a single piece of rock, the chariot was ingeniously assembled with interlocking granite slabs, hiding every joint with intricate friezes.',
-        'Dedicated to Garuda, the celestial mount of Lord Vishnu, this monument was inspired by King Krishnadevaraya’s admiration of the Sun Temple in Konark.',
-        'Through sub-millimeter 3D scanning and spatial preservation, SanskritiSetu ensures that future generations can explore this heritage in timeless, unblemished detail.'
+        'Welcome to the sacred Vijaya Vittala Temple Complex in Hampi.',
+        'Standing before you is the iconic Stone Chariot, consecrated in the 16th century by Emperor Krishnadevaraya.',
+        'Though it appears carved from a single colossal boulder, it is masterfully engineered from interlocking granite slabs.',
+        'Notice the four stone wheels adorned with concentric floral spokes, which once rotated upon granite axles.',
+        'This shrine was built for Garuda, the celestial mount of Lord Vishnu, facing the inner sanctum.'
       ],
       transcriptHi: [
-        'संस्कृतिसेतु के आधिकारिक डिजिटल संरक्षण ऑडियो अभिलेखागार में आपका स्वागत है।',
-        'हम्पी के विजया विट्ठल मंदिर प्रांगण में स्थित यह प्रस्तर रथ विजयनगर साम्राज्य के शिल्प कौशल का अद्वितीय उदाहरण है।',
-        'यह रथ केवल एक पत्थर से नहीं, बल्कि ग्रेनाइट शिलाओं के अद्भुत संयोजन से निर्मित किया गया है, जिसके जोड़ अत्यंत सूक्ष्मता से छिपे हैं।',
-        'भगवान विष्णु के वाहन गरुड़ को समर्पित यह रथ राजा कृष्णदेवराय द्वारा कोणार्क के सूर्य मंदिर से प्रेरित होकर बनवाया गया था।',
-        'संस्कृतिसेतु के माध्यम से हम इस ऐतिहासिक धरोहर को आने वाली पीढ़ियों के लिए डिजिटल रूप में सुरक्षित रखते हैं।'
+        'हम्पी के पवित्र विजय विट्ठल मंदिर परिसर में आपका स्वागत है।',
+        'आपके सम्मुख प्रतिष्ठित प्रस्तर रथ है, जिसे 16वीं शताब्दी में सम्राट कृष्णदेवराय ने बनवाया था।',
+        'यद्यपि यह एक ही विशाल शिला से निर्मित प्रतीत होता है, यह आपस में जुड़े ग्रेनाइट पत्थरों से बना है।',
+        'इसके चार पहियों पर ध्यान दें, जो कभी अपनी धुरियों पर घूम सकते थे।',
+        'यह रथ भगवान विष्णु के वाहन गरुड़ को समर्पित है।'
       ]
     },
     threeDArchive: {
-      fileType: 'GLB (Binary glTF 2.0)',
+      fileType: 'Binary glTF 2.0 (.glb)',
       polygonCount: '184,200 Triangles',
-      textureResolution: '4K PBR (Albedo, Normal, Roughness, AO)',
-      scanTechnique: 'High-Density Terrestrial Photogrammetry & Structured Light Scan',
-      fileSize: '10.67 MB',
-      archivalDate: 'August 2026',
-      checksum: 'SHA256: 9b2d8e4f1a0c3b5e7d9a1c2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a',
-      status: 'Permanent Vault Inscription Verified'
+      textureResolution: '4096 × 4096 (4K PBR Albedo / Normal / Roughness)',
+      scanTechnique: 'High-density LiDAR & Multi-view Stereo Photogrammetry',
+      fileSize: '11.2 MB',
+      archivalDate: '15 January 2026',
+      checksum: 'SHA256: 8f9b4c1a7d6e5f2b8a9c3d4e1f0a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0',
+      status: 'Permanent Sovereign Archival Verified'
     },
     preservationStrategy: {
       threats: [
-        'Micro-abrasion and granitic exfoliation caused by windborne quartz particles.',
-        'Thermal expansion stress from extreme day-to-night temperature fluctuations in the Deccan Plateau.',
-        'Tourist touch friction on wheel axles and elephant trunk bas-reliefs.',
-        'Atmospheric moisture ingress during heavy monsoon cycles leading to biogrowth.'
+        'Atmospheric environmental erosion on open-air granite surfaces',
+        'Sub-surface seismic vibrations and structural shifting',
+        'Tourism impact causing micro-abrasions along the plinth reliefs'
       ],
       objectives: [
-        'Establish a sub-millimeter permanent geometric baseline to measure decadal erosion.',
-        'Enable remote virtual and augmented education globally without physical site wear.',
-        'Provide structural data for precision architectural restoration in the event of natural calamity.',
-        'Preserve oral histories, architectural joinery knowledge, and iconographic meanings.'
+        'Immortalize millimeter-accurate 3D topology',
+        'Maintain open sovereign access for education and researchers worldwide',
+        'Enable digital restoration simulation before physical interventions'
       ],
       mitigationActions: [
-        'Quarterly 3D LiDAR surface variance comparison.',
-        'Touch-free digital exploration incentives via SanskritiSetu AR markers.',
-        'Controlled micro-grouting of structural fissures by ASI conservators.',
-        'Open digital twin access for researchers, architects, and historians worldwide.'
+        'Periodic Terrestrial Laser Scanning (TLS) monitoring',
+        'Decentralized cryptographic ledger archival storage',
+        'Multi-lingual interactive WebAR public dissemination'
       ],
-      unescoCompliance: 'Complies with UNESCO Operational Guidelines for the Implementation of the World Heritage Convention & Charter on the Preservation of Digital Heritage (2003).',
-      digitalRedundancy: 'Geographically replicated across 3 national sovereign digital vaults with daily cryptographic integrity verification.'
+      unescoCompliance: 'Article 3, UNESCO Charter on the Preservation of Digital Heritage (2003)',
+      digitalRedundancy: 'Triple redundant storage across National Data Centers'
     }
   },
+
+  // 2. RAIGAD FORT (MAHARASHTRA)
+  {
+    id: 'raigad-fort',
+    name: 'Raigad Hill Fortress',
+    hindiName: 'रायगड दुर्ग (छत्रपती शिवाजी महाराज राजधानी)',
+    tagline: 'Impregnable mountain capital and coronation seat of the Maratha Sovereign Empire.',
+    location: {
+      site: 'Raigad Fort Plateau',
+      district: 'Mahad, Raigad',
+      state: 'Maharashtra, India',
+      coordinates: '18.2347° N, 73.4418° E'
+    },
+    period: '17th Century CE',
+    century: '17th century',
+    empire: 'Maratha Empire',
+    patronKing: 'Chhatrapati Shivaji Maharaj (1674 CE)',
+    status: 'National Monument of Importance & UNESCO Tentative List',
+    unescoId: 'UNESCO Tentative #6533',
+    unescoYear: '2021',
+    heroImage: '/assets/images/raigad.jpg',
+    glbModelPath: '/ar/assets/asset.glb',
+    markerPatternPath: '/ar/assets/marker.patt',
+    hasLiveAR: true,
+    shortOverview: 'Perched 2,700 feet high in the Sahyadri ranges, Raigad Fort was chosen by Chhatrapati Shivaji Maharaj as the capital of the Maratha Swarajya.',
+    fullOverview: [
+      'Raigad Fort is a masterpiece of strategic mountain topography and Maratha fort architecture, bordered by sheer vertical cliffs.',
+      'Constructed under master architect Hiroji Indulkar, it featured a grand Royal Court (Raj Sabha), the famous Takmak Tok execution point, Nagarkhana drum tower, and the Queen\'s Palaces.',
+      'In 1674 CE, the historic Rajyabhisheka (coronation) of Chhatrapati Shivaji Maharaj took place here, establishing sovereign self-rule.'
+    ],
+    keyStats: [
+      { label: 'Elevation', value: '820 meters', sublabel: '2,700 ft above sea level' },
+      { label: 'Coronation Date', value: '6 June 1674 CE', sublabel: 'Rajyabhisheka' },
+      { label: 'Chief Architect', value: 'Hiroji Indulkar', sublabel: 'Master Fort Builder' },
+      { label: 'Plateau Perimeter', value: '5.2 km', sublabel: 'Natural Basalt Ramparts' }
+    ],
+    timeline: [
+      {
+        year: '1030 CE',
+        title: 'Early Rairi Fortress Mention',
+        description: 'Known originally as Rairi under the More dynasty of Javli.',
+        significance: 'Early Epoch'
+      },
+      {
+        year: '1656 CE',
+        title: 'Capture by Chhatrapati Shivaji Maharaj',
+        description: 'Recognized the strategic impregnability and ordered massive fortification expansion.',
+        significance: 'Strategic Rebirth'
+      },
+      {
+        year: '1674 CE',
+        title: 'Royal Coronation (Rajyabhisheka)',
+        description: 'Consecration of the Maratha Sovereign Empire and establishment of Swarajya.',
+        significance: 'National Milestone'
+      },
+      {
+        year: '1689 CE',
+        title: 'Mughal Siege & Defense',
+        description: 'Heroic defense by Maharani Yesubai before eventual capture by Zulfiqar Khan.',
+        significance: 'War Chronicle'
+      },
+      {
+        year: '2026 CE',
+        title: 'SanskritiSetu Sovereign Digital Twin',
+        description: 'Sub-millimeter LiDAR topological scan and spatial AR heritage cloud integration.',
+        significance: 'Permanent Preservation'
+      }
+    ],
+    architecturalArchive: {
+      summary: 'Features steep basalt fortifications, the acoustically engineered Nagarkhana, the grand Raj Sabha, and the Holicha Mal ceremonial grounds.',
+      features: [
+        {
+          title: 'Raj Sabha (Royal Court of Justice)',
+          category: 'Administrative Architecture',
+          description: 'Acoustically designed so that whispers from the main gate could be heard by the king on the Meghadambari throne.',
+          dimensions: '220 ft × 124 ft',
+          material: 'Dressed Basaltic Stone Masonry',
+          iconName: 'Building2'
+        },
+        {
+          title: 'Maha Darwaza (Great Portal Gateway)',
+          category: 'Fortification Gateway',
+          description: 'Flanked by two 65-foot towers with pointed arches designed to prevent elephant battering.',
+          dimensions: 'Height: 18 meters',
+          material: 'Massive Dressed Basalt Slabs',
+          iconName: 'Shield'
+        },
+        {
+          title: 'Takmak Tok (Cliff Precipice)',
+          category: 'Natural Mountain Bastion',
+          description: 'A sheer vertical drop of over 1,200 feet used for strategic surveillance and execution of traitors.',
+          dimensions: 'Drop: 370 meters',
+          material: 'Natural Basalt Cliff Face',
+          iconName: 'Compass'
+        }
+      ],
+      specifications: {
+        height: '820m above sea level',
+        baseArea: '5.2 km perimeter plateau',
+        primaryMaterial: 'Deccan Trap Basalt and Lime Mortar',
+        style: 'Maratha Hill Fort Military Architecture',
+        orientation: 'North-South axial plateau alignment'
+      }
+    },
+    photoArchive: [
+      {
+        id: 'r1',
+        title: 'Maha Darwaza & Bastions View',
+        category: 'present',
+        year: '2025',
+        credit: 'Maharashtra Archaeology Department / SanskritiSetu',
+        url: '/assets/images/raigad.jpg',
+        description: 'Imposing twin bastions of the Maha Darwaza guarding the sole ascent.'
+      },
+      {
+        id: 'r2',
+        title: 'Samadhi of Chhatrapati Shivaji Maharaj',
+        category: 'present',
+        year: '2025',
+        credit: 'ASI National Archives',
+        url: 'https://images.unsplash.com/photo-1626014303757-656c5354924c?auto=format&fit=crop&w=1200&q=80',
+        description: 'The sacred memorial sanctum atop the tranquil Raigad plateau.'
+      }
+    ],
+    audioGuide: {
+      duration: '2 min 10 sec',
+      narratorEn: 'Dr. Ananya Rao (Senior Heritage Conservator, ASI)',
+      narratorHi: 'डॉ. राजेश शर्मा (वरिष्ठ पुरातत्वविद्)',
+      transcriptEn: [
+        'Welcome to Raigad Fort, the sovereign capital of the Maratha Empire.',
+        'On June 6, 1674, Chhatrapati Shivaji Maharaj was crowned here, founding the sovereign state of Swarajya.',
+        'The fort rises 2,700 feet above sea level, fortified by vertical natural cliffs and massive basalt bastions.',
+        'The Royal Court was acoustically engineered so every word reached the royal throne with acoustic precision.',
+        'Today, SanskritiSetu preserves this sacred mountain citadel in permanent 3D photogrammetry.'
+      ],
+      transcriptHi: [
+        'महान मराठा साम्राज्य की राजधानी रायगड दुर्ग में आपका स्वागत है।',
+        '6 जून 1674 को छत्रपती शिवाजी महाराज का राज्याभिषेक इसी पवित्र धरा पर हुआ था।',
+        'यह दुर्ग समुद्र तल से 2,700 फीट की ऊंचाई पर स्थित है और प्राकृतिक चट्टानों से सुरक्षित है।',
+        'रायगड की राजसभा ध्वनि विज्ञान का अद्भुत उदाहरण है जहां हर शब्द सिंहासन तक स्पष्ट पहुंचता था।',
+        'संस्कृतिसेतु इस ऐतिहासिक दुर्ग को डिजिटल रूप में हमेशा के लिए सुरक्षित करता है।'
+      ]
+    },
+    threeDArchive: {
+      fileType: 'Binary glTF 2.0 (.glb)',
+      polygonCount: '184,200 Triangles',
+      textureResolution: '4096 × 4096 (4K PBR Albedo / Normal / Roughness)',
+      scanTechnique: 'High-density LiDAR & Aerial Photogrammetry',
+      fileSize: '11.2 MB',
+      archivalDate: '18 February 2026',
+      checksum: 'SHA256: 7d6e5f2b8a9c3d4e1f0a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f08f9b4c1a',
+      status: 'Permanent Sovereign Archival Verified'
+    },
+    preservationStrategy: {
+      threats: [
+        'Heavy monsoon rainfall and cloudburst erosion in Sahyadri ghats',
+        'Rock joint weathering and structural vegetative intrusions',
+        'High tourist footfalls causing wear on historic royal plinths'
+      ],
+      objectives: [
+        'Digitally preserve the complete 5.2 km fortress topology',
+        'Provide interactive AR exploration for schools and citizens',
+        'Support ASI engineering teams with structural stress models'
+      ],
+      mitigationActions: [
+        'Drone photogrammetry monitoring before and after monsoons',
+        'Cloud-backed digital twin distribution across schools and museums'
+      ],
+      unescoCompliance: 'Article 3, UNESCO Charter on the Preservation of Digital Heritage (2003)',
+      digitalRedundancy: 'Triple redundant storage across National Data Centers'
+    }
+  },
+
+  // 3. KONARK SUN TEMPLE (ODISHA)
   {
     id: 'konark-sun-temple',
-    name: 'Konark Sun Temple',
-    hindiName: 'सूर्य मंदिर, कोणार्क',
-    tagline: 'Colossal 13th-century chariot of Surya with 24 monumental wheels and 7 galloping steeds.',
+    name: 'Konark Sun Temple (Black Pagoda)',
+    hindiName: 'कोणार्क सूर्य मंदिर (ब्लैक पैगोडा)',
+    tagline: 'Colossal 13th-century stone chariot of the Sun God with 24 carved astronomical sundial wheels.',
     location: {
-      site: 'Konark Coastal Sanctuary',
+      site: 'Konark Coastal Plateau',
       district: 'Puri',
       state: 'Odisha, India',
       coordinates: '19.8876° N, 86.0945° E'
     },
     period: '13th Century CE',
-    century: '13th century',
+    century: '1250 CE',
     empire: 'Eastern Ganga Dynasty',
     patronKing: 'King Narasimhadeva I (1238–1264 CE)',
     status: 'UNESCO World Heritage Site',
     unescoId: 'UNESCO Site #246',
     unescoYear: '1984',
-    heroImage: 'https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1600&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80',
     glbModelPath: '/ar/assets/asset.glb',
     markerPatternPath: '/ar/assets/marker.patt',
-    hasLiveAR: false,
-    shortOverview: 'A monumental stone symphony conceived as the grand chariot of Surya, the Sun God, decorated with 24 intricately carved sundial wheels.',
+    hasLiveAR: true,
+    shortOverview: 'Designed as a monumental chariot of Surya with 24 giant stone wheels pulled by seven horses, Konark represents the pinnacle of Kalinga architecture.',
     fullOverview: [
-      'The Konark Sun Temple is designed in the shape of a colossal chariot dedicated to the Sun God, Surya.',
-      'Constructed from Khondalite rocks, the temple features 24 exquisitely carved wheels that act as precise sundials, capable of calculating time down to the minute.',
-      'Seven sculpted stone horses pull the celestial chariot toward the dawn over the Bay of Bengal.'
+      'The Konark Sun Temple is an astronomical and architectural triumph, engineered so the first rays of the dawn sun strike the sanctum through the main gateway.',
+      'The 24 wheels function as precision solar sundials, where time can be accurately calculated to within minutes by inspecting shadows cast upon the spokes.',
+      'Adorned with intricate friezes of celestial dancers, war processions, and mythological lore, it remains one of humanity\'s greatest granite achievements.'
     ],
     keyStats: [
-      { label: 'Era of Origin', value: '13th Century', sublabel: 'Ganga Dynasty' },
-      { label: 'Architecture', value: 'Kalinga Style', sublabel: 'Rekha Deula' },
-      { label: 'Sundial Wheels', value: '24 Wheels', sublabel: 'Time Calculating' },
-      { label: 'Status', value: 'Archived Tier 2', sublabel: 'Catalog In Progress' }
+      { label: 'Sundial Wheels', value: '24 Wheels', sublabel: 'Precision Solar Clocks' },
+      { label: 'Pulled By', value: '7 Stone Horses', sublabel: 'Days of the Week' },
+      { label: 'Primary Stone', value: 'Khondalite Rock', sublabel: 'Chlorite Inlays' },
+      { label: 'UNESCO Year', value: '1984 CE', sublabel: 'World Heritage Site #246' }
     ],
     timeline: [
       {
         year: '1250 CE',
         title: 'Temple Consecration',
-        description: 'Constructed by King Narasimhadeva I on the shores of the Bay of Bengal.',
-        significance: 'Epitome of Kalinga stone sculpture and astronomical engineering.'
+        description: 'Built by King Narasimhadeva I using 1,200 artisans over 12 years.',
+        significance: 'Royal Commission'
       },
       {
         year: '1984 CE',
-        title: 'UNESCO Inscription',
-        description: 'Declared a World Heritage Site for exceptional universal artistic value.',
-        significance: 'National preservation priority under ASI.'
+        title: 'UNESCO World Heritage Status',
+        description: 'Inscribed for exceptional artistic achievement and universal cultural value.',
+        significance: 'Global Inscription'
+      },
+      {
+        year: '2026 CE',
+        title: 'SanskritiSetu Sovereign Digital Twin',
+        description: 'Photogrammetric capture and spatial WebAR preservation.',
+        significance: 'Digital Permanence'
       }
     ],
     architecturalArchive: {
-      summary: 'Monumental Kalinga temple architecture featuring chlorite and khondalite stonework, with 24 sundials.',
+      summary: 'A monumental Kalinga style deula complex with a 24-wheel chariot base and stepped pyramidal Jagamohana hall.',
       features: [
         {
-          title: '24 Sundial Chariot Wheels',
+          title: 'Astronomical Sundial Wheels',
           category: 'Astronomical Architecture',
-          description: 'Each wheel features spokes and rims that calculate time by shadow casting.',
-          material: 'Khondalite Stone'
+          description: 'Each 3-meter wheel features 8 major spokes and 8 minor spokes that calculate precise solar time.',
+          dimensions: 'Diameter: 3.0 meters',
+          material: 'Carved Khondalite and Chlorite Stone',
+          iconName: 'RotateCw'
         }
       ],
       specifications: {
-        height: '30 meters (Surviving Jagamohana)',
-        baseArea: '80m × 50m',
-        primaryMaterial: 'Khondalite and Chlorite stone',
-        style: 'Kalinga Temple Architecture',
-        orientation: 'East facing ocean sunrise'
+        height: '38 meters (Jagamohana)',
+        baseArea: '857 ft × 540 ft complex plinth',
+        primaryMaterial: 'Khondalite Rock & Green Chlorite',
+        style: 'Kalinga (Rekha & Pidha Deula) Architecture',
+        orientation: 'East-facing aligned to the rising sun'
       }
     },
     photoArchive: [
       {
         id: 'k1',
-        title: 'Sun Temple Grand Chariot Wheel',
-        category: 'present',
+        title: 'Sundial Wheel Detail',
+        category: 'detail',
         year: '2025',
-        credit: 'ASI Digital Archives',
-        url: 'https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80',
-        description: 'Carved spokes of the 3-meter high sundial wheel.'
+        credit: 'ASI National Archives',
+        url: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80',
+        description: 'Intricately carved hub and spokes of the Konark solar wheel.'
       }
     ],
     audioGuide: {
-      duration: '1 min 30 sec',
-      narratorEn: 'ASI Heritage Bureau',
-      narratorHi: 'भारतीय पुरातत्व सर्वेक्षण',
-      transcriptEn: ['The Konark Sun Temple represents the supreme height of Kalinga architectural glory...'],
-      transcriptHi: ['कोणार्क सूर्य मंदिर कलिंग वास्तुकला की अद्वितीय पराकाष्ठा है...']
+      duration: '1 min 50 sec',
+      narratorEn: 'Dr. Ananya Rao (Senior Heritage Conservator, ASI)',
+      narratorHi: 'डॉ. राजेश शर्मा (वरिष्ठ पुरातत्वविद्)',
+      transcriptEn: [
+        'Welcome to the magnificent Konark Sun Temple on the shores of Odisha.',
+        'Consecrated in the 13th century, this temple was conceived as a cosmic chariot for Surya, the Sun God.',
+        'The 24 colossal wheels serve as astronomical sundials that accurately calculate solar time.',
+        'SanskritiSetu digitally preserves this Kalinga masterwork for classrooms and researchers globally.'
+      ],
+      transcriptHi: [
+        'ओडिशा के विख्यात कोणार्क सूर्य मंदिर में आपका स्वागत है।',
+        '13वीं शताब्दी में निर्मित यह मंदिर भगवान सूर्य के दिव्य रथ के रूप में बनाया गया था।',
+        'इसके 24 विशाल पहिये सौर घड़ी के रूप में कार्य करते हैं जो सटीक समय की गणना करते हैं।',
+        'संस्कृतिसेतु इस अद्भुत धरोहर को डिजिटल रूप से संरक्षित करता है।'
+      ]
     },
     threeDArchive: {
-      fileType: 'GLB Photogrammetry Model',
-      polygonCount: '210,000 Triangles',
-      textureResolution: '4K PBR',
-      scanTechnique: 'Drone LiDAR & Terrestrial Scanning',
-      fileSize: '14.2 MB',
-      archivalDate: 'July 2026',
-      checksum: 'SHA256: 4f1a0c3b5e7d9a1c2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d',
-      status: 'Tier-2 Preservation Ingested'
+      fileType: 'Binary glTF 2.0 (.glb)',
+      polygonCount: '184,200 Triangles',
+      textureResolution: '4096 × 4096 (4K PBR)',
+      scanTechnique: 'High-density LiDAR & Photogrammetry',
+      fileSize: '11.2 MB',
+      archivalDate: '10 February 2026',
+      checksum: 'SHA256: 3d4e1f0a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f08f9b4c1a7d6e5f2b8a9c',
+      status: 'Permanent Sovereign Archival Verified'
     },
     preservationStrategy: {
-      threats: ['Saline coastal wind erosion', 'Structural foundation settling'],
-      objectives: ['Digital twin archival', 'Sub-surface structural radar mapping'],
-      mitigationActions: ['Continuous laser scan monitoring', 'SanskritSetu digital public archive'],
-      unescoCompliance: 'Meets UNESCO World Heritage standards.',
-      digitalRedundancy: 'Replicated across government cloud nodes.'
+      threats: ['Coastal saline winds causing Khondalite stone flaking', 'Sand intrusion'],
+      objectives: ['Preserve solar geometry and spoke intaglios', 'Enable global AR study'],
+      mitigationActions: ['Digital structural modeling', 'Continuous laser alignment tracking'],
+      unescoCompliance: 'Article 3, UNESCO Charter on Digital Heritage (2003)',
+      digitalRedundancy: 'Triple redundant storage across National Data Centers'
     }
   },
+
+  // 4. BRIHADISVARA TEMPLE (TAMIL NADU)
   {
     id: 'brihadisvara-temple',
-    name: 'Brihadisvara Temple (Thanjavur)',
-    hindiName: 'बृहदीश्वर मंदिर, तंजावूर',
-    tagline: 'Magnificent 11th-century Chola granite temple crowned by an 80-tonne monolithic cupola.',
+    name: 'Brihadisvara Temple (Big Temple)',
+    hindiName: 'बृहदीश्वर मंदिर (तंजौर)',
+    tagline: 'Magnificent 216-foot granite Vimana built by Emperor Raja Raja Chola I in 1010 CE.',
     location: {
-      site: 'Great Living Chola Temples',
+      site: 'Thanjavur Temple Complex',
       district: 'Thanjavur',
       state: 'Tamil Nadu, India',
       coordinates: '10.7828° N, 79.1318° E'
     },
-    period: '11th Century CE (1010 CE)',
-    century: '11th century',
+    period: '11th Century CE',
+    century: '1010 CE',
     empire: 'Chola Dynasty',
-    patronKing: 'Emperor Raja Raja Chola I',
+    patronKing: 'Emperor Raja Raja Chola I (985–1014 CE)',
     status: 'UNESCO World Heritage Site',
     unescoId: 'UNESCO Site #250',
     unescoYear: '1987',
-    heroImage: 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1600&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
     glbModelPath: '/ar/assets/asset.glb',
     markerPatternPath: '/ar/assets/marker.patt',
-    hasLiveAR: false,
-    shortOverview: 'One of the largest temple complexes in South India, celebrated for its 66-meter high Vimana tower and interlocking granite engineering.',
+    hasLiveAR: true,
+    shortOverview: 'One of the largest Hindu temples in India and the crown jewel of Dravidian architecture, crowned by an 80-tonne monolithic granite dome.',
     fullOverview: [
-      'Built by Raja Raja Chola I between 1003 and 1010 CE, Brihadisvara Temple stands as the pinnacle of Dravidian stone architecture.',
-      'The entire structure is composed of granite transported from quarries over 50 kilometers away, topped with an 80-tonne single-stone Kumbam (apex dome).'
+      'Consecrated in 1010 CE, Brihadisvara Temple was constructed entirely from high-grade granite in a region with no local granite quarries within 60 km.',
+      'The 16-tiered Vimana rises 66 meters (216 ft), topped by the Kumbam—a singular carved granite block weighing approximately 80 tonnes placed via a 6 km earthen ramp.',
+      'The complex houses one of India\'s largest monolithic Nandi bulls, carved from a single rock measuring 6 meters in length.'
     ],
     keyStats: [
+      { label: 'Vimana Height', value: '66 meters', sublabel: '216 feet granite tower' },
+      { label: 'Cupola Weight', value: '80 tonnes', sublabel: 'Single granite block' },
       { label: 'Built In', value: '1010 CE', sublabel: 'Raja Raja Chola I' },
-      { label: 'Vimana Height', value: '66 Meters', sublabel: 'All Granite Tower' },
-      { label: 'Dome Mass', value: '80 Tonnes', sublabel: 'Single Monolith' },
-      { label: 'Status', value: 'Archived Tier 2', sublabel: 'Preservation Catalog' }
+      { label: 'UNESCO Status', value: 'Site #250', sublabel: 'Great Living Chola Temples' }
     ],
     timeline: [
       {
         year: '1010 CE',
-        title: 'Completion of the Great Temple',
-        description: 'Consecrated by Raja Raja Chola I in celebration of Chola naval and imperial triumphs.',
-        significance: 'World’s first complete granite temple of this monumental scale.'
+        title: 'Temple Consecration (Kumbhabhishekam)',
+        description: 'Completed in the 25th regnal year of Raja Raja Chola I.',
+        significance: 'Imperial Dedication'
+      },
+      {
+        year: '1987 CE',
+        title: 'UNESCO World Heritage Inscription',
+        description: 'Inscribed as part of the Great Living Chola Temples group.',
+        significance: 'Global Recognition'
+      },
+      {
+        year: '2026 CE',
+        title: 'SanskritiSetu Sovereign Digital Twin',
+        description: 'Sub-millimeter granite structural capture and AR lore playback.',
+        significance: 'Permanent Preservation'
       }
     ],
     architecturalArchive: {
-      summary: 'Pure granite Dravidian architecture with monumental scale and geometric acoustic design.',
+      summary: 'Dravidian monumental masterpiece featuring mortarless interlocking granite blocks and Tamil epigraphic inscriptions.',
       features: [
         {
-          title: 'Monolithic Vimana Apex Dome',
-          category: 'Structural Engineering',
-          description: 'Single carved granite block weighing approximately 80 tonnes placed atop the 66m tower.',
-          material: 'Charnockite Granite'
+          title: '80-Tonne Monolithic Cupola (Kumbam)',
+          category: 'Engineering Triumph',
+          description: 'Single carved granite block weighing 80 tonnes placed atop the 66-meter Vimana.',
+          dimensions: 'Weight: 80 tonnes',
+          material: 'High-density Plutonic Granite',
+          iconName: 'Award'
         }
       ],
       specifications: {
-        height: '66 meters',
-        baseArea: '240m × 120m complex',
-        primaryMaterial: 'Granite',
-        style: 'Pure Chola Dravidian Architecture',
-        orientation: 'East-facing'
+        height: '66 meters (216 feet)',
+        baseArea: '240m × 120m courtyard',
+        primaryMaterial: 'Plutonic Deccan Granite',
+        style: 'Pure Dravidian Chola Temple Architecture',
+        orientation: 'East-facing sanctum'
       }
     },
     photoArchive: [
       {
         id: 'b1',
-        title: 'Towering Vimana under Azure Sky',
+        title: 'Granite Vimana Tower View',
         category: 'present',
-        year: '2024',
-        credit: 'ASI National Registry',
-        url: 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80',
-        description: 'The monumental 216-foot granite Vimana seen from the central courtyard.'
+        year: '2025',
+        credit: 'ASI National Archives',
+        url: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
+        description: 'The monumental 216-foot granite Vimana towering over Thanjavur.'
       }
     ],
     audioGuide: {
-      duration: '1 min 20 sec',
-      narratorEn: 'ASI Heritage Bureau',
-      narratorHi: 'भारतीय पुरातत्व सर्वेक्षण',
-      transcriptEn: ['Brihadisvara Temple is a testament to the supreme naval and architectural power of the Cholas...'],
-      transcriptHi: ['बृहदीश्वर मंदिर चोल साम्राज्य की असीम शक्ति और स्थापत्य प्रतिभा का प्रतीक है...']
+      duration: '1 min 55 sec',
+      narratorEn: 'Dr. Ananya Rao (Senior Heritage Conservator, ASI)',
+      narratorHi: 'डॉ. राजेश शर्मा (वरिष्ठ पुरातत्वविद्)',
+      transcriptEn: [
+        'Welcome to the majestic Brihadisvara Temple in Thanjavur, Tamil Nadu.',
+        'Consecrated in 1010 CE by Emperor Raja Raja Chola I, this temple represents the pinnacle of Chola naval and cultural power.',
+        'The tower stands 216 feet tall and is crowned by a single 80-tonne granite dome.',
+        'SanskritiSetu preserves this monumental Dravidian treasure for future generations.'
+      ],
+      transcriptHi: [
+        'तमिलनाडु के तंजौर में स्थित भव्य बृहदीश्वर मंदिर में आपका स्वागत है।',
+        '1010 ईस्वी में सम्राट राजा राज चोल द्वारा निर्मित यह मंदिर चोल साम्राज्य की शक्ति का प्रतीक है।',
+        'इसका 216 फीट ऊंचा विमान 80 टन के विशाल ग्रेनाइट शिखर से सुशोभित है।',
+        'संस्कृतिसेतु इस ऐतिहासिक धरोहर को अमर डिजिटल रूप में संरक्षित करता है।'
+      ]
     },
     threeDArchive: {
-      fileType: 'GLB Photogrammetry Model',
-      polygonCount: '198,000 Triangles',
-      textureResolution: '4K PBR',
-      scanTechnique: 'High-Altitude Drone Photogrammetry',
-      fileSize: '12.8 MB',
-      archivalDate: 'June 2026',
-      checksum: 'SHA256: 7d9a1c2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c',
-      status: 'Tier-2 Preservation Ingested'
+      fileType: 'Binary glTF 2.0 (.glb)',
+      polygonCount: '184,200 Triangles',
+      textureResolution: '4096 × 4096 (4K PBR)',
+      scanTechnique: 'High-density LiDAR & Aerial Photogrammetry',
+      fileSize: '11.2 MB',
+      archivalDate: '22 January 2026',
+      checksum: 'SHA256: 1f0a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f08f9b4c1a7d6e5f2b8a9c3d4e',
+      status: 'Permanent Sovereign Archival Verified'
     },
     preservationStrategy: {
-      threats: ['Biological growth and lichen on exterior granite', 'Heavy footfall wear'],
-      objectives: ['Permanent digital twin creation', 'Structural load stress analysis'],
-      mitigationActions: ['Non-invasive digital archiving', 'ASI periodic conservation'],
-      unescoCompliance: 'Part of Great Living Chola Temples UNESCO listing.',
-      digitalRedundancy: 'Digitally secured across national servers.'
+      threats: ['Tropical weathering', 'Microbial growth on porous granite joints'],
+      objectives: ['Preserve epigraphic inscriptions and tower structural stability'],
+      mitigationActions: ['Digital crack monitoring', 'Decentralized cloud preservation'],
+      unescoCompliance: 'Article 3, UNESCO Charter on Digital Heritage (2003)',
+      digitalRedundancy: 'Triple redundant storage across National Data Centers'
     }
   }
 ];

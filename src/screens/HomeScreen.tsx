@@ -270,7 +270,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
           {/* Card 2: Raigad Fort */}
           <div
-            onClick={() => onNavigateTab('repository')}
+            onClick={() => onOpenMonument('raigad-fort')}
             className="digi-card"
             style={{
               minWidth: '155px',
@@ -312,7 +312,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
           {/* Card 3: Brihadisvara */}
           <div
-            onClick={() => onNavigateTab('repository')}
+            onClick={() => onOpenMonument('brihadisvara-temple')}
             className="digi-card"
             style={{
               minWidth: '155px',
@@ -354,7 +354,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
           {/* Card 4: Konark Sun Temple */}
           <div
-            onClick={() => onNavigateTab('repository')}
+            onClick={() => onOpenMonument('konark-sun-temple')}
             className="digi-card"
             style={{
               minWidth: '155px',
