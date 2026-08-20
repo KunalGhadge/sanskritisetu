@@ -207,9 +207,8 @@
     </div>
 
     <div id="not-supported">
-      ⚠️ WebXR AR not available.<br/>
-      Open this page in <strong>Chrome</strong> on Android, or install
-      <a href="https://play.google.com/store/apps/details?id=com.google.ar.core" target="_blank">Google Play Services for AR</a>.
+      ⚠️ <strong>ARCore not detected.</strong><br/>
+      Install <a href="https://play.google.com/store/apps/details?id=com.google.ar.core" target="_blank">Google Play Services for AR</a> from the Play Store, then tap Launch AR again.
     </div>
   </div>
 
@@ -243,14 +242,22 @@
     const scaleVal      = document.getElementById('scale-val');
 
     // ── Check support ──────────────────────────────────────────────────
-    const supported = navigator.xr
-      ? await navigator.xr.isSessionSupported('immersive-ar').catch(() => false)
-      : false;
+    // Detect browser
+    const isChrome = /Chrome/.test(navigator.userAgent) && !/Chromium|Edg|OPR|Samsung/.test(navigator.userAgent);
+
+    let supported = false;
+    if (navigator.xr) {
+      supported = await navigator.xr.isSessionSupported('immersive-ar').catch(() => false);
+    }
 
     if (!supported) {
-      notSupported.style.display = 'block';
-      btnLaunch.disabled = true;
-      btnLaunch.style.opacity = '0.4';
+      const msg = document.getElementById('not-supported');
+      if (!isChrome) {
+        msg.innerHTML = '⚠️ Please open this page in <strong>Chrome</strong> on Android for AR support.';
+      }
+      // else: isChrome but no ARCore — default message already says install ARCore
+      msg.style.display = 'block';
+      // Do NOT disable the button — ARCore install then retry should work
     }
 
     // ── Three.js renderer ──────────────────────────────────────────────
