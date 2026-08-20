@@ -2,223 +2,715 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <title>Stone Chariot AR</title>
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a1628" />
+  <title>AR Explorer – Stone Chariot | SanskritiSetu</title>
+  <meta name="description" content="Experience the Stone Chariot of Vittala Temple in Augmented Reality. Part of SanskritiSetu Digital Heritage Platform." />
 
-    body {
-      background: #09091a;
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #fff;
-      height: 100dvh;
-      overflow: hidden;
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       DESIGN TOKENS  — SanskritiSetu Government Heritage Style
+    ═══════════════════════════════════════════════════════════ */
+    :root {
+      --navy:        #0a1628;
+      --navy-mid:    #132340;
+      --navy-light:  #1e3a5f;
+      --blue:        #1a4480;
+      --blue-mid:    #2563a0;
+      --blue-accent: #3b82c4;
+      --stone:       #c4a882;
+      --stone-light: #e8d5b7;
+      --gold:        #b8952a;
+      --white:       #f8f6f2;
+      --white-dim:   rgba(248,246,242,0.85);
+      --border:      rgba(196,168,130,0.25);
+      --shadow:      0 4px 24px rgba(0,0,0,0.35);
+      --radius:      14px;
+      --radius-sm:   8px;
     }
 
-    /* ── Start Screen ── */
-    #start-screen {
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      height: 100%;
+      background: var(--navy);
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--white);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SCREENS
+    ═══════════════════════════════════════════════════════════ */
+    .screen {
       position: fixed;
       inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(160deg, #0f0a24 0%, #09091a 100%);
-      padding: 28px;
-      gap: 0;
+      padding: 24px;
       z-index: 100;
     }
+    .screen.hidden { display: none !important; }
 
-    .start-icon {
-      font-size: 64px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 24px rgba(124,58,237,0.5));
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
+    /* ── Start Screen ── */
+    #screen-start {
+      background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
     }
 
+    .gov-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      opacity: 0.7;
+    }
+    .gov-header img { width: 32px; height: 32px; }
+    .gov-header-text { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone-light); }
+
+    .monument-preview {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 24px;
+      background: var(--navy-mid);
+      box-shadow: 0 0 0 8px rgba(196,168,130,0.08);
+    }
+    .monument-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+    .start-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 8px;
+    }
     .start-title {
       font-size: 26px;
-      font-weight: 800;
+      font-weight: 700;
       text-align: center;
-      background: linear-gradient(135deg, #fff 50%, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 6px;
     }
     .start-sub {
       font-size: 13px;
-      color: #6b60a8;
+      color: rgba(248,246,242,0.5);
       text-align: center;
       margin-bottom: 36px;
-      line-height: 1.5;
     }
 
-    .btn-launch {
+    .btn-primary {
       width: 100%;
-      max-width: 340px;
-      padding: 20px 28px;
+      max-width: 320px;
+      padding: 17px 24px;
       font-family: inherit;
-      font-size: 18px;
-      font-weight: 800;
-      color: #fff;
-      background: linear-gradient(135deg, #7c3aed, #4f46e5);
-      border: none;
-      border-radius: 20px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--blue);
+      border: 1px solid rgba(59,130,196,0.5);
+      border-radius: var(--radius);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      box-shadow: 0 12px 40px rgba(124,58,237,0.5), 0 0 0 1px rgba(167,139,250,0.2);
-      transition: transform 0.15s, box-shadow 0.15s;
-      margin-bottom: 16px;
+      gap: 10px;
+      letter-spacing: 0.02em;
+      transition: background 0.2s;
+      margin-bottom: 12px;
     }
-    .btn-launch:active { transform: scale(0.97); }
+    .btn-primary:active { background: var(--blue-mid); }
 
-    .hint-list {
+    .btn-secondary {
       width: 100%;
-      max-width: 340px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(124,58,237,0.2);
-      border-radius: 18px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .hint {
+      max-width: 320px;
+      padding: 13px 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--stone-light);
+      background: rgba(196,168,130,0.1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 13px;
-      color: #9b8fd4;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
     }
-    .hint-dot {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed40, #4f46e540);
-      border: 1px solid #7c3aed60;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
+    .btn-secondary:active { background: rgba(196,168,130,0.18); }
 
-    #not-supported {
-      display: none;
+    .btn-icon { font-size: 18px; line-height: 1; }
+
+    /* ── Fallback Screen ── */
+    #screen-fallback {
+      background: var(--navy);
+    }
+    .fallback-icon { font-size: 52px; margin-bottom: 20px; opacity: 0.5; }
+    .fallback-title { font-size: 20px; font-weight: 700; color: var(--white); text-align: center; margin-bottom: 10px; }
+    .fallback-body  { font-size: 14px; color: rgba(248,246,242,0.55); text-align: center; line-height: 1.7; max-width: 300px; margin-bottom: 32px; }
+    .fallback-note {
       width: 100%;
-      max-width: 340px;
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.3);
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 13px;
-      color: #fca5a5;
+      max-width: 320px;
+      padding: 14px 16px;
+      background: rgba(196,168,130,0.08);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      color: var(--stone-light);
       text-align: center;
       line-height: 1.6;
-      margin-top: 16px;
+      margin-bottom: 24px;
     }
-    #not-supported a { color: #f87171; }
 
-    /* ── AR Overlay (visible during session) ── */
-    #ar-overlay {
+    /* ── Loading Screen ── */
+    #screen-loading {
+      background: rgba(10,22,40,0.92);
+    }
+    .loading-ring {
+      width: 52px; height: 52px;
+      border: 3px solid rgba(196,168,130,0.2);
+      border-top-color: var(--stone);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; color: var(--stone-light); font-weight: 500; }
+    .loading-sub  { font-size: 12px; color: rgba(248,246,242,0.4); margin-top: 6px; }
+
+    /* ── Error Screen ── */
+    #screen-error {
+      background: var(--navy);
+    }
+    .error-icon { font-size: 44px; margin-bottom: 18px; }
+    .error-title { font-size: 18px; font-weight: 700; color: var(--white); text-align: center; margin-bottom: 8px; }
+    .error-body  { font-size: 13px; color: rgba(248,246,242,0.5); text-align: center; line-height: 1.6; max-width: 290px; margin-bottom: 28px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       AR ACTIVE UI  (dom-overlay on top of camera)
+    ═══════════════════════════════════════════════════════════ */
+    #ar-ui {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 50;
+      z-index: 200;
       display: none;
     }
+    #ar-ui.active { display: block; }
 
-    #ar-hint {
+    /* Top bar */
+    .ar-topbar {
       position: absolute;
-      bottom: 120px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(8px);
-      color: #fff;
-      padding: 10px 22px;
-      border-radius: 30px;
-      font-size: 14px;
-      font-weight: 600;
-      white-space: nowrap;
-      border: 1px solid rgba(255,255,255,0.1);
-      transition: opacity 0.4s;
-    }
-
-    #scale-bar {
-      position: absolute;
-      top: 24px;
-      right: 16px;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 8px 12px;
-      font-size: 12px;
-      color: #a78bfa;
-      font-weight: 700;
-      display: none;
-    }
-
-    #exit-btn {
-      position: absolute;
-      top: 20px;
-      left: 16px;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 52px 16px 14px;
+      background: linear-gradient(to bottom, rgba(10,22,40,0.85) 0%, transparent 100%);
       pointer-events: all;
+    }
+    .ar-title-block { display: flex; flex-direction: column; }
+    .ar-app-name { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone); }
+    .ar-mon-name { font-size: 15px; font-weight: 700; color: var(--white); }
+
+    .btn-exit {
       display: flex;
       align-items: center;
       gap: 6px;
+      background: rgba(10,22,40,0.75);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--white-dim);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      cursor: pointer;
     }
 
-    canvas { display: block; }
+    /* Status pill */
+    .ar-status {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -200%);
+      background: rgba(10,22,40,0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--stone-light);
+      white-space: nowrap;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    /* Bottom controls */
+    .ar-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 16px 16px 36px;
+      background: linear-gradient(to top, rgba(10,22,40,0.9) 0%, transparent 100%);
+      pointer-events: all;
+    }
+
+    /* Monument label */
+    .ar-mon-label {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .ar-mon-label strong { font-size: 14px; font-weight: 700; color: var(--white); display: block; }
+    .ar-mon-label span   { font-size: 11px; color: var(--stone); }
+
+    /* Action row */
+    .ar-action-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .ar-btn {
+      flex: 1;
+      max-width: 120px;
+      padding: 10px 8px;
+      background: rgba(19,35,64,0.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--stone-light);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.15s;
+    }
+    .ar-btn:active { background: rgba(30,58,95,0.95); }
+    .ar-btn-icon { font-size: 18px; }
+
+    /* Scale row */
+    .ar-scale-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .scale-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(19,35,64,0.9);
+      color: var(--stone-light);
+      font-size: 22px;
+      font-weight: 300;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+    }
+    .scale-label {
+      min-width: 80px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--stone);
+      letter-spacing: 0.04em;
+    }
+
+    /* Rotate row */
+    .ar-rotate-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .rotate-btn {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(19,35,64,0.9);
+      color: var(--stone-light);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .rotate-hint { font-size: 11px; color: rgba(248,246,242,0.4); }
+
+    /* ═══════════════════════════════════════════════════════════
+       INFO PANEL (bottom sheet)
+    ═══════════════════════════════════════════════════════════ */
+    #info-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: flex;
+      align-items: flex-end;
+      display: none;
+    }
+    #info-panel.open { display: flex; }
+
+    .info-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    .info-sheet {
+      position: relative;
+      width: 100%;
+      max-height: 82vh;
+      overflow-y: auto;
+      background: var(--navy-mid);
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid var(--border);
+      padding: 0 0 40px;
+    }
+    .info-drag-handle {
+      width: 36px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 14px auto 0;
+    }
+    .info-header {
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .info-title-block .info-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--stone); text-transform: uppercase; }
+    .info-title-block h2 { font-size: 18px; font-weight: 700; color: var(--white); margin: 4px 0 2px; }
+    .info-title-block .info-location { font-size: 12px; color: rgba(248,246,242,0.5); }
+    .info-close {
+      background: rgba(196,168,130,0.12);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      color: var(--stone-light);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .info-section { padding: 16px 20px; border-bottom: 1px solid rgba(196,168,130,0.1); }
+    .info-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 8px;
+    }
+    .info-text { font-size: 13px; color: rgba(248,246,242,0.75); line-height: 1.7; }
+
+    .info-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(196,168,130,0.1);
+    }
+    .stat-box {
+      background: rgba(10,22,40,0.6);
+      border: 1px solid rgba(196,168,130,0.15);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+    }
+    .stat-label { font-size: 10px; color: var(--stone); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+    .stat-value { font-size: 13px; color: var(--white); font-weight: 700; margin-top: 3px; }
+
+    .info-actions { padding: 16px 20px 0; display: flex; flex-direction: column; gap: 8px; }
+
+    /* Audio panel */
+    #audio-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: flex;
+      align-items: flex-end;
+      display: none;
+    }
+    #audio-panel.open { display: flex; }
+
+    .audio-sheet {
+      position: relative;
+      width: 100%;
+      background: var(--navy-mid);
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid var(--border);
+      padding: 20px 20px 48px;
+    }
+    .audio-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .audio-sub   { font-size: 12px; color: rgba(248,246,242,0.45); margin-bottom: 20px; }
+    .transcript-box {
+      background: rgba(10,22,40,0.6);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-size: 13px;
+      color: rgba(248,246,242,0.7);
+      line-height: 1.75;
+      margin-bottom: 16px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .audio-note {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(248,246,242,0.35);
+      font-style: italic;
+    }
+
+    /* Three.js canvas */
+    canvas { display: block; position: fixed; inset: 0; z-index: 0; }
   </style>
 </head>
 <body>
 
-  <!-- Start Screen -->
-  <div id="start-screen">
-    <div class="start-icon">🏛️</div>
-    <div class="start-title">Stone Chariot AR</div>
-    <div class="start-sub">Vittala Temple · Hampi · 15th century</div>
+  <!-- ═══════════ SCREEN: START ═══════════ -->
+  <div id="screen-start" class="screen">
+    <div class="gov-header">
+      <img src="/emblem.svg" alt="Ashoka Emblem" onerror="this.style.display='none'" />
+      <div class="gov-header-text">SanskritiSetu · Digital Heritage Platform</div>
+    </div>
 
-    <button class="btn-launch" id="btn-launch">
-      <span>📷</span>
-      <span>Launch AR</span>
+    <div class="monument-preview">
+      <img src="/assets/images/stonechariot.jpg" alt="Stone Chariot" onerror="this.style.background='#1e3a5f'" />
+    </div>
+
+    <div class="start-label">AR Explorer</div>
+    <div class="start-title">Stone Chariot<br/>Vittala Temple</div>
+    <div class="start-sub">Hampi, Karnataka · 16th Century CE</div>
+
+    <button class="btn-primary" id="btn-start-ar">
+      <span class="btn-icon">📷</span>
+      <span>Experience in AR</span>
     </button>
 
-    <div class="hint-list">
-      <div class="hint"><div class="hint-dot">🔍</div><span>Move camera slowly to detect your floor or desk</span></div>
-      <div class="hint"><div class="hint-dot">👆</div><span>Tap the purple ring to place the chariot</span></div>
-      <div class="hint"><div class="hint-dot">🤏</div><span>Pinch to scale it up or down</span></div>
-      <div class="hint"><div class="hint-dot">🚶</div><span>Walk around — it stays fixed in space</span></div>
+    <button class="btn-secondary" id="btn-back-vault">
+      <span>← Back to Heritage Vault</span>
+    </button>
+  </div>
+
+  <!-- ═══════════ SCREEN: FALLBACK ═══════════ -->
+  <div id="screen-fallback" class="screen hidden">
+    <div class="gov-header">
+      <div class="gov-header-text">SanskritiSetu · AR Explorer</div>
+    </div>
+    <div class="fallback-icon">📵</div>
+    <div class="fallback-title">AR Not Available</div>
+    <div class="fallback-body">
+      Your device or browser does not support immersive Augmented Reality.
+    </div>
+    <div class="fallback-note">
+      For the AR experience, use <strong>Chrome</strong> on an ARCore-compatible Android device with
+      <strong>Google Play Services for AR</strong> installed.
+    </div>
+    <button class="btn-primary" id="btn-retry">
+      <span class="btn-icon">🔄</span>
+      <span>Try Again</span>
+    </button>
+    <button class="btn-secondary" id="btn-open-vault">
+      <span>📚 Open 3D Archive</span>
+    </button>
+  </div>
+
+  <!-- ═══════════ SCREEN: LOADING ═══════════ -->
+  <div id="screen-loading" class="screen hidden">
+    <div class="loading-ring"></div>
+    <div class="loading-text" id="loading-text">Preparing AR experience…</div>
+    <div class="loading-sub" id="loading-sub">Loading 3D model</div>
+  </div>
+
+  <!-- ═══════════ SCREEN: ERROR ═══════════ -->
+  <div id="screen-error" class="screen hidden">
+    <div class="error-icon">⚠️</div>
+    <div class="error-title">AR could not be started</div>
+    <div class="error-body" id="error-body">An error occurred while starting the AR experience.</div>
+    <button class="btn-primary" id="btn-error-retry">
+      <span class="btn-icon">🔄</span>
+      <span>Try Again</span>
+    </button>
+    <button class="btn-secondary" style="margin-top:10px" id="btn-error-vault">
+      <span>← Return to Heritage Vault</span>
+    </button>
+  </div>
+
+  <!-- ═══════════ AR UI OVERLAY ═══════════ -->
+  <div id="ar-ui">
+
+    <!-- Top bar -->
+    <div class="ar-topbar">
+      <div class="ar-title-block">
+        <span class="ar-app-name">SanskritiSetu</span>
+        <span class="ar-mon-name">Stone Chariot</span>
+      </div>
+      <button class="btn-exit" id="btn-exit-ar">✕ Exit AR</button>
     </div>
 
-    <div id="not-supported">
-      ⚠️ <strong>ARCore not detected.</strong><br/>
-      Install <a href="https://play.google.com/store/apps/details?id=com.google.ar.core" target="_blank">Google Play Services for AR</a> from the Play Store, then tap Launch AR again.
+    <!-- Status -->
+    <div class="ar-status" id="ar-status">Move your phone to find a surface</div>
+
+    <!-- Bottom controls -->
+    <div class="ar-bottom" id="ar-controls">
+
+      <div class="ar-mon-label">
+        <strong>Stone Chariot · Vittala Temple</strong>
+        <span>Hampi, Karnataka</span>
+      </div>
+
+      <!-- Action row -->
+      <div class="ar-action-row">
+        <button class="ar-btn" id="btn-info">
+          <span class="ar-btn-icon">📋</span>
+          <span>Info</span>
+        </button>
+        <button class="ar-btn" id="btn-audio">
+          <span class="ar-btn-icon">🎧</span>
+          <span>Audio</span>
+        </button>
+        <button class="ar-btn" id="btn-reset">
+          <span class="ar-btn-icon">↺</span>
+          <span>Reset</span>
+        </button>
+      </div>
+
+      <!-- Scale row -->
+      <div class="ar-scale-row">
+        <button class="scale-btn" id="btn-scale-down">−</button>
+        <div class="scale-label" id="scale-label">100%</div>
+        <button class="scale-btn" id="btn-scale-up">+</button>
+      </div>
+
+      <!-- Rotate row -->
+      <div class="ar-rotate-row">
+        <button class="rotate-btn" id="btn-rot-left">↺ Rotate</button>
+        <span class="rotate-hint">or drag model</span>
+        <button class="rotate-btn" id="btn-rot-right">Rotate ↻</button>
+      </div>
+
     </div>
   </div>
 
-  <!-- AR Session Overlay -->
-  <div id="ar-overlay">
-    <button id="exit-btn">✕ Exit AR</button>
-    <div id="scale-bar" style="display:none;">Scale: <span id="scale-val">100%</span></div>
-    <div id="ar-hint">Slowly scan your floor or desk…</div>
+  <!-- ═══════════ INFO PANEL ═══════════ -->
+  <div id="info-panel">
+    <div class="info-backdrop" id="info-backdrop"></div>
+    <div class="info-sheet">
+      <div class="info-drag-handle"></div>
+      <div class="info-header">
+        <div class="info-title-block">
+          <div class="info-label">Heritage Archive · UNESCO #356</div>
+          <h2>Stone Chariot</h2>
+          <div class="info-location">Vittala Temple Complex · Hampi, Karnataka</div>
+        </div>
+        <button class="info-close" id="btn-close-info">✕</button>
+      </div>
+
+      <div class="info-stats">
+        <div class="stat-box">
+          <div class="stat-label">Period</div>
+          <div class="stat-value">16th Century CE</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Empire</div>
+          <div class="stat-value">Vijayanagara</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Height</div>
+          <div class="stat-value">4.5 metres</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">UNESCO</div>
+          <div class="stat-value">1986</div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">Overview</div>
+        <p class="info-text">
+          The Stone Chariot is one of India's most celebrated architectural wonders, representing the zenith of Vijayanagara granite craftsmanship. Dedicated to Garuda — the celestial mount of Lord Vishnu — it stands as the axial focal point facing the grand Vittala Temple sanctum.
+        </p>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">Architecture</div>
+        <p class="info-text">
+          Though it appears carved from a single colossal boulder, the chariot is masterfully engineered from interlocking granite slabs. Four monumental wheels (1.2m diameter each) adorned with 16-spoke concentric floral hubs were originally engineered to rotate freely on granite axles. Height: 4.5m · Base: 4.2m × 3.6m. Material: fine-grained Grey and Pink Deccan Granite.
+        </p>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">Historical Significance</div>
+        <p class="info-text">
+          Commissioned under Emperor Krishnadevaraya (1509–1529 CE) following his victorious Konark campaign. The Vijayanagara Empire's imperial capital fell after the Battle of Talikota (1565 CE), yet the granite chariot remained intact. Inscribed as a UNESCO World Heritage Site in 1986 (Site #356) for its exceptional universal artistic value.
+        </p>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">3D Archive</div>
+        <p class="info-text">
+          This digital twin was captured using high-density LiDAR and multi-view stereo photogrammetry. 184,200 triangles · 4K PBR textures · Binary glTF 2.0. Archived 15 January 2026 under the SanskritiSetu Sovereign Digital Preservation Protocol.
+        </p>
+      </div>
+
+      <div class="info-actions">
+        <button class="btn-primary" id="btn-open-vault-from-info">
+          <span class="btn-icon">🏛️</span>
+          <span>Open Heritage Vault</span>
+        </button>
+        <button class="btn-secondary" id="btn-close-info-2">
+          ← Return to AR
+        </button>
+      </div>
+    </div>
   </div>
 
+  <!-- ═══════════ AUDIO PANEL ═══════════ -->
+  <div id="audio-panel">
+    <div class="info-backdrop" id="audio-backdrop"></div>
+    <div class="audio-sheet">
+      <div class="info-drag-handle"></div>
+      <div class="audio-title">🎧 Audio Guide</div>
+      <div class="audio-sub">Dr. Ananya Rao · Senior Heritage Conservator, ASI · 1 min 45 sec</div>
+      <div class="transcript-box">
+        <p>Welcome to the sacred Vijaya Vittala Temple Complex in Hampi.</p>
+        <br/>
+        <p>Standing before you is the iconic Stone Chariot, consecrated in the 16th century by Emperor Krishnadevaraya.</p>
+        <br/>
+        <p>Though it appears carved from a single colossal boulder, it is masterfully engineered from interlocking granite slabs.</p>
+        <br/>
+        <p>Notice the four stone wheels adorned with concentric floral spokes, which once rotated upon granite axles.</p>
+        <br/>
+        <p>This shrine was built for Garuda, the celestial mount of Lord Vishnu, facing the inner sanctum.</p>
+      </div>
+      <div class="audio-note">Audio guide narration coming soon · Transcript available above</div>
+      <div style="height:16px;"></div>
+      <button class="btn-secondary" id="btn-close-audio">← Return to AR</button>
+    </div>
+  </div>
+
+  <!-- Three.js via CDN (importmap) -->
   <script type="importmap">
     {
       "imports": {
@@ -232,35 +724,74 @@
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-    const startScreen   = document.getElementById('start-screen');
-    const arOverlay     = document.getElementById('ar-overlay');
-    const btnLaunch     = document.getElementById('btn-launch');
-    const notSupported  = document.getElementById('not-supported');
-    const arHint        = document.getElementById('ar-hint');
-    const exitBtn       = document.getElementById('exit-btn');
-    const scaleBar      = document.getElementById('scale-bar');
-    const scaleVal      = document.getElementById('scale-val');
+    // ═══════════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════════
+    const STATE = {
+      CHECKING: 'checking',
+      START:    'start',
+      FALLBACK: 'fallback',
+      LOADING:  'loading',
+      FINDING:  'finding',
+      READY:    'ready',
+      PLACED:   'placed',
+      ERROR:    'error',
+    };
 
-    // ── Check support ──────────────────────────────────────────────────
-    // Detect browser
-    const isChrome = /Chrome/.test(navigator.userAgent) && !/Chromium|Edg|OPR|Samsung/.test(navigator.userAgent);
+    let currentState = STATE.CHECKING;
+    let xrSession    = null;
+    let hitTestSource = null;
+    let hitTestSourceRequested = false;
+    let chariot = null;
+    let modelPlaced = false;
+    let baseScale = 0.4;   // 0.4 → ~0.8m wide (our model spans -1..1)
+    let currentScale = baseScale;
+    const MIN_SCALE = 0.04;
+    const MAX_SCALE = 4.0;
 
-    let supported = false;
-    if (navigator.xr) {
-      supported = await navigator.xr.isSessionSupported('immersive-ar').catch(() => false);
+    // Touch rotate state
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartRotY = 0;
+
+    // Pinch state
+    let pinchStartDist  = null;
+    let pinchStartScale = null;
+
+    // ═══════════════════════════════════════════════
+    // DOM REFS
+    // ═══════════════════════════════════════════════
+    const screens = {
+      start:    document.getElementById('screen-start'),
+      fallback: document.getElementById('screen-fallback'),
+      loading:  document.getElementById('screen-loading'),
+      error:    document.getElementById('screen-error'),
+    };
+    const arUi       = document.getElementById('ar-ui');
+    const arStatus   = document.getElementById('ar-status');
+    const loadingTxt = document.getElementById('loading-text');
+    const loadingSub = document.getElementById('loading-sub');
+    const scaleLabel = document.getElementById('scale-label');
+    const errorBody  = document.getElementById('error-body');
+    const infoPanel  = document.getElementById('info-panel');
+    const audioPanel = document.getElementById('audio-panel');
+
+    // ═══════════════════════════════════════════════
+    // SCREEN MANAGER
+    // ═══════════════════════════════════════════════
+    function showScreen(name) {
+      Object.entries(screens).forEach(([k, el]) => {
+        el.classList.toggle('hidden', k !== name);
+      });
+      arUi.classList.toggle('active', name === 'ar');
+      currentState = name;
     }
 
-    if (!supported) {
-      const msg = document.getElementById('not-supported');
-      if (!isChrome) {
-        msg.innerHTML = '⚠️ Please open this page in <strong>Chrome</strong> on Android for AR support.';
-      }
-      // else: isChrome but no ARCore — default message already says install ARCore
-      msg.style.display = 'block';
-      // Do NOT disable the button — ARCore install then retry should work
-    }
+    function setStatus(msg) { arStatus.textContent = msg; }
 
-    // ── Three.js renderer ──────────────────────────────────────────────
+    // ═══════════════════════════════════════════════
+    // THREE.JS SETUP
+    // ═══════════════════════════════════════════════
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -271,145 +802,168 @@
     const scene  = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.01, 30);
 
-    // ── Lights ─────────────────────────────────────────────────────────
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x888888, 2));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 2);
-    dirLight.position.set(1, 3, 2);
-    dirLight.castShadow = true;
-    scene.add(dirLight);
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    fillLight.position.set(-1, 1, -1);
-    scene.add(fillLight);
+    // Lighting — warm, museum-like
+    const hemi = new THREE.HemisphereLight(0xffeedd, 0x334455, 2.5);
+    scene.add(hemi);
+    const sun = new THREE.DirectionalLight(0xfff5e0, 2.0);
+    sun.position.set(1, 3, 2);
+    sun.castShadow = true;
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight(0xd0e8ff, 0.6);
+    fill.position.set(-2, 1, -1);
+    scene.add(fill);
 
-    // ── Reticle ────────────────────────────────────────────────────────
-    const reticle = new THREE.Group();
-    const ring = new THREE.Mesh(
-      new THREE.RingGeometry(0.10, 0.16, 40).rotateX(-Math.PI / 2),
-      new THREE.MeshBasicMaterial({ color: 0x7c3aed, side: THREE.DoubleSide, transparent: true, opacity: 0.9 })
+    // ═══════════════════════════════════════════════
+    // RETICLE
+    // ═══════════════════════════════════════════════
+    const reticleGroup = new THREE.Group();
+
+    const outerRing = new THREE.Mesh(
+      new THREE.RingGeometry(0.12, 0.16, 48).rotateX(-Math.PI / 2),
+      new THREE.MeshBasicMaterial({ color: 0xc4a882, side: THREE.DoubleSide, transparent: true, opacity: 0.85 })
     );
     const innerRing = new THREE.Mesh(
-      new THREE.RingGeometry(0.03, 0.08, 40).rotateX(-Math.PI / 2),
-      new THREE.MeshBasicMaterial({ color: 0xa78bfa, side: THREE.DoubleSide, transparent: true, opacity: 0.7 })
+      new THREE.RingGeometry(0.04, 0.09, 48).rotateX(-Math.PI / 2),
+      new THREE.MeshBasicMaterial({ color: 0xe8d5b7, side: THREE.DoubleSide, transparent: true, opacity: 0.6 })
     );
-    const centerDot = new THREE.Mesh(
-      new THREE.CircleGeometry(0.025, 24).rotateX(-Math.PI / 2),
+    const dot = new THREE.Mesh(
+      new THREE.CircleGeometry(0.03, 32).rotateX(-Math.PI / 2),
       new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
     );
-    reticle.add(ring, innerRing, centerDot);
-    reticle.matrixAutoUpdate = false;
-    reticle.visible = false;
-    scene.add(reticle);
+    reticleGroup.add(outerRing, innerRing, dot);
+    reticleGroup.matrixAutoUpdate = false;
+    reticleGroup.visible = false;
+    scene.add(reticleGroup);
 
-    // ── Load model ─────────────────────────────────────────────────────
-    let chariot = null;
-    let placed  = false;
-    let baseScale = 0.25;       // meters — model spans -1..1, so 0.25 = 0.5m wide
-
+    // ═══════════════════════════════════════════════
+    // LOAD GLB (once, eagerly when page loads)
+    // ═══════════════════════════════════════════════
     const loader = new GLTFLoader();
-    loader.load('./asset.glb', gltf => {
-      chariot = gltf.scene;
-      chariot.scale.setScalar(baseScale);
-      chariot.visible = false;
-      chariot.castShadow = true;
-      scene.add(chariot);
-    });
+    let modelReady = false;
 
-    // ── Hit-test ───────────────────────────────────────────────────────
-    let hitTestSource = null;
-    let hitTestSourceRequested = false;
+    loader.load(
+      './asset.glb',
+      (gltf) => {
+        chariot = gltf.scene;
+        chariot.scale.setScalar(baseScale);
+        chariot.visible = false;
+        chariot.castShadow = true;
+        chariot.receiveShadow = false;
+        scene.add(chariot);
+        modelReady = true;
+        console.log('[AR] GLB loaded successfully');
+      },
+      (prog) => {
+        const pct = Math.round((prog.loaded / (prog.total || 1)) * 100);
+        loadingSub.textContent = `Loading model… ${pct}%`;
+      },
+      (err) => {
+        console.error('[AR] GLB load error:', err);
+        modelReady = true; // let session proceed even if model fails
+      }
+    );
 
-    // ── Pinch-to-scale state ───────────────────────────────────────────
-    let pinchStartDist  = null;
-    let pinchStartScale = null;
-
-    function getPinchDist(ev) {
-      const t = ev.touches;
-      if (t.length < 2) return null;
-      const dx = t[0].clientX - t[1].clientX;
-      const dy = t[0].clientY - t[1].clientY;
-      return Math.sqrt(dx * dx + dy * dy);
+    // ═══════════════════════════════════════════════
+    // WEBXR SUPPORT CHECK
+    // ═══════════════════════════════════════════════
+    async function checkSupport() {
+      if (!navigator.xr) return false;
+      try {
+        return await navigator.xr.isSessionSupported('immersive-ar');
+      } catch { return false; }
     }
 
-    // ── Session start ──────────────────────────────────────────────────
-    btnLaunch.addEventListener('click', async () => {
-      if (!supported) return;
+    // ═══════════════════════════════════════════════
+    // START AR SESSION
+    // ═══════════════════════════════════════════════
+    async function startAR() {
+      showScreen('loading');
+      loadingTxt.textContent = 'Preparing AR experience…';
+      loadingSub.textContent = 'Loading 3D model';
+
+      const supported = await checkSupport();
+      if (!supported) {
+        showScreen('fallback');
+        return;
+      }
+
+      // Wait for model to load (max 10s)
+      const t0 = Date.now();
+      while (!modelReady && Date.now() - t0 < 10000) {
+        await new Promise(r => setTimeout(r, 100));
+      }
+
       try {
-        const session = await navigator.xr.requestSession('immersive-ar', {
+        xrSession = await navigator.xr.requestSession('immersive-ar', {
           requiredFeatures: ['hit-test'],
           optionalFeatures: ['dom-overlay'],
-          domOverlay: { root: document.getElementById('ar-overlay') },
+          domOverlay: { root: document.getElementById('ar-ui') },
         });
 
-        renderer.xr.setSession(session);
-        startScreen.style.display = 'none';
-        arOverlay.style.display = 'block';
+        renderer.xr.setSession(xrSession);
 
-        // ── Exit ─────────────────────────────────────────────────────
-        exitBtn.addEventListener('click', () => session.end());
-        session.addEventListener('end', () => {
-          startScreen.style.display = 'flex';
-          arOverlay.style.display = 'none';
-          hitTestSource = null;
-          hitTestSourceRequested = false;
-          placed = false;
-          if (chariot) { chariot.visible = false; chariot.scale.setScalar(baseScale); }
-          reticle.visible = false;
-          arHint.textContent = 'Slowly scan your floor or desk…';
-          scaleBar.style.display = 'none';
-        });
+        // Reset state
+        modelPlaced = false;
+        hitTestSource = null;
+        hitTestSourceRequested = false;
+        currentScale = baseScale;
+        if (chariot) {
+          chariot.visible = false;
+          chariot.scale.setScalar(baseScale);
+          chariot.rotation.set(0, 0, 0);
+        }
+        reticleGroup.visible = false;
+        updateScaleLabel();
 
-        // ── Tap to place / move ───────────────────────────────────────
-        session.addEventListener('select', () => {
-          if (!chariot || !reticle.visible) return;
-          const pos = new THREE.Vector3().setFromMatrixPosition(reticle.matrix);
-          chariot.position.copy(pos);
-          if (!placed) {
-            chariot.visible = true;
-            placed = true;
-            arHint.textContent = 'Pinch to scale · Tap to move · Walk around!';
-            scaleBar.style.display = 'block';
-            setTimeout(() => { arHint.style.opacity = '0'; }, 3500);
-          }
-        });
+        showScreen('ar'); // hide all screens, show AR ui
+        arUi.classList.add('active');
+        setStatus('Move your phone to find a surface');
 
-        // ── Pinch-to-scale ────────────────────────────────────────────
-        window.addEventListener('touchstart', ev => {
-          if (ev.touches.length === 2) {
-            pinchStartDist  = getPinchDist(ev);
-            pinchStartScale = chariot ? chariot.scale.x : baseScale;
-          }
-        }, { passive: true });
+        xrSession.addEventListener('end', onSessionEnd);
+        xrSession.addEventListener('select', onTap);
 
-        window.addEventListener('touchmove', ev => {
-          if (ev.touches.length !== 2 || !chariot || !placed) return;
-          const dist  = getPinchDist(ev);
-          const ratio = dist / pinchStartDist;
-          const newScale = Math.max(0.05, Math.min(2.5, pinchStartScale * ratio));
-          chariot.scale.setScalar(newScale);
-          scaleVal.textContent = Math.round((newScale / baseScale) * 100) + '%';
-        }, { passive: true });
+        // Drag-to-rotate
+        renderer.domElement.addEventListener('touchstart', onTouchStart, { passive: true });
+        renderer.domElement.addEventListener('touchmove',  onTouchMove,  { passive: true });
+        renderer.domElement.addEventListener('touchend',   onTouchEnd,   { passive: true });
 
-        window.addEventListener('touchend', ev => {
-          if (ev.touches.length < 2) { pinchStartDist = null; }
-        }, { passive: true });
+        renderer.setAnimationLoop(onFrame);
 
       } catch (e) {
-        notSupported.style.display = 'block';
-        notSupported.innerHTML = `⚠️ AR Error: ${e.message}<br/>Open this page in <strong>Chrome</strong> on Android.`;
+        console.error('[AR] Session error:', e);
+        errorBody.textContent = e.message || 'AR session failed. Ensure camera permission is granted.';
+        showScreen('error');
       }
-    });
+    }
 
-    // ── Render loop ────────────────────────────────────────────────────
-    renderer.setAnimationLoop((_, frame) => {
+    // ═══════════════════════════════════════════════
+    // SESSION END / CLEANUP
+    // ═══════════════════════════════════════════════
+    function onSessionEnd() {
+      renderer.setAnimationLoop(null);
+      hitTestSource = null;
+      hitTestSourceRequested = false;
+      xrSession = null;
+      arUi.classList.remove('active');
+      renderer.domElement.removeEventListener('touchstart', onTouchStart);
+      renderer.domElement.removeEventListener('touchmove',  onTouchMove);
+      renderer.domElement.removeEventListener('touchend',   onTouchEnd);
+      showScreen('start');
+    }
+
+    // ═══════════════════════════════════════════════
+    // FRAME LOOP
+    // ═══════════════════════════════════════════════
+    function onFrame(_, frame) {
       if (!frame) return;
 
       const refSpace = renderer.xr.getReferenceSpace();
       const session  = renderer.xr.getSession();
 
       if (!hitTestSourceRequested) {
-        session.requestReferenceSpace('viewer').then(vs => {
-          session.requestHitTestSource({ space: vs }).then(src => { hitTestSource = src; });
-        });
+        session.requestReferenceSpace('viewer').then(vs =>
+          session.requestHitTestSource({ space: vs }).then(src => { hitTestSource = src; })
+        );
         session.addEventListener('end', () => { hitTestSourceRequested = false; hitTestSource = null; });
         hitTestSourceRequested = true;
       }
@@ -418,16 +972,198 @@
         const hits = frame.getHitTestResults(hitTestSource);
         if (hits.length > 0) {
           const pose = hits[0].getPose(refSpace);
-          reticle.visible = true;
-          reticle.matrix.fromArray(pose.transform.matrix);
-          if (!placed) arHint.textContent = 'Surface detected — tap to place!';
+          reticleGroup.visible = !modelPlaced;
+          reticleGroup.matrix.fromArray(pose.transform.matrix);
+
+          if (!modelPlaced) {
+            setStatus('Tap to place Stone Chariot');
+          }
         } else {
-          reticle.visible = false;
-          if (!placed) arHint.textContent = 'Slowly scan your floor or desk…';
+          reticleGroup.visible = false;
+          if (!modelPlaced) setStatus('Move your phone to find a surface');
         }
       }
 
       renderer.render(scene, camera);
+    }
+
+    // ═══════════════════════════════════════════════
+    // TAP TO PLACE
+    // ═══════════════════════════════════════════════
+    function onTap() {
+      if (!chariot || !reticleGroup.visible) return;
+      if (infoPanel.classList.contains('open') || audioPanel.classList.contains('open')) return;
+
+      const pos = new THREE.Vector3().setFromMatrixPosition(reticleGroup.matrix);
+      chariot.position.copy(pos);
+
+      if (!modelPlaced) {
+        chariot.visible = true;
+        modelPlaced = true;
+        reticleGroup.visible = false;
+        setStatus('Stone Chariot placed');
+        setTimeout(() => { arStatus.style.opacity = '0'; }, 2500);
+      }
+    }
+
+    // ═══════════════════════════════════════════════
+    // TOUCH: DRAG TO ROTATE + PINCH TO SCALE
+    // ═══════════════════════════════════════════════
+    function pinchDist(ev) {
+      const t = ev.touches;
+      if (t.length < 2) return null;
+      const dx = t[0].clientX - t[1].clientX;
+      const dy = t[0].clientY - t[1].clientY;
+      return Math.sqrt(dx*dx + dy*dy);
+    }
+
+    function onTouchStart(ev) {
+      if (!modelPlaced || !chariot) return;
+      if (ev.touches.length === 1) {
+        isDragging = true;
+        dragStartX = ev.touches[0].clientX;
+        dragStartRotY = chariot.rotation.y;
+      } else if (ev.touches.length === 2) {
+        isDragging = false;
+        pinchStartDist  = pinchDist(ev);
+        pinchStartScale = currentScale;
+      }
+    }
+
+    function onTouchMove(ev) {
+      if (!modelPlaced || !chariot) return;
+      if (ev.touches.length === 1 && isDragging) {
+        const dx = ev.touches[0].clientX - dragStartX;
+        chariot.rotation.y = dragStartRotY + dx * 0.008;
+      } else if (ev.touches.length === 2 && pinchStartDist !== null) {
+        const d = pinchDist(ev);
+        if (d === null) return;
+        const ratio = d / pinchStartDist;
+        currentScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, pinchStartScale * ratio));
+        chariot.scale.setScalar(currentScale);
+        updateScaleLabel();
+      }
+    }
+
+    function onTouchEnd(ev) {
+      if (ev.touches.length < 2) { pinchStartDist = null; }
+      if (ev.touches.length === 0) { isDragging = false; }
+    }
+
+    // ═══════════════════════════════════════════════
+    // SCALE CONTROLS
+    // ═══════════════════════════════════════════════
+    function updateScaleLabel() {
+      scaleLabel.textContent = Math.round((currentScale / baseScale) * 100) + '%';
+    }
+
+    document.getElementById('btn-scale-up').addEventListener('click', () => {
+      if (!chariot) return;
+      currentScale = Math.min(MAX_SCALE, currentScale * 1.25);
+      chariot.scale.setScalar(currentScale);
+      updateScaleLabel();
+    });
+
+    document.getElementById('btn-scale-down').addEventListener('click', () => {
+      if (!chariot) return;
+      currentScale = Math.max(MIN_SCALE, currentScale * 0.8);
+      chariot.scale.setScalar(currentScale);
+      updateScaleLabel();
+    });
+
+    // ═══════════════════════════════════════════════
+    // ROTATION CONTROLS
+    // ═══════════════════════════════════════════════
+    document.getElementById('btn-rot-left').addEventListener('click', () => {
+      if (chariot) chariot.rotation.y -= Math.PI / 8;
+    });
+    document.getElementById('btn-rot-right').addEventListener('click', () => {
+      if (chariot) chariot.rotation.y += Math.PI / 8;
+    });
+
+    // ═══════════════════════════════════════════════
+    // RESET
+    // ═══════════════════════════════════════════════
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      if (!chariot) return;
+      currentScale = baseScale;
+      chariot.scale.setScalar(baseScale);
+      chariot.rotation.set(0, 0, 0);
+      chariot.visible = false;
+      modelPlaced = false;
+      reticleGroup.visible = false;
+      arStatus.style.opacity = '1';
+      setStatus('Move your phone to find a surface');
+      updateScaleLabel();
+    });
+
+    // ═══════════════════════════════════════════════
+    // EXIT AR
+    // ═══════════════════════════════════════════════
+    document.getElementById('btn-exit-ar').addEventListener('click', () => {
+      if (xrSession) xrSession.end();
+    });
+
+    // ═══════════════════════════════════════════════
+    // INFO PANEL
+    // ═══════════════════════════════════════════════
+    document.getElementById('btn-info').addEventListener('click', () => {
+      infoPanel.classList.add('open');
+    });
+    ['btn-close-info', 'btn-close-info-2', 'info-backdrop'].forEach(id => {
+      document.getElementById(id).addEventListener('click', () => infoPanel.classList.remove('open'));
+    });
+    document.getElementById('btn-open-vault-from-info').addEventListener('click', () => {
+      if (xrSession) xrSession.end();
+      navigateToVault();
+    });
+
+    // ═══════════════════════════════════════════════
+    // AUDIO PANEL
+    // ═══════════════════════════════════════════════
+    document.getElementById('btn-audio').addEventListener('click', () => {
+      audioPanel.classList.add('open');
+    });
+    ['btn-close-audio', 'audio-backdrop'].forEach(id => {
+      document.getElementById(id).addEventListener('click', () => audioPanel.classList.remove('open'));
+    });
+
+    // ═══════════════════════════════════════════════
+    // NAVIGATION
+    // ═══════════════════════════════════════════════
+    function navigateToVault() {
+      // Return to the SanskritiSetu app
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = '/';
+      }
+    }
+
+    document.getElementById('btn-back-vault').addEventListener('click', navigateToVault);
+    document.getElementById('btn-open-vault').addEventListener('click', navigateToVault);
+    document.getElementById('btn-error-vault').addEventListener('click', navigateToVault);
+
+    document.getElementById('btn-retry').addEventListener('click', () => {
+      showScreen('start');
+    });
+    document.getElementById('btn-error-retry').addEventListener('click', () => {
+      showScreen('start');
+    });
+
+    // ═══════════════════════════════════════════════
+    // LAUNCH
+    // ═══════════════════════════════════════════════
+    document.getElementById('btn-start-ar').addEventListener('click', startAR);
+
+    // Check support on load and show appropriate start screen
+    checkSupport().then(supported => {
+      if (!supported) {
+        // Pre-warn but still show start screen — let user try
+        const btn = document.getElementById('btn-start-ar');
+        btn.innerHTML = '<span class="btn-icon">📷</span><span>Try AR (may need ARCore)</span>';
+      }
+      showScreen('start');
     });
 
     window.addEventListener('resize', () => {
@@ -436,5 +1172,6 @@
       camera.updateProjectionMatrix();
     });
   </script>
+
 </body>
 </html>
