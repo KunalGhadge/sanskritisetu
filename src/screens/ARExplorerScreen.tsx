@@ -275,10 +275,10 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
         </div>
 
         <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', margin: '0 0 2px 0', fontFamily: 'Outfit, sans-serif' }}>
-          MindAR AI Natural Tracking
+          ARCore Surface Detection
         </h3>
         <p style={{ fontSize: '0.74rem', color: '#e0dbff', margin: 0, lineHeight: 1.35 }}>
-          Real TensorFlow.js Computer Vision. Anchors 3D models onto natural images with true 6-DoF tracking.
+          Tap to open in Chrome → scan your floor or table → place the chariot in real space. Works on Android & iOS.
         </p>
       </div>
 
@@ -354,14 +354,14 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
         </div>
       </div>
 
-      {/* MindAR Target Launch Card */}
+      {/* AR Launch Card */}
       <div className="digi-card" style={{ padding: '16px', margin: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
           <span style={{ fontSize: '0.66rem', color: '#4c35de', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            AI Computer Vision Target
+            ARCore Plane Detection
           </span>
           <span style={{ fontSize: '0.64rem', color: '#10b981', fontWeight: 800, background: '#ecfdf5', padding: '2px 6px', borderRadius: '6px' }}>
-            ● targets.mind Compiled
+            ● Android &amp; iOS
           </span>
         </div>
 
@@ -389,57 +389,48 @@ export const ARExplorerScreen: React.FC<ARExplorerScreenProps> = ({
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <CheckCircle2 size={13} color="#10b981" />
-            <span><strong>Real 6-DoF SLAM:</strong> Locks onto the photograph using AI feature point matching.</span>
+            <span><strong>Real Surface Detection:</strong> Scans floor &amp; table — place the model in your real space.</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <CheckCircle2 size={13} color="#10b981" />
-            <span><strong>Zero Google Play Restrictions:</strong> Runs in WebAssembly on all devices.</span>
+            <span><strong>Google Scene Viewer:</strong> Native ARCore — walk around the chariot, resize, screenshot.</span>
           </div>
         </div>
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <button
-            onClick={() => setIsMindARActive(true)}
-            className="btn-digi-purple"
-            style={{ width: '100%', padding: '14px', fontSize: '0.9rem' }}
-          >
-            <Camera size={18} />
-            <span>Launch MindAR AI Scanner</span>
-          </button>
 
-          <button
-            onClick={() => setShowTargetModal(true)}
-            className="btn-digi-secondary"
-            style={{ padding: '10px' }}
-          >
-            <ImageIcon size={15} />
-            <span>View Target Image to Scan</span>
-          </button>
-
+          {/* PRIMARY: Open in browser for real ARCore surface detection */}
           <a
             href={STANDALONE_WEBAR_URL}
             target="_blank"
             rel="noopener noreferrer"
+            className="btn-digi-purple"
             style={{
               textDecoration: 'none',
-              border: '1.5px solid #4c35de',
-              background: '#f8f7ff',
-              color: '#4c35de',
+              width: '100%',
+              padding: '16px',
+              fontSize: '0.95rem',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '6px',
-              padding: '10px 14px',
-              borderRadius: '14px',
-              fontWeight: 800,
-              fontSize: '0.78rem',
-              cursor: 'pointer',
+              gap: '8px',
             }}
           >
-            <ExternalLink size={15} />
-            <span>{t.openInBrowserAR} ↗</span>
+            <Camera size={20} />
+            <span>Open AR in Chrome ↗</span>
           </a>
+
+          {/* SECONDARY: image-tracking fallback */}
+          <button
+            onClick={() => setIsMindARActive(true)}
+            className="btn-digi-secondary"
+            style={{ padding: '10px', fontSize: '0.8rem' }}
+          >
+            <QrCode size={15} />
+            <span>Scan Target Image (in-app)</span>
+          </button>
+
         </div>
       </div>
     </div>

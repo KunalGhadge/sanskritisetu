@@ -3,50 +3,111 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <title>AR - Stone Chariot</title>
+  <title>Stone Chariot AR – Vittala Temple, Hampi</title>
+  <meta name="description" content="Experience the Stone Chariot of Vittala Temple, Hampi in Augmented Reality. Place it in your real environment with ARCore." />
+
+  <!-- Google model-viewer — the industry standard web AR component -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #0a0d18;
-      font-family: system-ui, -apple-system, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 24px;
-      color: #fff;
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --purple: #7c3aed;
+      --purple-light: #a78bfa;
+      --bg: #09091a;
+      --card: #12112b;
+      --border: rgba(124,58,237,0.25);
     }
 
-    .icon { font-size: 56px; margin-bottom: 16px; }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      font-family: 'Outfit', system-ui, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 18px 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .logo-text { font-size: 15px; font-weight: 800; color: #fff; }
+    .logo-sub  { font-size: 11px; color: #7c6fcd; }
+
+    /* ── Hero model-viewer ── */
+    model-viewer {
+      width: 100%;
+      height: 340px;
+      background: radial-gradient(ellipse at 50% 80%, #1e0a4a 0%, #09091a 100%);
+      --poster-color: transparent;
+    }
+
+    /* AR button inside model-viewer */
+    model-viewer::part(default-ar-button) {
+      display: none; /* we use our own button */
+    }
+
+    /* ── Info section ── */
+    .info {
+      padding: 0 20px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.35);
+      color: var(--purple-light);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
 
     h1 {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
-      margin-bottom: 8px;
-      text-align: center;
-      background: linear-gradient(135deg, #a78bfa, #7c3aed);
+      line-height: 1.2;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #fff 60%, #a78bfa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    p {
-      font-size: 14px;
-      color: #94a3b8;
-      text-align: center;
-      line-height: 1.7;
-      margin-bottom: 28px;
-      max-width: 320px;
+    .subtitle {
+      font-size: 13px;
+      color: #7c6fcd;
+      margin-bottom: 20px;
+      font-weight: 500;
     }
 
+    /* ── AR Launch Button ── */
     .btn-ar {
       width: 100%;
-      max-width: 320px;
       padding: 18px 24px;
+      font-family: 'Outfit', sans-serif;
       font-size: 17px;
-      font-weight: 700;
+      font-weight: 800;
       color: #fff;
-      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
       border: none;
       border-radius: 18px;
       cursor: pointer;
@@ -54,110 +115,158 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 8px 32px rgba(124,58,237,0.45);
-      transition: transform 0.15s, box-shadow 0.15s;
-      margin-bottom: 12px;
+      box-shadow: 0 8px 32px rgba(124,58,237,0.5);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      margin-bottom: 10px;
+      letter-spacing: 0.01em;
     }
-    .btn-ar:active { transform: scale(0.97); box-shadow: 0 4px 16px rgba(124,58,237,0.3); }
+    .btn-ar:active { transform: scale(0.97); }
 
-    .steps {
-      width: 100%;
-      max-width: 320px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 16px;
-      margin-top: 8px;
+    .btn-ar-icon {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
     }
-    .steps h3 {
-      font-size: 12px;
+
+    /* ── Steps card ── */
+    .steps-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      margin: 14px 0;
+    }
+    .steps-title {
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #7c3aed;
-      margin-bottom: 12px;
+      color: var(--purple-light);
       font-weight: 700;
+      margin-bottom: 14px;
     }
     .step {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 10px;
-      font-size: 13px;
-      color: #cbd5e1;
-      line-height: 1.4;
+      gap: 12px;
+      margin-bottom: 12px;
     }
+    .step:last-child { margin-bottom: 0; }
     .step-num {
-      min-width: 22px;
-      height: 22px;
+      min-width: 26px; height: 26px;
       border-radius: 50%;
-      background: #7c3aed;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
       color: #fff;
-      font-size: 11px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .fallback {
-      margin-top: 20px;
       font-size: 12px;
-      color: #475569;
-      text-align: center;
-      max-width: 300px;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
+    .step-text { font-size: 13px; color: #b8b3e0; line-height: 1.5; }
+    .step-text strong { color: #fff; }
+
+    /* ── Compat note ── */
+    .compat {
+      text-align: center;
+      font-size: 11.5px;
+      color: #4a4870;
+      padding: 0 20px 32px;
+      line-height: 1.6;
+    }
+    .compat a { color: var(--purple-light); text-decoration: none; }
   </style>
 </head>
 <body>
 
-  <div class="icon">🏛️</div>
-  <h1>Stone Chariot AR</h1>
-  <p>Place the Stone Chariot of Vittala Temple in your real environment using ARCore plane detection.</p>
+  <header>
+    <div class="logo">🏛️</div>
+    <div>
+      <div class="logo-text">SanskritiSetu</div>
+      <div class="logo-sub">Heritage AR Experience</div>
+    </div>
+  </header>
 
-  <button class="btn-ar" id="launchBtn" onclick="launchSceneViewer()">
-    <span>📱</span>
-    <span>Launch AR Experience</span>
-  </button>
+  <!-- Interactive 3D preview + AR -->
+  <model-viewer
+    id="viewer"
+    src="./asset.glb"
+    alt="Stone Chariot of Vittala Temple, Hampi"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    camera-controls
+    auto-rotate
+    auto-rotate-delay="1000"
+    shadow-intensity="1.2"
+    environment-image="neutral"
+    exposure="1"
+    tone-mapping="commerce"
+    ar-scale="auto"
+  >
+  </model-viewer>
 
-  <div class="steps">
-    <h3>How it works</h3>
-    <div class="step">
-      <div class="step-num">1</div>
-      <span>Tap the button — Google Scene Viewer opens with your camera</span>
+  <div class="info">
+
+    <div class="badge">🇮🇳 Karnataka Heritage · Hampi</div>
+    <h1>Stone Chariot<br/>Vittala Temple</h1>
+    <p class="subtitle">15th century · UNESCO World Heritage Site</p>
+
+    <!-- Primary AR CTA -->
+    <button class="btn-ar" onclick="launchAR()">
+      <div class="btn-ar-icon">📱</div>
+      <span>View in Your Space (AR)</span>
+    </button>
+
+    <!-- Steps -->
+    <div class="steps-card">
+      <div class="steps-title">⚡ How to use</div>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Tap <strong>"View in Your Space"</strong> above</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Your camera opens — <strong>slowly sweep</strong> your phone over the floor or table</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Tap any detected surface</strong> — the chariot appears in real scale!</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">Walk around it, pinch to resize, take screenshots 📸</div>
+      </div>
     </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <span>Slowly move your phone to scan your floor or table</span>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <span>Tap the detected surface — the chariot appears in real space!</span>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <span>Walk around it, change scale, take photos 📸</span>
-    </div>
+
   </div>
 
-  <p class="fallback">
-    Requires Google Play Services for AR (ARCore).<br>
-    If it doesn't open, install it from the Play Store.
+  <p class="compat">
+    Works on Android (Chrome + ARCore) and iOS 12+ (Safari + AR Quick Look).<br/>
+    Android users: ensure <a href="https://play.google.com/store/apps/details?id=com.google.ar.core" target="_blank">Google Play Services for AR</a> is installed.
   </p>
 
   <script>
-    function launchSceneViewer() {
-      // Absolute URL to the GLB model — must be publicly accessible
-      // Using the GitHub CDN path from our repo via jsDelivr
-      const modelUrl = encodeURIComponent(window.location.origin + '/ar/asset.glb');
-      const title = encodeURIComponent('Stone Chariot - Vittala Temple');
-      const link = encodeURIComponent(window.location.href);
+    const viewer = document.getElementById('viewer');
 
-      // Google Scene Viewer intent URL
-      const sceneViewerUrl =
-        `intent://arvr.google.com/scene-viewer/1.0?file=${modelUrl}&mode=ar_preferred&title=${title}&link=${link}#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=${encodeURIComponent('https://play.google.com/store/apps/details?id=com.google.ar.core')};end;`;
-
-      window.location.href = sceneViewerUrl;
+    function launchAR() {
+      // model-viewer's built-in AR activation
+      if (viewer && viewer.canActivateAR) {
+        viewer.activateAR();
+      } else {
+        // Fallback: trigger the hidden AR button
+        const arBtn = viewer.shadowRoot && viewer.shadowRoot.querySelector('[slot="ar-button"], .ar-button');
+        if (arBtn) arBtn.click();
+        else alert('AR is not supported on this device. Please use Chrome on an Android device or Safari on iPhone.');
+      }
     }
+
+    // Auto-trigger AR if opened via intent (Android)
+    viewer.addEventListener('load', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('ar') === '1') {
+        setTimeout(() => launchAR(), 500);
+      }
+    });
   </script>
 
 </body>
