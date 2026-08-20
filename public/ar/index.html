@@ -3,271 +3,431 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <title>Stone Chariot AR – Vittala Temple, Hampi</title>
-  <meta name="description" content="Experience the Stone Chariot of Vittala Temple, Hampi in Augmented Reality. Place it in your real environment with ARCore." />
-
-  <!-- Google model-viewer — the industry standard web AR component -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
-
+  <title>Stone Chariot AR</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    :root {
-      --purple: #7c3aed;
-      --purple-light: #a78bfa;
-      --bg: #09091a;
-      --card: #12112b;
-      --border: rgba(124,58,237,0.25);
-    }
-
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      font-family: 'Outfit', system-ui, sans-serif;
+    body {
+      background: #09091a;
+      font-family: system-ui, -apple-system, sans-serif;
       color: #fff;
-      overflow-x: hidden;
+      height: 100dvh;
+      overflow: hidden;
     }
 
-    /* ── Header ── */
-    header {
-      padding: 18px 20px 0;
+    /* ── Start Screen ── */
+    #start-screen {
+      position: fixed;
+      inset: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
-    }
-    .logo {
-      width: 40px; height: 40px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #7c3aed, #4f46e5);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-    }
-    .logo-text { font-size: 15px; font-weight: 800; color: #fff; }
-    .logo-sub  { font-size: 11px; color: #7c6fcd; }
-
-    /* ── Hero model-viewer ── */
-    model-viewer {
-      width: 100%;
-      height: 340px;
-      background: radial-gradient(ellipse at 50% 80%, #1e0a4a 0%, #09091a 100%);
-      --poster-color: transparent;
+      justify-content: center;
+      background: linear-gradient(160deg, #0f0a24 0%, #09091a 100%);
+      padding: 28px;
+      gap: 0;
+      z-index: 100;
     }
 
-    /* AR button inside model-viewer */
-    model-viewer::part(default-ar-button) {
-      display: none; /* we use our own button */
+    .start-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 24px rgba(124,58,237,0.5));
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
     }
 
-    /* ── Info section ── */
-    .info {
-      padding: 0 20px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(124,58,237,0.15);
-      border: 1px solid rgba(124,58,237,0.35);
-      color: var(--purple-light);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      font-size: 24px;
+    .start-title {
+      font-size: 26px;
       font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 6px;
-      background: linear-gradient(135deg, #fff 60%, #a78bfa);
+      text-align: center;
+      background: linear-gradient(135deg, #fff 50%, #a78bfa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
     }
-
-    .subtitle {
+    .start-sub {
       font-size: 13px;
-      color: #7c6fcd;
-      margin-bottom: 20px;
-      font-weight: 500;
+      color: #6b60a8;
+      text-align: center;
+      margin-bottom: 36px;
+      line-height: 1.5;
     }
 
-    /* ── AR Launch Button ── */
-    .btn-ar {
+    .btn-launch {
       width: 100%;
-      padding: 18px 24px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 17px;
+      max-width: 340px;
+      padding: 20px 28px;
+      font-family: inherit;
+      font-size: 18px;
       font-weight: 800;
       color: #fff;
-      background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
       border: none;
-      border-radius: 18px;
+      border-radius: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      box-shadow: 0 8px 32px rgba(124,58,237,0.5);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      margin-bottom: 10px;
-      letter-spacing: 0.01em;
-    }
-    .btn-ar:active { transform: scale(0.97); }
-
-    .btn-ar-icon {
-      width: 32px; height: 32px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-    }
-
-    /* ── Steps card ── */
-    .steps-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 18px;
-      margin: 14px 0;
-    }
-    .steps-title {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--purple-light);
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .step {
-      display: flex;
-      align-items: flex-start;
       gap: 12px;
-      margin-bottom: 12px;
+      box-shadow: 0 12px 40px rgba(124,58,237,0.5), 0 0 0 1px rgba(167,139,250,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+      margin-bottom: 16px;
     }
-    .step:last-child { margin-bottom: 0; }
-    .step-num {
-      min-width: 26px; height: 26px;
+    .btn-launch:active { transform: scale(0.97); }
+
+    .hint-list {
+      width: 100%;
+      max-width: 340px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hint {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: #9b8fd4;
+    }
+    .hint-dot {
+      width: 28px; height: 28px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #4f46e5);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 800;
+      background: linear-gradient(135deg, #7c3aed40, #4f46e540);
+      border: 1px solid #7c3aed60;
       display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
       flex-shrink: 0;
     }
-    .step-text { font-size: 13px; color: #b8b3e0; line-height: 1.5; }
-    .step-text strong { color: #fff; }
 
-    /* ── Compat note ── */
-    .compat {
+    #not-supported {
+      display: none;
+      width: 100%;
+      max-width: 340px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #fca5a5;
       text-align: center;
-      font-size: 11.5px;
-      color: #4a4870;
-      padding: 0 20px 32px;
       line-height: 1.6;
+      margin-top: 16px;
     }
-    .compat a { color: var(--purple-light); text-decoration: none; }
+    #not-supported a { color: #f87171; }
+
+    /* ── AR Overlay (visible during session) ── */
+    #ar-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      display: none;
+    }
+
+    #ar-hint {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: opacity 0.4s;
+    }
+
+    #scale-bar {
+      position: absolute;
+      top: 24px;
+      right: 16px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: #a78bfa;
+      font-weight: 700;
+      display: none;
+    }
+
+    #exit-btn {
+      position: absolute;
+      top: 20px;
+      left: 16px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      pointer-events: all;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    canvas { display: block; }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">🏛️</div>
-    <div>
-      <div class="logo-text">SanskritiSetu</div>
-      <div class="logo-sub">Heritage AR Experience</div>
-    </div>
-  </header>
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <div class="start-icon">🏛️</div>
+    <div class="start-title">Stone Chariot AR</div>
+    <div class="start-sub">Vittala Temple · Hampi · 15th century</div>
 
-  <!-- Interactive 3D preview + AR -->
-  <model-viewer
-    id="viewer"
-    src="./asset.glb"
-    alt="Stone Chariot of Vittala Temple, Hampi"
-    ar
-    ar-modes="webxr scene-viewer quick-look"
-    camera-controls
-    auto-rotate
-    auto-rotate-delay="1000"
-    shadow-intensity="1.2"
-    environment-image="neutral"
-    exposure="1"
-    tone-mapping="commerce"
-    ar-scale="auto"
-  >
-  </model-viewer>
-
-  <div class="info">
-
-    <div class="badge">🇮🇳 Karnataka Heritage · Hampi</div>
-    <h1>Stone Chariot<br/>Vittala Temple</h1>
-    <p class="subtitle">15th century · UNESCO World Heritage Site</p>
-
-    <!-- Primary AR CTA -->
-    <button class="btn-ar" onclick="launchAR()">
-      <div class="btn-ar-icon">📱</div>
-      <span>View in Your Space (AR)</span>
+    <button class="btn-launch" id="btn-launch">
+      <span>📷</span>
+      <span>Launch AR</span>
     </button>
 
-    <!-- Steps -->
-    <div class="steps-card">
-      <div class="steps-title">⚡ How to use</div>
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-text">Tap <strong>"View in Your Space"</strong> above</div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-text">Your camera opens — <strong>slowly sweep</strong> your phone over the floor or table</div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-text"><strong>Tap any detected surface</strong> — the chariot appears in real scale!</div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-text">Walk around it, pinch to resize, take screenshots 📸</div>
-      </div>
+    <div class="hint-list">
+      <div class="hint"><div class="hint-dot">🔍</div><span>Move camera slowly to detect your floor or desk</span></div>
+      <div class="hint"><div class="hint-dot">👆</div><span>Tap the purple ring to place the chariot</span></div>
+      <div class="hint"><div class="hint-dot">🤏</div><span>Pinch to scale it up or down</span></div>
+      <div class="hint"><div class="hint-dot">🚶</div><span>Walk around — it stays fixed in space</span></div>
     </div>
 
+    <div id="not-supported">
+      ⚠️ WebXR AR not available.<br/>
+      Open this page in <strong>Chrome</strong> on Android, or install
+      <a href="https://play.google.com/store/apps/details?id=com.google.ar.core" target="_blank">Google Play Services for AR</a>.
+    </div>
   </div>
 
-  <p class="compat">
-    Works on Android (Chrome + ARCore) and iOS 12+ (Safari + AR Quick Look).<br/>
-    Android users: ensure <a href="https://play.google.com/store/apps/details?id=com.google.ar.core" target="_blank">Google Play Services for AR</a> is installed.
-  </p>
+  <!-- AR Session Overlay -->
+  <div id="ar-overlay">
+    <button id="exit-btn">✕ Exit AR</button>
+    <div id="scale-bar" style="display:none;">Scale: <span id="scale-val">100%</span></div>
+    <div id="ar-hint">Slowly scan your floor or desk…</div>
+  </div>
 
-  <script>
-    const viewer = document.getElementById('viewer');
-
-    function launchAR() {
-      // model-viewer's built-in AR activation
-      if (viewer && viewer.canActivateAR) {
-        viewer.activateAR();
-      } else {
-        // Fallback: trigger the hidden AR button
-        const arBtn = viewer.shadowRoot && viewer.shadowRoot.querySelector('[slot="ar-button"], .ar-button');
-        if (arBtn) arBtn.click();
-        else alert('AR is not supported on this device. Please use Chrome on an Android device or Safari on iPhone.');
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
       }
     }
-
-    // Auto-trigger AR if opened via intent (Android)
-    viewer.addEventListener('load', () => {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('ar') === '1') {
-        setTimeout(() => launchAR(), 500);
-      }
-    });
   </script>
 
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const startScreen   = document.getElementById('start-screen');
+    const arOverlay     = document.getElementById('ar-overlay');
+    const btnLaunch     = document.getElementById('btn-launch');
+    const notSupported  = document.getElementById('not-supported');
+    const arHint        = document.getElementById('ar-hint');
+    const exitBtn       = document.getElementById('exit-btn');
+    const scaleBar      = document.getElementById('scale-bar');
+    const scaleVal      = document.getElementById('scale-val');
+
+    // ── Check support ──────────────────────────────────────────────────
+    const supported = navigator.xr
+      ? await navigator.xr.isSessionSupported('immersive-ar').catch(() => false)
+      : false;
+
+    if (!supported) {
+      notSupported.style.display = 'block';
+      btnLaunch.disabled = true;
+      btnLaunch.style.opacity = '0.4';
+    }
+
+    // ── Three.js renderer ──────────────────────────────────────────────
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.xr.enabled = true;
+    renderer.shadowMap.enabled = true;
+    document.body.prepend(renderer.domElement);
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.01, 30);
+
+    // ── Lights ─────────────────────────────────────────────────────────
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x888888, 2));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+    dirLight.position.set(1, 3, 2);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    fillLight.position.set(-1, 1, -1);
+    scene.add(fillLight);
+
+    // ── Reticle ────────────────────────────────────────────────────────
+    const reticle = new THREE.Group();
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.10, 0.16, 40).rotateX(-Math.PI / 2),
+      new THREE.MeshBasicMaterial({ color: 0x7c3aed, side: THREE.DoubleSide, transparent: true, opacity: 0.9 })
+    );
+    const innerRing = new THREE.Mesh(
+      new THREE.RingGeometry(0.03, 0.08, 40).rotateX(-Math.PI / 2),
+      new THREE.MeshBasicMaterial({ color: 0xa78bfa, side: THREE.DoubleSide, transparent: true, opacity: 0.7 })
+    );
+    const centerDot = new THREE.Mesh(
+      new THREE.CircleGeometry(0.025, 24).rotateX(-Math.PI / 2),
+      new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
+    );
+    reticle.add(ring, innerRing, centerDot);
+    reticle.matrixAutoUpdate = false;
+    reticle.visible = false;
+    scene.add(reticle);
+
+    // ── Load model ─────────────────────────────────────────────────────
+    let chariot = null;
+    let placed  = false;
+    let baseScale = 0.25;       // meters — model spans -1..1, so 0.25 = 0.5m wide
+
+    const loader = new GLTFLoader();
+    loader.load('./asset.glb', gltf => {
+      chariot = gltf.scene;
+      chariot.scale.setScalar(baseScale);
+      chariot.visible = false;
+      chariot.castShadow = true;
+      scene.add(chariot);
+    });
+
+    // ── Hit-test ───────────────────────────────────────────────────────
+    let hitTestSource = null;
+    let hitTestSourceRequested = false;
+
+    // ── Pinch-to-scale state ───────────────────────────────────────────
+    let pinchStartDist  = null;
+    let pinchStartScale = null;
+
+    function getPinchDist(ev) {
+      const t = ev.touches;
+      if (t.length < 2) return null;
+      const dx = t[0].clientX - t[1].clientX;
+      const dy = t[0].clientY - t[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // ── Session start ──────────────────────────────────────────────────
+    btnLaunch.addEventListener('click', async () => {
+      if (!supported) return;
+      try {
+        const session = await navigator.xr.requestSession('immersive-ar', {
+          requiredFeatures: ['hit-test'],
+          optionalFeatures: ['dom-overlay'],
+          domOverlay: { root: document.getElementById('ar-overlay') },
+        });
+
+        renderer.xr.setSession(session);
+        startScreen.style.display = 'none';
+        arOverlay.style.display = 'block';
+
+        // ── Exit ─────────────────────────────────────────────────────
+        exitBtn.addEventListener('click', () => session.end());
+        session.addEventListener('end', () => {
+          startScreen.style.display = 'flex';
+          arOverlay.style.display = 'none';
+          hitTestSource = null;
+          hitTestSourceRequested = false;
+          placed = false;
+          if (chariot) { chariot.visible = false; chariot.scale.setScalar(baseScale); }
+          reticle.visible = false;
+          arHint.textContent = 'Slowly scan your floor or desk…';
+          scaleBar.style.display = 'none';
+        });
+
+        // ── Tap to place / move ───────────────────────────────────────
+        session.addEventListener('select', () => {
+          if (!chariot || !reticle.visible) return;
+          const pos = new THREE.Vector3().setFromMatrixPosition(reticle.matrix);
+          chariot.position.copy(pos);
+          if (!placed) {
+            chariot.visible = true;
+            placed = true;
+            arHint.textContent = 'Pinch to scale · Tap to move · Walk around!';
+            scaleBar.style.display = 'block';
+            setTimeout(() => { arHint.style.opacity = '0'; }, 3500);
+          }
+        });
+
+        // ── Pinch-to-scale ────────────────────────────────────────────
+        window.addEventListener('touchstart', ev => {
+          if (ev.touches.length === 2) {
+            pinchStartDist  = getPinchDist(ev);
+            pinchStartScale = chariot ? chariot.scale.x : baseScale;
+          }
+        }, { passive: true });
+
+        window.addEventListener('touchmove', ev => {
+          if (ev.touches.length !== 2 || !chariot || !placed) return;
+          const dist  = getPinchDist(ev);
+          const ratio = dist / pinchStartDist;
+          const newScale = Math.max(0.05, Math.min(2.5, pinchStartScale * ratio));
+          chariot.scale.setScalar(newScale);
+          scaleVal.textContent = Math.round((newScale / baseScale) * 100) + '%';
+        }, { passive: true });
+
+        window.addEventListener('touchend', ev => {
+          if (ev.touches.length < 2) { pinchStartDist = null; }
+        }, { passive: true });
+
+      } catch (e) {
+        notSupported.style.display = 'block';
+        notSupported.innerHTML = `⚠️ AR Error: ${e.message}<br/>Open this page in <strong>Chrome</strong> on Android.`;
+      }
+    });
+
+    // ── Render loop ────────────────────────────────────────────────────
+    renderer.setAnimationLoop((_, frame) => {
+      if (!frame) return;
+
+      const refSpace = renderer.xr.getReferenceSpace();
+      const session  = renderer.xr.getSession();
+
+      if (!hitTestSourceRequested) {
+        session.requestReferenceSpace('viewer').then(vs => {
+          session.requestHitTestSource({ space: vs }).then(src => { hitTestSource = src; });
+        });
+        session.addEventListener('end', () => { hitTestSourceRequested = false; hitTestSource = null; });
+        hitTestSourceRequested = true;
+      }
+
+      if (hitTestSource) {
+        const hits = frame.getHitTestResults(hitTestSource);
+        if (hits.length > 0) {
+          const pose = hits[0].getPose(refSpace);
+          reticle.visible = true;
+          reticle.matrix.fromArray(pose.transform.matrix);
+          if (!placed) arHint.textContent = 'Surface detected — tap to place!';
+        } else {
+          reticle.visible = false;
+          if (!placed) arHint.textContent = 'Slowly scan your floor or desk…';
+        }
+      }
+
+      renderer.render(scene, camera);
+    });
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(innerWidth, innerHeight);
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+    });
+  </script>
 </body>
 </html>
